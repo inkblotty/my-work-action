@@ -1,7 +1,8 @@
 import * as github from '@actions/github';
 import { filterCommentsByUser, filterPRsByAuthorAndCreation } from './queryFilters';
+import { InputFields, QueryType } from './shared.types';
 
-export const getPRsCreatedAndReviewedInRange = async (inputFields: InputFields, username: string, sinceIso: string) => {
+export const getPRsCreated = async (inputFields: InputFields, username: string, sinceIso: string) => {
     const allRepos = inputFields.queried_repos.split(',');
     const allPRs = await Promise.all(allRepos.map(async repo => {
         const allRepoPRs = await github.getOctokit(process.env.GH_TOKEN).request('GET /repos/{owner}/{repo}/pulls', {
@@ -12,7 +13,7 @@ export const getPRsCreatedAndReviewedInRange = async (inputFields: InputFields, 
             repo,
             // @ts-ignore
             data: filterPRsByAuthorAndCreation(allRepoPRs, username, sinceIso),
-            type: 'prs-created',
+            type: QueryType['pr-created'],
         };
     }));
     return allPRs;
@@ -30,7 +31,7 @@ export const getIssuesCreatedInRange = async (inputFields: InputFields, username
         return {
             repo,
             data: allRepoIssues,
-            type: 'issues-created',
+            type: QueryType['issue-created'],
         };
     }));
     return allIssues;
@@ -41,7 +42,21 @@ export const getDiscussionsCreatedInRange = async (inputFields: InputFields, use
 }
 
 export const getPRCommentsInRange = async (inputFields: InputFields, username: string, sinceIso: string) => {
-
+    const allRepos = inputFields.queried_repos.split(',');
+    const allPRs = await Promise.all(allRepos.map(async repo => {
+        const allPRComments = await github.getOctokit(process.env.GH_TOKEN).request('GET /repos/{owner}/{repo}/pulls/comments', {
+            owner: inputFields.owner,
+            repo,
+            since: sinceIso,
+        });
+        return {
+            repo,
+            // @ts-ignore
+            data: filterCommentsByUser(allPRComments, username),
+            type: QueryType['pr-comment-created'],
+        };
+    }));
+    return allPRs;
 }
 
 export const getIssueCommentsInRange = async (inputFields: InputFields, username: string, sinceIso: string) => {
@@ -57,7 +72,7 @@ export const getIssueCommentsInRange = async (inputFields: InputFields, username
             repo,
             // @ts-ignore -- the type here is different than the docs
             data: filterCommentsByUser(allRepoIssueComments, username),
-            type: 'issue-comments-created',
+            type: QueryType['issue-comment-created'],
         };
     }));
     return allIssueComents;
@@ -67,10 +82,20 @@ export const getDiscussionCommentsInRange = async (inputFields: InputFields, use
 
 }
 
-export const getPRsReviewedInRange = async (inputFields: InputFields, username: string, sinceIso: string) => {
-
-}
-
-export const getCommitsInRange = async (inputFields: InputFields, username: string, sinceIso: string) => {
-
-}
+// export const getCommitsInRange = async (inputFields: InputFields, username: string, sinceIso: string) => {
+//     const allRepos = inputFields.queried_repos.split(',');
+//     const allCommits = await Promise.all(allRepos.map(async repo => {
+//         const allRepoCommits = await github.getOctokit(process.env.GH_TOKEN).request('GET /repos/{owner}/{repo}/pulls', {
+//             owner: inputFields.owner,
+//             repo,
+//             since: sinceIso,
+//             author: username
+//         });
+//         return {
+//             repo,
+//             data: allRepoCommits,
+//             type: QueryType['commit'],
+//         };
+//     }));
+//     return allCommits;
+// }

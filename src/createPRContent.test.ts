@@ -1,4 +1,4 @@
-import { formatDate, oneDayMs } from "../shared";
+import { formatDate, oneDayMs } from "./shared";
 import createPRObj, { createPRBodyText } from "./createPRContent";
 
 const startDate = new Date((new Date()).getTime() - (oneDayMs * 7));

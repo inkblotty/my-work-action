@@ -1,5 +1,6 @@
 import * as core from '@actions/core';
-import { oneDayMs } from '../shared';
+import { oneDayMs } from './shared';
+import { InputFields } from './shared.types';
 import handleSingleUser from './handleSingleUser';
 
 const makeRequiredErrorMessage = (inputName) => `Failed to retrieve input "${inputName}". Does the workflow include "${inputName}"?`;
