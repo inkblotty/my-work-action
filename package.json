@@ -4,7 +4,7 @@
   "description": "Action to summarize all the work you've done in a week for you in a PR",
   "main": "index.js",
   "scripts": {
-    "build": "rm ./lib/* && tsc",
+    "build": "rm -f ./lib/* && tsc",
     "test": "jest"
   },
   "repository": {

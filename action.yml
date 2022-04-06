@@ -1,0 +1,22 @@
+name: "my-work-action"
+author: "inkblotty"
+description: "Action to summarize all the work you've done in a week for you into a PR"
+inputs:
+  owner:
+    description: "The owner of the repo where the PR should be created."
+    required: true
+  queried_repos:
+    description: "The repos that should be searched for relevant work, comma-separated."
+    required: true
+  repo:
+    description: "The name of the repo where the PR should be created."
+    required: true
+  timespan:
+    description: "Number of days to query, with today as the end date. Defaults to 7 days."
+    required: false
+  usernames:
+    description: "Your user handle, or your list of teammates, comma-separated."
+    required: true
+runs:
+  using: "node16"
+  main: "lib/index.js"
