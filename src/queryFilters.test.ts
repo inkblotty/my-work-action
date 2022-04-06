@@ -1,4 +1,4 @@
-import { oneDayMs } from "../shared";
+import { oneDayMs } from "./shared";
 import { filterCommentsByUser, filterPRsByAuthorAndCreation } from "./queryFilters";
 
 const now = (new Date());
@@ -30,10 +30,18 @@ describe('queryFilters', () => {
         expect(result[0].user.login).toEqual(username);
     });
 
-    test('filterCommentsByUser', () => {
-        const result = filterCommentsByUser(testArr, username);
-        expect(result.length).toEqual(2);
-        expect(result[0].user.login).toEqual(username);
-        expect(result[1].user.login).toEqual(username);
+    describe('filterCommentsByUser', () => {
+        test('include single user', () => {
+            const result = filterCommentsByUser(testArr, username);
+            expect(result.length).toEqual(2);
+            expect(result[0].user.login).toEqual(username);
+            expect(result[1].user.login).toEqual(username);
+        });
+
+        test('exclude single user', () => {
+            const result = filterCommentsByUser(testArr, username, true);
+            expect(result.length).toEqual(1);
+            expect(result[0].user.login).toEqual('someone-else');
+        })
     });
 });

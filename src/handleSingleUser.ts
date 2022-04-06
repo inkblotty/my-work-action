@@ -1,6 +1,6 @@
 import { InputFields } from "./shared.types";
 import handlePRGroups from "./groupPRs";
-import { getCommitsInRange, getIssueCommentsInRange, getIssuesCreatedInRange, getPRCommentsInRange, getPRsCreated } from "./queries";
+import { getIssueCommentsInRange, getIssuesCreatedInRange, getPRCommentsInRange, getPRsCreated } from "./queries";
 
 async function handleSingleUser(inputFields: InputFields, username: string, startDate: Date) {
     const startDateIso = startDate.toISOString();
@@ -9,7 +9,6 @@ async function handleSingleUser(inputFields: InputFields, username: string, star
     const issueComments = await getIssueCommentsInRange(inputFields, username, startDateIso);
     const prsCreated = await getPRsCreated(inputFields, username, startDateIso);
     const prComments = await getPRCommentsInRange(inputFields, username, startDateIso);
-    // const commits = await getCommitsInRange(inputFields, username, startDateIso);
 
     // group all the things
     const prGroups = handlePRGroups(prsCreated, prComments);

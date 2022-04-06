@@ -1,5 +1,5 @@
 import * as core from '@actions/core';
-import handleInputAndAggregate from "./input/handleInputAndAggregate";
+import handleInputAndAggregate from "./handleInputAndAggregate";
 
 (async () => {
     try {

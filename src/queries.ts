@@ -1,14 +1,47 @@
 import * as github from '@actions/github';
-import { filterCommentsByUser, filterPRsByAuthorAndCreation } from './queryFilters';
+import { filterCommentsByUser, filterCommitsByAuthorAndCreation, filterPRsByAuthorAndCreation } from './queryFilters';
 import { InputFields, QueryType } from './shared.types';
 
+const getCommitsForPR = async (inputFields: InputFields, username: string, sinceIso: string, pr: any) => {
+    if (pr.user.login === username) {
+        return;
+    }
+
+    const allPrCommits = await github.getOctokit(process.env.GH_TOKEN).request(pr.commits_url, {
+        owner: inputFields.owner,
+        repo: pr.repo.name,
+    });
+    return {
+        repo: pr.repo.full_name,
+        titleData: {
+            identifier: pr,
+            title: pr.title,
+            url: pr.html_url,
+            username: pr.user.login,
+        },
+        // @ts-ignore
+        data: filterCommitsByAuthorAndCreation(allPrCommits, username, sinceIso, true),
+        type: QueryType['commit'],
+    }
+}
 export const getPRsCreated = async (inputFields: InputFields, username: string, sinceIso: string) => {
     const allRepos = inputFields.queried_repos.split(',');
-    const allPRs = await Promise.all(allRepos.map(async repo => {
+    const allSecondaryPRs = [];
+
+    const allCreatedPRs = await Promise.all(allRepos.map(async repo => {
         const allRepoPRs = await github.getOctokit(process.env.GH_TOKEN).request('GET /repos/{owner}/{repo}/pulls', {
             owner: inputFields.owner,
             repo,
         });
+
+        // @ts-ignore
+        await Promise.all(allRepoPRs.forEach(async pr => {
+            const secondaryContribution = await getCommitsForPR(inputFields, username, sinceIso, pr);
+            if (secondaryContribution) {
+                allSecondaryPRs.push(secondaryContribution);
+            }
+        }))
+
         return {
             repo,
             // @ts-ignore
@@ -16,7 +49,7 @@ export const getPRsCreated = async (inputFields: InputFields, username: string, 
             type: QueryType['pr-created'],
         };
     }));
-    return allPRs;
+    return [...allCreatedPRs, ...allSecondaryPRs];
 }
 
 export const getIssuesCreatedInRange = async (inputFields: InputFields, username: string, sinceIso: string) => {
@@ -81,21 +114,3 @@ export const getIssueCommentsInRange = async (inputFields: InputFields, username
 export const getDiscussionCommentsInRange = async (inputFields: InputFields, username: string, sinceIso: string) => {
 
 }
-
-// export const getCommitsInRange = async (inputFields: InputFields, username: string, sinceIso: string) => {
-//     const allRepos = inputFields.queried_repos.split(',');
-//     const allCommits = await Promise.all(allRepos.map(async repo => {
-//         const allRepoCommits = await github.getOctokit(process.env.GH_TOKEN).request('GET /repos/{owner}/{repo}/pulls', {
-//             owner: inputFields.owner,
-//             repo,
-//             since: sinceIso,
-//             author: username
-//         });
-//         return {
-//             repo,
-//             data: allRepoCommits,
-//             type: QueryType['commit'],
-//         };
-//     }));
-//     return allCommits;
-// }

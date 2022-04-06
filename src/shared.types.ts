@@ -10,6 +10,12 @@ export enum QueryType {
 
 export interface QueryGroup {
     repo: string;
+    titleData?: {
+        identifier: string;
+        title: string;
+        url: string;
+        username?: string;
+    };
     data: any[]; // this will be the array of comments, commits, prs, etc.
     type: QueryType;
 }

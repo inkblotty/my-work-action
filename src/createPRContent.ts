@@ -1,5 +1,5 @@
-import { stringify } from "querystring";
-import { formatDate } from "../shared";
+import { formatDate } from "./shared";
+import { InputFields } from "./shared.types";
 
 export const createPRBodyText = (startDate: Date, endDate: Date, username: string): string => `\
 ## @${username}'s Work for Week of ${formatDate(startDate)} - ${formatDate(endDate)}}
