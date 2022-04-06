@@ -1,9 +1,9 @@
 interface InputFields {
     owner: string;
-    queried_repos: string[];
+    queried_repos: string;
     repo: string;
     timespan: number;
-    usernames: string[];
+    usernames: string;
 }
 
 type WorkItemType = 'pull-request' | 'discussion' | 'issue' | 'review' | 'commit' | 'comment';

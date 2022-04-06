@@ -1,16 +1,9 @@
 import * as core from '@actions/core';
-import * as camelcase from 'camelcase';
 import { oneDayMs } from '../shared';
+import handleSingleUser from './handleSingleUser';
 
 const makeRequiredErrorMessage = (inputName) => `Failed to retrieve input "${inputName}". Does the workflow include "${inputName}"?`;
 
-interface ValidatedInput {
-    owner: string;
-    queried_repos: string;
-    repo: string;
-    timespan: number;
-    usernames: string;
-}
 export const makeValidatedInput = (GH_TOKEN: string) => {
     if (!GH_TOKEN) {
         throw new Error(
@@ -18,7 +11,13 @@ export const makeValidatedInput = (GH_TOKEN: string) => {
           );
     }
 
-    const endObj: Partial<ValidatedInput> = {};
+    const endObj: InputFields = {
+        owner: '',
+        repo: '',
+        queried_repos: '',
+        timespan: parseInt(core.getInput('timespan') || '7'),
+        usernames: '',
+    };
     const requiredInputs = ["owner", "repo", "queried_repos", "usernames"];
     requiredInputs.forEach(inputName => {
         const workflowValue = core.getInput(inputName, { required: true });
@@ -26,7 +25,7 @@ export const makeValidatedInput = (GH_TOKEN: string) => {
             throw new Error(makeRequiredErrorMessage(inputName));
         }
 
-        endObj[camelcase(inputName)] = workflowValue;
+        endObj[inputName] = workflowValue;
     });
 
     return endObj;
@@ -36,11 +35,8 @@ const handleInputAndAggregate = async () => {
     const inputFields = makeValidatedInput(process.env.GH_TOKEN);
     const usernames = inputFields.usernames.split(',');
 
-    const endDate = new Date();
     const startDate = new Date((new Date()).getTime() - (oneDayMs * (inputFields.timespan || 7)));
 
-    const allGroupsOfWork = usernames.forEach(username => {
-
-    });
+    usernames.forEach(username => handleSingleUser(inputFields, username, startDate));
 }
 export default handleInputAndAggregate;

@@ -4,7 +4,7 @@
   "description": "Action to summarize all the work you've done in a week for you in a PR",
   "main": "index.js",
   "scripts": {
-    "build": "rm -f ./lib/* && tsc",
+    "build": "rm -rf ./lib/* && tsc",
     "test": "jest"
   },
   "repository": {
@@ -33,7 +33,6 @@
   },
   "dependencies": {
     "@actions/core": "^1.6.0",
-    "@actions/github": "^5.0.1",
-    "camelcase": "^6.3.0"
+    "@actions/github": "^5.0.1"
   }
 }
