@@ -14,7 +14,9 @@ const makeGroupsIntoMarkdown = (groupsArr: OutputGroupGroup[], username: string,
     const secondaryArr = [
         '## Secondary Work\n\nThis usually refers to reviews, contributions to other\'s PRs, and other secondary work\n\n',
     ];
-    const unknownArr = [];
+    const unknownArr = [
+        '## Unknown Work\n\n'
+    ];
 
     groupsArr.forEach(group => {
         Object.values(group.primary).forEach(primaryVal => {
@@ -36,9 +38,17 @@ const makeGroupsIntoMarkdown = (groupsArr: OutputGroupGroup[], username: string,
     if (primaryArr.length === 1) {
         primaryArr.push(noWorkMessage);
     }
+    markdownBodyArr.push.apply(primaryArr);
+    markdownBodyArr.push('\n');
 
     if (secondaryArr.length === 1) {
         secondaryArr.push(noWorkMessage);
+    }
+    markdownBodyArr.push.apply(secondaryArr);
+    markdownBodyArr.push('\n');
+
+    if (unknownArr.length !== 1) {
+        markdownBodyArr.push.apply(unknownArr);
     }
 
     return markdownBodyArr.join('');

@@ -1,6 +1,8 @@
 import { InputFields } from "./shared.types";
 import handlePRGroups from "./groupPRs";
 import { getIssueCommentsInRange, getIssuesCreatedInRange, getPRCommentsInRange, getPRsCreated } from "./queries";
+import makeGroupsIntoMarkdown from "./makeGroupsIntoMarkdown";
+import openBranch from "./openBranch";
 
 async function handleSingleUser(inputFields: InputFields, username: string, startDate: Date) {
     const startDateIso = startDate.toISOString();
@@ -14,8 +16,10 @@ async function handleSingleUser(inputFields: InputFields, username: string, star
     const prGroups = handlePRGroups(prsCreated, prComments);
 
     // format the groups into markdown
+    const documentBody = makeGroupsIntoMarkdown([prGroups], username, startDate);
 
     // create a branch
+    const { ref } = await openBranch(inputFields, username);
 
     // open a PR
 }
