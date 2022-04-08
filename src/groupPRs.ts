@@ -37,8 +37,10 @@ const handlePRGroups = (allPRsCreated: QueryGroup[], allPRComments: QueryGroup[]
 
     allPRComments.forEach(repoGroup => {
         repoGroup.data.forEach(comment => {
+            // use the specific PR as key
             const key = comment.html_url.split('#')[0];
-            const repo = key.split('github.com')[1];
+            const prUrl = key.split('github.com')[1];
+            const repo = prUrl.split('/pull')[0];
             // if comment is on own PR, ignore
             if (finalPRs.primary[repo]) {
                 if (finalPRs.primary[repo].artifacts.find(url => url === key)) {
@@ -47,14 +49,14 @@ const handlePRGroups = (allPRsCreated: QueryGroup[], allPRComments: QueryGroup[]
             }
             
             // make sure that comment belongs to a PR group
-            if (!finalPRs.secondary[key]) {
-                finalPRs.secondary[key] = {
-                    groupTitle: `Reviewed and left comments on [a PR in ${repo}](${key})`,
+            if (!finalPRs.secondary[prUrl]) {
+                finalPRs.secondary[prUrl] = {
+                    groupTitle: `Reviewed and left comments on [a PR in ${repo}](${prUrl})`,
                     artifacts: [],
                 }
             }
 
-            finalPRs.secondary[key].artifacts.push({
+            finalPRs.secondary[prUrl].artifacts.push({
                 title: comment.body,
                 url: comment.html_url,
             });

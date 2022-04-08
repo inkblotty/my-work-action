@@ -3,6 +3,7 @@ import handlePRGroups from "./groupPRs";
 import { getIssueCommentsInRange, getIssuesCreatedInRange, getPRCommentsInRange, getPRsCreated } from "./queries";
 import makeGroupsIntoMarkdown from "./makeGroupsIntoMarkdown";
 import openBranch from "./openBranch";
+import commitToBranch from "./commitToBranch";
 
 async function handleSingleUser(inputFields: InputFields, username: string, startDate: Date) {
     const startDateIso = startDate.toISOString();
@@ -20,6 +21,9 @@ async function handleSingleUser(inputFields: InputFields, username: string, star
 
     // create a branch
     const { ref } = await openBranch(inputFields, username);
+
+    // commit to branch
+    await commitToBranch(inputFields, username, ref.id, documentBody);
 
     // open a PR
 }

@@ -4,3 +4,5 @@ export const formatDate = (date: Date): string => {
 }
 
 export const oneDayMs = 1000 * 60 * 60 * 24;
+
+export const base64encode = (str: string) => Buffer.from(str, 'utf-8').toString('base64');
