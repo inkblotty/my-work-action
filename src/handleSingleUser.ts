@@ -4,6 +4,8 @@ import { getIssueCommentsInRange, getIssuesCreatedInRange, getPRCommentsInRange,
 import makeGroupsIntoMarkdown from "./makeGroupsIntoMarkdown";
 import openBranch from "./openBranch";
 import commitToBranch from "./commitToBranch";
+import openPR from "./openPR";
+import { createPRBodyText } from "./createPRContent";
 
 async function handleSingleUser(inputFields: InputFields, username: string, startDate: Date) {
     const startDateIso = startDate.toISOString();
@@ -26,5 +28,7 @@ async function handleSingleUser(inputFields: InputFields, username: string, star
     await commitToBranch(inputFields, username, ref.id, documentBody);
 
     // open a PR
+    const body = createPRBodyText(startDate, new Date(), username);
+    return openPR(inputFields, username, ref.name, body);
 }
 export default handleSingleUser;

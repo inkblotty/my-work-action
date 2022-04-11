@@ -9,7 +9,7 @@ mutation myCreateRef($input: CreateRefInput!) {
 }
 `
 
-const openBranch = async ({ owner, repo }: InputFields, username: string): Promise<{ ref: { id: string } }> => {
+const openBranch = async ({ owner, repo }: InputFields, username: string): Promise<{ ref: { id: string, name: string } }> => {
     const now = (new Date()).getTime();
     const branchName = `temp/my-work-${username}-${now}`
     const branchData = {

@@ -1,28 +1,21 @@
-import { graphql } from "@octokit/graphql";
+import * as github from '@actions/github';
+import { formatDate } from "./shared";
 import { InputFields } from "./shared.types";
 
-const createRefMutation = `\
-mutation myCreateRef($input: CreateRefInput!) {
-    createRef(input: $input) {
-        ref,
-    }
-}
-`
-
-const openBranch = async ({ owner, repo }: InputFields, username: string): Promise<{ ref: { id: string } }> => {
-    const now = (new Date()).getTime();
-    const branchName = `temp/my-work-${username}-${now}`
-    const branchData = {
+const openPR = async ({ owner, repo }: InputFields, username: string, branchName: string, body: string): Promise<{ html_url: string }> => {
+    const now = formatDate(new Date());
+    const prData = {
         owner,
         repo,
-        name: `refs/heads/${branchName}`,
+        base: 'main',
+        head: `refs/heads/${branchName}`,
+        title: `@${username}'s Work: ${now}`,
+        body, 
         headers: {
             authorization: `token ${process.env.GH_TOKEN}`
         },
     };
-    return graphql(
-        createRefMutation,
-        branchData,
-    );
+    const { data } = await github.getOctokit(process.env.GITHUB_TOKEN).request('POST /repos/{owner}/{repo}/pulls', prData);
+    return { html_url: data.html_url };
 }
-export default openBranch;
+export default openPR;
