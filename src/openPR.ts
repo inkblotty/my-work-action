@@ -15,7 +15,7 @@ const openPR = async ({ owner, repo }: InputFields, username: string, branchName
             authorization: `token ${process.env.GH_TOKEN}`
         },
     };
-    const { data } = await github.getOctokit(process.env.GITHUB_TOKEN).request('POST /repos/{owner}/{repo}/pulls', prData);
+    const { data } = await github.getOctokit(process.env.GH_TOKEN).request('POST /repos/{owner}/{repo}/pulls', prData);
     return { html_url: data.html_url };
 }
 export default openPR;
