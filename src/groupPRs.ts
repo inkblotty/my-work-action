@@ -14,7 +14,7 @@ const handlePRGroups = (allPRsCreated: QueryGroup[], allPRComments: QueryGroup[]
     };
     allPRsCreated.forEach(repoGroup => {
         const { data, type, titleData } = repoGroup;
-        if (type === QueryType['pr-created']) {
+        if (type === QueryType['pr-created'] && data[0]) {
             finalPRs.primary[data[0].repo.full_name] = {
                 groupTitle: `PRs Created in [${data[0].repo.full_name}](${data[0].repo.html_url})`,
                 artifacts: data.map(pr => ({
