@@ -13,7 +13,8 @@ mutation myCreateRef($input: CreateRefInput!) {
 }
 `;
 
-const openBranch = async ({ owner, repo }: InputFields, username: string): Promise<{ ref: { id: string, name: string } }> => {
+interface RefStuff { ref: { id: string, name: string } }
+const openBranch = async ({ owner, repo }: InputFields, username: string): Promise<RefStuff> => {
     const now = (new Date()).getTime();
     const branchName = `temp/my-work-${username}-${now}`;
     const { data: { node_id: repositoryId } } = await github.getOctokit(process.env.GH_TOKEN).request('GET /repos/{owner}/{repo}', {
@@ -35,9 +36,10 @@ const openBranch = async ({ owner, repo }: InputFields, username: string): Promi
             authorization: `token ${process.env.GH_TOKEN}`
         },
     };
-    return graphql(
+    const data = await graphql(
         createRefMutation,
         branchData,
     );
+    return data as RefStuff;
 }
 export default openBranch;
