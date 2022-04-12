@@ -29,7 +29,7 @@ const commitToBranch = async ({ owner, repo }: InputFields, username: string, br
                     contents: base64encode(documentBody),
                 }],
             },
-            message: { to_h: commitMessage },
+            message: commitMessage,
         },
         headers: {
             authorization: `token ${process.env.GH_TOKEN}`

@@ -8,6 +8,7 @@ mutation myCreateRef($input: CreateRefInput!) {
         ref {
             id
             name
+            sha
         }
     }
 }
@@ -40,6 +41,8 @@ const openBranch = async ({ owner, repo }: InputFields, username: string): Promi
         createRefMutation,
         branchData,
     );
+    // @ts-ignore
+    console.log(data.createRef.ref);
     return {
         // @ts-ignore return type isn't great here
         ref: data.createRef.ref,
