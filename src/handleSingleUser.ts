@@ -25,7 +25,7 @@ async function handleSingleUser(inputFields: InputFields, username: string, star
     const { ref } = await openBranch(inputFields, username);
 
     // commit to branch
-    await commitToBranch(inputFields, username, ref.id, ref.target, documentBody);
+    await commitToBranch(inputFields, username, ref.id, ref.target.oid, documentBody);
 
     // open a PR
     const body = createPRBodyText(startDate, new Date(), username);

@@ -8,13 +8,15 @@ mutation myCreateRef($input: CreateRefInput!) {
         ref {
             id
             name
-            target
+            target {
+                oid
+            }
         }
     }
 }
 `;
 
-interface RefStuff { ref: { id: string, name: string, target: string } }
+interface RefStuff { ref: { id: string, name: string, target: { oid: string } } }
 const openBranch = async ({ owner, repo }: InputFields, username: string): Promise<RefStuff> => {
     const now = (new Date()).getTime();
     const branchName = `temp/my-work-${username}-${now}`;
