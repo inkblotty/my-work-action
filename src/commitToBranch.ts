@@ -18,16 +18,18 @@ const commitToBranch = async ({ owner, repo }: InputFields, username: string, br
     const changeData = {
         owner,
         repo,
-        branch: {
-            id: branchNodeId,
+        input: {
+            branch: {
+                id: branchNodeId,
+            },
+            fileChanges: {
+                additions: [{
+                    path: `my-work/${username}/${now}.md`,
+                    contents: base64encode(documentBody),
+                }],
+            },
+            message: commitMessage,
         },
-        fileChanges: {
-            additions: [{
-                path: `my-work/${username}/${now}.md`,
-                contents: base64encode(documentBody),
-            }],
-        },
-        message: commitMessage,
         headers: {
             authorization: `token ${process.env.GH_TOKEN}`
         },

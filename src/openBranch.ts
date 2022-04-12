@@ -1,3 +1,4 @@
+import * as github from '@actions/github';
 import { graphql } from "@octokit/graphql";
 import { InputFields } from "./shared.types";
 
@@ -10,15 +11,26 @@ mutation myCreateRef($input: CreateRefInput!) {
         }
     }
 }
-`
+`;
 
 const openBranch = async ({ owner, repo }: InputFields, username: string): Promise<{ ref: { id: string, name: string } }> => {
     const now = (new Date()).getTime();
-    const branchName = `temp/my-work-${username}-${now}`
-    const branchData = {
+    const branchName = `temp/my-work-${username}-${now}`;
+    const { data: { node_id: repositoryId } } = await github.getOctokit(process.env.GH_TOKEN).request('GET /repos/{owner}/{repo}', {
         owner,
         repo,
-        ref: `refs/heads/${branchName}`,
+    });
+    const { data: { commit: { node_id: latestCommitOnMain } } } = await github.getOctokit(process.env.GH_TOKEN).request('GET /repos/{owner}/{repo}/branches/{branch}', {
+        owner,
+        repo,
+        branch: 'main',
+    });
+    const branchData = {
+        input: {
+            name: `refs/heads/${branchName}`,
+            old: latestCommitOnMain,
+            repositoryId,
+        },
         headers: {
             authorization: `token ${process.env.GH_TOKEN}`
         },
