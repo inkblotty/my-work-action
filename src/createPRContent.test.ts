@@ -8,7 +8,7 @@ describe('createPRContent', () => {
     test('createPRBodyText', () => {
         const username = 'beepboop';
         const output = `\
-## @${username}'s Work for Week of ${formatDate(startDate)} - ${formatDate(endDate)}}
+## @${username}'s Work for Week of ${formatDate(startDate)} - ${formatDate(endDate)}
 
 ### Description
 This PR aggregates everything you've done in asssociated repos within the last week.
@@ -16,8 +16,8 @@ This PR aggregates everything you've done in asssociated repos within the last w
 ### Next Steps for @${username}
 1. Review the PR
     - If you notice missing information, add it in and ping @inkblotty to update the script
-2. Merge the PR
-3. Add any Highlights to your Highlights file
+2. Add any Highlights to your Highlights file
+3. Merge the PR
 4. In your next meeting with your manager, if there are any trends you want to discuss, bring up this document
 `;
         expect(createPRBodyText(startDate, endDate, username)).toEqual(output);

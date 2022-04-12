@@ -2,7 +2,7 @@ import { formatDate } from "./shared";
 import { InputFields } from "./shared.types";
 
 export const createPRBodyText = (startDate: Date, endDate: Date, username: string): string => `\
-## @${username}'s Work for Week of ${formatDate(startDate)} - ${formatDate(endDate)}}
+## @${username}'s Work for Week of ${formatDate(startDate)} - ${formatDate(endDate)}
 
 ### Description
 This PR aggregates everything you've done in asssociated repos within the last week.
