@@ -19,5 +19,20 @@ Use this action as a tool to reflect on where your team member's time is spent. 
 
 ## Required Fields
 ### Environment variables
+- `GH_TOKEN`
 
 ### Input variables
+- `owner`
+The owner of the repo where the PR should be created. Often, either an organizaiton name or a user's handle.
+
+- `queried_repos`
+The repos that should be searched for relevant work, comma-separated.
+
+- `repo`
+The name of the repo where the PR should be created.
+
+- `timespan` (optional)
+Number of days to query, with today as the end date. Defaults to 7 days.
+
+- `usernames`
+Your user handle, or your list of teammates, comma-separated.
