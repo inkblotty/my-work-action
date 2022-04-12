@@ -20,7 +20,7 @@ const openBranch = async ({ owner, repo }: InputFields, username: string): Promi
         owner,
         repo,
     });
-    const { data: { commit: { node_id: latestCommitOnMain } } } = await github.getOctokit(process.env.GH_TOKEN).request('GET /repos/{owner}/{repo}/branches/{branch}', {
+    const { data: { commit: { sha: latestCommitOnMain } } } = await github.getOctokit(process.env.GH_TOKEN).request('GET /repos/{owner}/{repo}/branches/{branch}', {
         owner,
         repo,
         branch: 'main',
