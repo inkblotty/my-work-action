@@ -5,7 +5,9 @@ import { InputFields } from "./shared.types";
 const commitMutation = `\
 mutation myCreateCommitOnBranch($input: CreateCommitOnBranchInput!) {
     createCommitOnBranch(input: $input) {
-        ref,
+        ref {
+            id
+        }
     }
 }
 `

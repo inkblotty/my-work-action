@@ -4,7 +4,10 @@ import { InputFields } from "./shared.types";
 const createRefMutation = `\
 mutation myCreateRef($input: CreateRefInput!) {
     createRef(input: $input) {
-        ref,
+        ref {
+            id
+            name
+        }
     }
 }
 `
