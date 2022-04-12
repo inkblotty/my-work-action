@@ -33,13 +33,12 @@ export const getPRsCreated = async (inputFields: InputFields, username: string, 
             repo,
         });
 
-        // @ts-ignore
-        await Promise.all(allRepoPRs.forEach(async pr => {
+        allRepoPRs.forEach(async pr => {
             const secondaryContribution = await getCommitsForPR(inputFields, username, sinceIso, pr);
             if (secondaryContribution) {
                 allSecondaryPRs.push(secondaryContribution);
             }
-        }))
+        });
 
         return {
             repo,
