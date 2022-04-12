@@ -40,7 +40,7 @@ const openBranch = async ({ owner, repo }: InputFields, username: string): Promi
         createRefMutation,
         branchData,
     );
-    console.log('return data', data);
-    return data as RefStuff;
+    // @ts-ignore return type isn't great here
+    return data.createRef as RefStuff;
 }
 export default openBranch;
