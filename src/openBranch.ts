@@ -8,13 +8,13 @@ mutation myCreateRef($input: CreateRefInput!) {
         ref {
             id
             name
-            sha
+            target
         }
     }
 }
 `;
 
-interface RefStuff { ref: { id: string, name: string, sha: string } }
+interface RefStuff { ref: { id: string, name: string, target: string } }
 const openBranch = async ({ owner, repo }: InputFields, username: string): Promise<RefStuff> => {
     const now = (new Date()).getTime();
     const branchName = `temp/my-work-${username}-${now}`;
@@ -41,8 +41,6 @@ const openBranch = async ({ owner, repo }: InputFields, username: string): Promi
         createRefMutation,
         branchData,
     );
-    // @ts-ignore
-    console.log(data.createRef.ref);
     return {
         // @ts-ignore return type isn't great here
         ref: data.createRef.ref,
