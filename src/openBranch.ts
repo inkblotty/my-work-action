@@ -28,7 +28,7 @@ const openBranch = async ({ owner, repo }: InputFields, username: string): Promi
     const branchData = {
         input: {
             name: `refs/heads/${branchName}`,
-            old: latestCommitOnMain,
+            oid: latestCommitOnMain,
             repositoryId,
         },
         headers: {
