@@ -12,7 +12,7 @@ mutation myCreateCommitOnBranch($input: CreateCommitOnBranchInput!) {
 }
 `
 
-const commitToBranch = async ({ owner, repo }: InputFields, username: string, branchNodeId: string, documentBody: string): Promise<{ ref: { id: string } }> => {
+const commitToBranch = async ({ owner, repo }: InputFields, username: string, branchNodeId: string, branchSha: string, documentBody: string): Promise<{ ref: { id: string } }> => {
     const now = (new Date()).toISOString();
     const commitMessage = 'Generated commit from my-work-action';
     const changeData = {
@@ -22,13 +22,14 @@ const commitToBranch = async ({ owner, repo }: InputFields, username: string, br
             branch: {
                 id: branchNodeId,
             },
+            expectedHeadOid: branchSha,
             fileChanges: {
                 additions: [{
                     path: `my-work/${username}/${now}.md`,
                     contents: base64encode(documentBody),
                 }],
             },
-            message: commitMessage,
+            message: { to_h: commitMessage },
         },
         headers: {
             authorization: `token ${process.env.GH_TOKEN}`
