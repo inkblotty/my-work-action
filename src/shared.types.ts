@@ -24,7 +24,7 @@ export interface OutputGroup {
     [repoOrEventString: string]: {
         groupTitle: string;
         artifacts: {
-            text: string;
+            title: string;
             url: string;
         }[];
     };

@@ -23,17 +23,17 @@ const makeGroupsIntoMarkdown = (groups: OutputGroupGroup, username: string, star
     Object.values(groups.primary).forEach(primaryVal => {
         console.log('primary: ', primaryVal.artifacts);
         primaryArr.push(`### ${primaryVal.groupTitle}\n`);
-        primaryVal.artifacts.forEach(lineItem => primaryArr.push(`- [${lineItem.text}](${lineItem.url})\n`))
+        primaryVal.artifacts.forEach(lineItem => primaryArr.push(`- [${lineItem.title}](${lineItem.url})\n`))
     });
 
     Object.values(groups.secondary).forEach(secondaryVal => {
         secondaryArr.push(`### ${secondaryVal.groupTitle}\n`);
-        secondaryVal.artifacts.forEach(lineItem => secondaryArr.push(`- [${lineItem.text}](${lineItem.url})\n`))
+        secondaryVal.artifacts.forEach(lineItem => secondaryArr.push(`- [${lineItem.title}](${lineItem.url})\n`))
     });
 
     Object.values(groups.unknown).forEach(unknownVal => {
         unknownArr.push(`### ${unknownVal.groupTitle}\n`);
-        unknownVal.artifacts.forEach(lineItem => unknownArr.push(`- [${lineItem.text}](${lineItem.url})\n`))
+        unknownVal.artifacts.forEach(lineItem => unknownArr.push(`- [${lineItem.title}](${lineItem.url})\n`))
     });
 
     console.log('\nprimaryArr', primaryArr);
