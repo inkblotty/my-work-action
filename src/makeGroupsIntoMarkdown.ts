@@ -18,10 +18,7 @@ const makeGroupsIntoMarkdown = (groups: OutputGroupGroup, username: string, star
         '## Unknown Work\n\n'
     ];
 
-    console.log('groups', groups);
-
     Object.values(groups.primary).forEach(primaryVal => {
-        console.log('primary: ', primaryVal.artifacts);
         primaryArr.push(`### ${primaryVal.groupTitle}\n`);
         primaryVal.artifacts.forEach(lineItem => primaryArr.push(`- [${lineItem.title}](${lineItem.url})\n`))
     });
@@ -36,24 +33,20 @@ const makeGroupsIntoMarkdown = (groups: OutputGroupGroup, username: string, star
         unknownVal.artifacts.forEach(lineItem => unknownArr.push(`- [${lineItem.title}](${lineItem.url})\n`))
     });
 
-    console.log('\nprimaryArr', primaryArr);
-    console.log('\nsecondaryArr', secondaryArr);
-    console.log('\nunknownArr', unknownArr);
-
     if (primaryArr.length === 1) {
         primaryArr.push(noWorkMessage);
     }
-    markdownBodyArr.push.apply(primaryArr);
+    primaryArr.forEach(item => markdownBodyArr.push(item));
     markdownBodyArr.push('\n');
 
     if (secondaryArr.length === 1) {
         secondaryArr.push(noWorkMessage);
     }
-    markdownBodyArr.push.apply(secondaryArr);
+    secondaryArr.forEach(item => markdownBodyArr.push(item));
     markdownBodyArr.push('\n');
 
     if (unknownArr.length !== 1) {
-        markdownBodyArr.push.apply(unknownArr);
+        unknownArr.forEach(item => markdownBodyArr.push(item));
     }
 
     return markdownBodyArr.join('');
