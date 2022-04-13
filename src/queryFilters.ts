@@ -15,6 +15,13 @@ export const filterCommitsByAuthorAndCreation = (commitsList: { commit: { author
     });
 }
 
-export const filterCommentsByUser = (commentsArr: { user: { login: string  } }[], username: string, excludeUser?: boolean) => {
+interface ReviewComment {
+    user: {
+        login: string;
+    };
+    html_url: string;
+    path?: string;
+}
+export const filterCommentsByUser = (commentsArr: ReviewComment[], username: string, excludeUser?: boolean): ReviewComment[] => {
     return commentsArr.filter(({ user }) => excludeUser ? user.login !== username : user.login === username);
 }

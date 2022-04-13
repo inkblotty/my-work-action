@@ -1,6 +1,6 @@
 import * as github from '@actions/github';
 import { filterCommentsByUser, filterCommitsByAuthorAndCreation, filterPRsByAuthorAndCreation } from './queryFilters';
-import { InputFields, QueryType } from './shared.types';
+import { InputFields, QueryGroup, QueryType } from './shared.types';
 
 const getCommitsForPR = async (inputFields: InputFields, username: string, sinceIso: string, pr: any) => {
     if (pr.user.login === username) {
@@ -76,19 +76,36 @@ export const getDiscussionsCreatedInRange = async (inputFields: InputFields, use
 
 export const getPRCommentsInRange = async (inputFields: InputFields, username: string, sinceIso: string) => {
     const allRepos = inputFields.queried_repos.split(',');
-    const allPRs = await Promise.all(allRepos.map(async repo => {
+    const commentsGroupedByPr: { [key: string]: QueryGroup } = {
+    };
+    await Promise.all(allRepos.map(async repo => {
         const { data: allPRComments } = await github.getOctokit(process.env.GH_TOKEN).request('GET /repos/{owner}/{repo}/pulls/comments', {
             owner: inputFields.owner,
             repo,
             since: sinceIso,
         });
-        return {
-            repo,
-            data: filterCommentsByUser(allPRComments, username),
-            type: QueryType['pr-comment-created'],
-        };
+
+        const filteredComments = filterCommentsByUser(allPRComments, username);
+        filteredComments.forEach(comment => {
+            const [prUrl] = comment.html_url.split('#');
+            if (!commentsGroupedByPr[prUrl]) {
+                commentsGroupedByPr[prUrl] = {
+                    repo,
+                    data: [],
+                    titleData: {
+                        identifier: comment.html_url,
+                        title: `Commented on file: ${comment.path}`,
+                        url: prUrl,
+                        username: comment.user.login,
+                    },
+                    type: QueryType['pr-comment-created'],
+                }
+            }
+        });
+
+        return '';
     }));
-    return allPRs;
+    return Object.values(commentsGroupedByPr);
 }
 
 export const getIssueCommentsInRange = async (inputFields: InputFields, username: string, sinceIso: string) => {
