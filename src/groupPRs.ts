@@ -14,7 +14,6 @@ const handlePRGroups = (allPRsCreated: QueryGroup[], allPRComments: QueryGroup[]
     };
 
     allPRsCreated.forEach(repoGroup => {
-        console.log('repoGroup', repoGroup);
         const { data, type, titleData } = repoGroup;
         if (type === QueryType['pr-created'] && data[0]) {
             const [repoUrl] = data[0].html_url.split('/pull');
@@ -67,6 +66,9 @@ const handlePRGroups = (allPRsCreated: QueryGroup[], allPRComments: QueryGroup[]
             });
         })
     });
+
+    console.log('finalPRs', finalPRs);
+
     return finalPRs;
 }
 export default handlePRGroups;
