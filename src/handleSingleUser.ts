@@ -19,7 +19,7 @@ async function handleSingleUser(inputFields: InputFields, username: string, star
     const prGroups = handlePRGroups(prsCreated, prComments);
 
     // format the groups into markdown
-    const documentBody = makeGroupsIntoMarkdown([prGroups], username, startDate);
+    const documentBody = makeGroupsIntoMarkdown(prGroups, username, startDate);
 
     // create a branch
     const { ref } = await openBranch(inputFields, username);

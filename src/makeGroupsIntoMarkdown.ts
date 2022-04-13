@@ -2,7 +2,7 @@ import { formatDate } from "./shared";
 import { OutputGroupGroup } from "./shared.types";
 
 const noWorkMessage = 'No work items';
-const makeGroupsIntoMarkdown = (groupsArr: OutputGroupGroup[], username: string, startDate: Date): string => {
+const makeGroupsIntoMarkdown = (groups: OutputGroupGroup, username: string, startDate: Date): string => {
     const now = new Date();
     const markdownBodyArr = [
         `# @${username}'s update for ${formatDate(startDate)} - ${formatDate(now)}\n\n`,
@@ -18,21 +18,19 @@ const makeGroupsIntoMarkdown = (groupsArr: OutputGroupGroup[], username: string,
         '## Unknown Work\n\n'
     ];
 
-    groupsArr.forEach(group => {
-        Object.values(group.primary).forEach(primaryVal => {
-            primaryArr.push(`### ${primaryVal.groupTitle}\n`);
-            primaryVal.artifacts.forEach(lineItem => primaryArr.push(`- [${lineItem.text}](${lineItem.url})\n`))
-        });
+    Object.values(groups.primary).forEach(primaryVal => {
+        primaryArr.push(`### ${primaryVal.groupTitle}\n`);
+        primaryVal.artifacts.forEach(lineItem => primaryArr.push(`- [${lineItem.text}](${lineItem.url})\n`))
+    });
 
-        Object.values(group.secondary).forEach(secondaryVal => {
-            secondaryArr.push(`### ${secondaryVal.groupTitle}\n`);
-            secondaryVal.artifacts.forEach(lineItem => secondaryArr.push(`- [${lineItem.text}](${lineItem.url})\n`))
-        });
+    Object.values(groups.secondary).forEach(secondaryVal => {
+        secondaryArr.push(`### ${secondaryVal.groupTitle}\n`);
+        secondaryVal.artifacts.forEach(lineItem => secondaryArr.push(`- [${lineItem.text}](${lineItem.url})\n`))
+    });
 
-        Object.values(group.unknown).forEach(unknownVal => {
-            unknownArr.push(`### ${unknownVal.groupTitle}\n`);
-            unknownVal.artifacts.forEach(lineItem => unknownArr.push(`- [${lineItem.text}](${lineItem.url})\n`))
-        });
+    Object.values(groups.unknown).forEach(unknownVal => {
+        unknownArr.push(`### ${unknownVal.groupTitle}\n`);
+        unknownVal.artifacts.forEach(lineItem => unknownArr.push(`- [${lineItem.text}](${lineItem.url})\n`))
     });
 
     if (primaryArr.length === 1) {
