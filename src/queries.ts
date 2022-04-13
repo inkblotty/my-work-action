@@ -88,19 +88,21 @@ export const getPRCommentsInRange = async (inputFields: InputFields, username: s
         const filteredComments = filterCommentsByUser(allPRComments, username);
         filteredComments.forEach(comment => {
             const [prUrl] = comment.html_url.split('#');
+            const [_, prNumber] = prUrl.split('pulls/');
             if (!commentsGroupedByPr[prUrl]) {
                 commentsGroupedByPr[prUrl] = {
                     repo,
                     data: [],
                     titleData: {
                         identifier: comment.html_url,
-                        title: `Commented on file: ${comment.path}`,
+                        title: `#${prNumber} in ${repo}`,
                         url: prUrl,
                         username: comment.user.login,
                     },
                     type: QueryType['pr-comment-created'],
                 }
             }
+            commentsGroupedByPr[prUrl].data.push(comment);
         });
 
         return '';
