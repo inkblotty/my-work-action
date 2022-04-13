@@ -7,9 +7,12 @@ const getCommitsForPR = async (inputFields: InputFields, username: string, since
         return;
     }
 
+    const [repoUrl] = pr.html_url.split('/pull');
+    const [_, repoName] = repoUrl.split('github.com/');
+
     const { data: allPrCommits } = await github.getOctokit(process.env.GH_TOKEN).request(pr.commits_url, {
         owner: inputFields.owner,
-        repo: pr.repo.name,
+        repo: repoName,
     });
     return {
         repo: pr.repo.full_name,
@@ -34,7 +37,6 @@ export const getPRsCreated = async (inputFields: InputFields, username: string, 
         });
 
         allRepoPRs.forEach(async pr => {
-            console.log('repo pr', pr);
             const secondaryContribution = await getCommitsForPR(inputFields, username, sinceIso, pr);
             if (secondaryContribution) {
                 allSecondaryPRs.push(secondaryContribution);
