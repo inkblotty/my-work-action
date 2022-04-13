@@ -15,7 +15,7 @@ const getCommitsForPR = async (inputFields: InputFields, username: string, since
         repo: repoName,
     });
     return {
-        repo: pr.repo.full_name,
+        repo: repoName,
         titleData: {
             identifier: pr,
             title: pr.title,
