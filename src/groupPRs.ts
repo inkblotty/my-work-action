@@ -55,7 +55,7 @@ const handlePRGroups = (allPRsCreated: QueryGroup[], allPRComments: QueryGroup[]
             // make sure that comment belongs to a PR group
             if (!finalPRs.secondary[prUrl]) {
                 finalPRs.secondary[prUrl] = {
-                    groupTitle: `Reviewed and left comments on [a PR in ${repo}](${prUrl})`,
+                    groupTitle: `Reviewed and left comments on PR [${repoGroup.titleData.title}](${prUrl})`,
                     artifacts: [],
                 }
             }
