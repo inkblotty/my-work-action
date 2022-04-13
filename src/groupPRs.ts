@@ -12,6 +12,9 @@ const handlePRGroups = (allPRsCreated: QueryGroup[], allPRComments: QueryGroup[]
         unknown: {
         }
     };
+
+    console.log('allPrsCreated', allPRsCreated);
+
     allPRsCreated.forEach(repoGroup => {
         const { data, type, titleData } = repoGroup;
         if (type === QueryType['pr-created'] && data[0]?.repo) {
