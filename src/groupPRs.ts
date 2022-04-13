@@ -16,9 +16,12 @@ const handlePRGroups = (allPRsCreated: QueryGroup[], allPRComments: QueryGroup[]
     allPRsCreated.forEach(repoGroup => {
         console.log('repoGroup', repoGroup);
         const { data, type, titleData } = repoGroup;
-        if (type === QueryType['pr-created'] && data[0]?.repo) {
-            finalPRs.primary[data[0].repo.full_name] = {
-                groupTitle: `PRs Created in [${data[0].repo.full_name}](${data[0].repo.html_url})`,
+        if (type === QueryType['pr-created'] && data[0]) {
+            const [repoUrl] = data[0].html_url.split('/pull');
+            const [_, repoName] = repoUrl.split('github.com/');
+
+            finalPRs.primary[repoName] = {
+                groupTitle: `PRs Created in [${repoName}](${repoUrl})`,
                 artifacts: data.map(pr => ({
                     title: pr.title,
                     url: pr.html_url,
