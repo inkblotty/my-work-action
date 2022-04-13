@@ -11,15 +11,18 @@ const testArr = [
     {
         user: { login: username },
         created_at: twoWeeksAgo.toISOString(),
+        html_url: 'https://github.com/somewhere/bloop/pull/1'
     },
     // second one has different user
     {
         user: { login: 'someone-else' },
         created_at: now.toISOString(),
+        html_url: 'https://github.com/somewhere/bloop/pull/2'
     },
     {
         user: { login: username },
         created_at: lastWeek.toISOString(),
+        html_url: 'https://github.com/somewhere/bloop/pull/3'
     }
 ];
 describe('queryFilters', () => {

@@ -90,10 +90,11 @@ export const getPRCommentsInRange = async (inputFields: InputFields, username: s
         const filteredComments = filterCommentsByUser(allPRComments, username);
         filteredComments.forEach(comment => {
             const [prUrl] = comment.html_url.split('#');
-            const [_, prNumber] = prUrl.split('pull/');
+            const [repoUrl, prNumber] = prUrl.split('/pull/');
+            const [_, repoName] = repoUrl.split('github.com/');
             if (!commentsGroupedByPr[prUrl]) {
                 commentsGroupedByPr[prUrl] = {
-                    repo,
+                    repo: repoName,
                     data: [],
                     titleData: {
                         identifier: comment.html_url,
