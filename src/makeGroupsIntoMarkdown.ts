@@ -19,6 +19,7 @@ const makeGroupsIntoMarkdown = (groups: OutputGroupGroup, username: string, star
     ];
 
     console.log('groups', groups);
+    console.log('primary group', groups.primary);
 
     Object.values(groups.primary).forEach(primaryVal => {
         primaryArr.push(`### ${primaryVal.groupTitle}\n`);
