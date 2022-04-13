@@ -34,6 +34,7 @@ export const getPRsCreated = async (inputFields: InputFields, username: string, 
         });
 
         allRepoPRs.forEach(async pr => {
+            console.log('repo pr', pr);
             const secondaryContribution = await getCommitsForPR(inputFields, username, sinceIso, pr);
             if (secondaryContribution) {
                 allSecondaryPRs.push(secondaryContribution);
