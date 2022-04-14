@@ -25,11 +25,12 @@ interface PRData {
 // object to be submitted for PR creation
 // see https://docs.github.com/en/rest/reference/pulls#create-a-pull-request
 const createPRObj = ({ owner, repo }: Pick<InputFields, 'owner' | 'repo'>, currentUsername: string, prData: PRData) => {
+    const requestOwner = repo.includes('/') ? repo.split('/')[0] : owner;
     return {
         body: createPRBodyText(prData.startDate, prData.endDate, currentUsername),
         base: prData.destinationBranch,
         head: prData.tempBranch,
-        owner,
+        owner: requestOwner,
         repo,
         title: prData.title,
     }

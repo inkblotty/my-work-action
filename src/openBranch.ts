@@ -20,12 +20,13 @@ interface RefStuff { ref: { id: string, name: string, target: { oid: string } } 
 const openBranch = async ({ owner, repo }: InputFields, username: string): Promise<RefStuff> => {
     const now = (new Date()).getTime();
     const branchName = `temp/my-work-${username}-${now}`;
+    const requestOwner = repo.includes('/') ? repo.split('/')[0] : owner;
     const { data: { node_id: repositoryId } } = await github.getOctokit(process.env.GH_TOKEN).request('GET /repos/{owner}/{repo}', {
-        owner,
+        owner: requestOwner,
         repo,
     });
     const { data: { commit: { sha: latestCommitOnMain } } } = await github.getOctokit(process.env.GH_TOKEN).request('GET /repos/{owner}/{repo}/branches/{branch}', {
-        owner,
+        owner: requestOwner,
         repo,
         branch: 'main',
     });

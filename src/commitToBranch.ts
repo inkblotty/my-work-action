@@ -15,8 +15,9 @@ mutation myCreateCommitOnBranch($input: CreateCommitOnBranchInput!) {
 const commitToBranch = async ({ owner, repo }: InputFields, username: string, branchNodeId: string, branchSha: string, documentBody: string): Promise<{ ref: { id: string } }> => {
     const now = (new Date()).toISOString();
     const commitMessage = 'Generated commit from my-work-action';
+    const requestOwner = repo.includes('/') ? repo.split('/')[0] : owner;
     const changeData = {
-        owner,
+        owner: requestOwner,
         repo,
         input: {
             branch: {

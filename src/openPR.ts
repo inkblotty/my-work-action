@@ -4,8 +4,9 @@ import { InputFields } from "./shared.types";
 
 const openPR = async ({ owner, repo }: InputFields, username: string, branchName: string, body: string): Promise<{ html_url: string }> => {
     const now = formatDate(new Date());
+    const requestOwner = repo.includes('/') ? repo.split('/')[0] : owner;
     const prData = {
-        owner,
+        owner: requestOwner,
         repo,
         base: 'main',
         head: `refs/heads/${branchName}`,

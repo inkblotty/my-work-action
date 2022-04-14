@@ -10,8 +10,9 @@ const getCommitsForPR = async (inputFields: InputFields, username: string, since
     const [repoUrl] = pr.html_url.split('/pull');
     const [_, repoName] = repoUrl.split('github.com/');
 
+    const requestOwner = repoName.includes('/') ? repoName.split('/')[0] : inputFields.owner;
     const { data: allPrCommits } = await github.getOctokit(process.env.GH_TOKEN).request(pr.commits_url, {
-        owner: inputFields.owner,
+        owner: requestOwner,
         repo: repoName,
     });
     return {
@@ -31,8 +32,9 @@ export const getPRsCreated = async (inputFields: InputFields, username: string, 
     const allSecondaryPRs = [];
 
     const allCreatedPRs = await Promise.all(allRepos.map(async repo => {
+        const requestOwner = repo.includes('/') ? repo.split('/')[0] : inputFields.owner;
         const { data: allRepoPRs } = await github.getOctokit(process.env.GH_TOKEN).request('GET /repos/{owner}/{repo}/pulls', {
-            owner: inputFields.owner,
+            owner: requestOwner,
             repo,
             state: 'closed'
         });
@@ -56,8 +58,9 @@ export const getPRsCreated = async (inputFields: InputFields, username: string, 
 export const getIssuesCreatedInRange = async (inputFields: InputFields, username: string, sinceIso: string) => {
     const allRepos = inputFields.queried_repos.split(',');
     const allIssues = await Promise.all(allRepos.map(async repo => {
+        const requestOwner = repo.includes('/') ? repo.split('/')[0] : inputFields.owner;
         const { data: allRepoIssues } = await github.getOctokit(process.env.GH_TOKEN).request('GET /repos/{owner}/{repo}/issues', {
-            owner: inputFields.owner,
+            owner: requestOwner,
             repo,
             since: sinceIso,
             creator: username,
@@ -80,8 +83,9 @@ export const getPRCommentsInRange = async (inputFields: InputFields, username: s
     const commentsGroupedByPr: { [key: string]: QueryGroup } = {
     };
     await Promise.all(allRepos.map(async repo => {
+        const requestOwner = repo.includes('/') ? repo.split('/')[0] : inputFields.owner;
         const { data: allPRComments } = await github.getOctokit(process.env.GH_TOKEN).request('GET /repos/{owner}/{repo}/pulls/comments', {
-            owner: inputFields.owner,
+            owner: requestOwner,
             repo,
             since: sinceIso,
             state: 'closed'
@@ -116,8 +120,9 @@ export const getPRCommentsInRange = async (inputFields: InputFields, username: s
 export const getIssueCommentsInRange = async (inputFields: InputFields, username: string, sinceIso: string) => {
     const allRepos = inputFields.queried_repos.split(',');
     const allIssueComents = await Promise.all(allRepos.map(async repo => {
+        const requestOwner = repo.includes('/') ? repo.split('/')[0] : inputFields.owner;
         const { data: allRepoIssueComments } = await github.getOctokit(process.env.GH_TOKEN).request('GET /repos/{owner}/{repo}/issues/comments', {
-            owner: inputFields.owner,
+            owner: requestOwner,
             repo,
             since: sinceIso,
         });
