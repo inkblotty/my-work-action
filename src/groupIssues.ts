@@ -13,6 +13,22 @@ const handleIssueGroups = (allIssuesCreated: QueryGroup[], allIssueComents: Quer
         }
     };
 
+    allIssuesCreated.forEach(repoGroup => {
+        const { data, type } = repoGroup;
+        if (type === QueryType['issue-created'] && data[0]) {
+            const [repoUrl] = data[0].html_url.split('/pull');
+            const [_, repoName] = repoUrl.split('github.com/');
+
+            finalIssues.primary[repoName] = {
+                groupTitle: `Issues Created in [${repoName}](${repoUrl})`,
+                artifacts: data.map(pr => ({
+                    title: pr.title,
+                    url: pr.html_url,
+                }))
+            }
+        }
+    });
+
     allIssueComents.forEach(repoGroup => {
         repoGroup.data.forEach(comment => {
             // use the specific PR as key
