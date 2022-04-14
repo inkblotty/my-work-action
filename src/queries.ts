@@ -83,10 +83,10 @@ export const getPRCommentsInRange = async (inputFields: InputFields, username: s
     const commentsGroupedByPr: { [key: string]: QueryGroup } = {
     };
     await Promise.all(allRepos.map(async repo => {
-        const requestOwner = repo.includes('/') ? repo.split('/')[0] : inputFields.owner;
+        const [requestOwner, repoName] = repo.includes('/') ? repo.split('/') : [inputFields.owner, repo];
         const { data: allPRComments } = await github.getOctokit(process.env.GH_TOKEN).request('GET /repos/{owner}/{repo}/pulls/comments', {
             owner: requestOwner,
-            repo,
+            repo: repoName,
             since: sinceIso,
             state: 'closed'
         });
