@@ -68,8 +68,6 @@ const handlePRGroups = (allPRsCreated: QueryGroup[], allPRComments: QueryGroup[]
         })
     });
 
-    console.log('finalPRs', finalPRs);
-
     return finalPRs;
 }
 export default handlePRGroups;

@@ -1,4 +1,4 @@
-import { InputFields } from "./shared.types";
+import { InputFields, OutputGroupGroup } from "./shared.types";
 import handlePRGroups from "./groupPRs";
 import { getIssueCommentsInRange, getIssuesCreatedInRange, getPRCommentsInRange, getPRsCreated } from "./queries";
 import makeGroupsIntoMarkdown from "./makeGroupsIntoMarkdown";
@@ -6,6 +6,7 @@ import openBranch from "./openBranch";
 import commitToBranch from "./commitToBranch";
 import openPR from "./openPR";
 import { createPRBodyText } from "./createPRContent";
+import handleIssueGroups from "./groupIssues";
 
 async function handleSingleUser(inputFields: InputFields, username: string, startDate: Date) {
     const startDateIso = startDate.toISOString();
@@ -17,9 +18,10 @@ async function handleSingleUser(inputFields: InputFields, username: string, star
 
     // group all the things
     const prGroups = handlePRGroups(prsCreated, prComments);
+    const issueGroups = handleIssueGroups(issuesCreated, issueComments);
 
     // format the groups into markdown
-    const documentBody = makeGroupsIntoMarkdown(prGroups, username, startDate);
+    const documentBody = makeGroupsIntoMarkdown([prGroups, issueGroups], username, startDate);
 
     // create a branch
     const { ref } = await openBranch(inputFields, username);

@@ -119,6 +119,8 @@ export const getPRCommentsInRange = async (inputFields: InputFields, username: s
 
 export const getIssueCommentsInRange = async (inputFields: InputFields, username: string, sinceIso: string) => {
     const allRepos = inputFields.queried_repos.split(',');
+    const commentsGroupedByIssue: { [key: string]: QueryGroup } = {
+    };
     const allIssueComents = await Promise.all(allRepos.map(async repo => {
         const requestOwner = repo.includes('/') ? repo.split('/')[0] : inputFields.owner;
         const { data: allRepoIssueComments } = await github.getOctokit(process.env.GH_TOKEN).request('GET /repos/{owner}/{repo}/issues/comments', {
@@ -126,13 +128,29 @@ export const getIssueCommentsInRange = async (inputFields: InputFields, username
             repo,
             since: sinceIso,
         });
-        return {
-            repo,
-            data: filterCommentsByUser(allRepoIssueComments, username),
-            type: QueryType['issue-comment-created'],
-        };
+        const filteredComments = filterCommentsByUser(allRepoIssueComments, username);
+        filteredComments.forEach(comment => {
+            const [issueUrl] = comment.html_url.split('#');
+            const [repoUrl, issueNumber] = issueUrl.split('/issues/');
+            const [_, repoName] = repoUrl.split('github.com/');
+            if (!commentsGroupedByIssue[issueUrl]) {
+                commentsGroupedByIssue[issueUrl] = {
+                    repo: repoName,
+                    data: [],
+                    titleData: {
+                        identifier: comment.html_url,
+                        title: `#${issueNumber} in ${repo}`,
+                        url: issueUrl,
+                        username: comment.user.login,
+                    },
+                    type: QueryType['issue-comment-created'],
+                }
+            }
+            commentsGroupedByIssue[issueUrl].data.push(comment);
+        });
+        return;
     }));
-    return allIssueComents;
+    return Object.values(commentsGroupedByIssue);
 }
 
 export const getDiscussionCommentsInRange = async (inputFields: InputFields, username: string, sinceIso: string) => {
