@@ -51,7 +51,7 @@ const handleIssueGroups = (allIssuesCreated: QueryGroup[], allIssueComents: Quer
             }
 
             finalIssues.secondary[issueUrl].artifacts.push({
-                title: comment.body,
+                title: `Comment #${finalIssues.secondary[issueUrl].artifacts.length + 1}`,
                 url: comment.html_url,
             });
         })
