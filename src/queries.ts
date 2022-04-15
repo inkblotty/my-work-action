@@ -36,7 +36,7 @@ export const getPRsCreated = async (inputFields: InputFields, username: string, 
         const { data: allRepoPRs } = await github.getOctokit(process.env.GH_TOKEN).request('GET /repos/{owner}/{repo}/pulls', {
             owner: requestOwner,
             repo: repoName,
-            state: 'closed'
+            state: 'all'
         });
 
         allRepoPRs.forEach(async pr => {
@@ -88,7 +88,7 @@ export const getPRCommentsInRange = async (inputFields: InputFields, username: s
             owner: requestOwner,
             repo: repoName,
             since: sinceIso,
-            state: 'closed'
+            state: 'all'
         });
 
         const filteredComments = filterCommentsByUser(allPRComments, username);
