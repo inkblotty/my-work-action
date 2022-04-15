@@ -15,6 +15,7 @@ const getCommitsForPR = async (inputFields: InputFields, username: string, since
         owner: requestOwner,
         repo: repoName,
     });
+
     return {
         repo: repoName,
         titleData: {
@@ -41,7 +42,7 @@ export const getPRsCreated = async (inputFields: InputFields, username: string, 
 
         allRepoPRs.forEach(async pr => {
             const secondaryContribution = await getCommitsForPR(inputFields, username, sinceIso, pr);
-            if (secondaryContribution) {
+            if (secondaryContribution && secondaryContribution.data.length) {
                 allSecondaryPRs.push(secondaryContribution);
             }
         });
