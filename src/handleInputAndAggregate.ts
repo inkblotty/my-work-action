@@ -38,6 +38,18 @@ const handleInputAndAggregate = async () => {
 
     const startDate = new Date((new Date()).getTime() - (oneDayMs * (inputFields.timespan || 7)));
 
-    usernames.forEach(username => handleSingleUser(inputFields, username, startDate));
+    let userIndex = 0;
+    // delay each user call so that we don't get rate limited
+    function loopUsersWithDelay() {
+        setTimeout(function() {
+            handleSingleUser(inputFields, usernames[userIndex], startDate);
+            userIndex++;
+            if (userIndex < usernames.length) {
+                loopUsersWithDelay();
+            }                       
+        }, 1500)
+    }
+
+    loopUsersWithDelay();
 }
 export default handleInputAndAggregate;
