@@ -34,10 +34,10 @@ export const getPRsCreated = async (inputFields: InputFields, username: string, 
 
     const allCreatedPRs = await Promise.all(allRepos.map(async repo => {
         const [requestOwner, repoName] = repo.includes('/') ? repo.split('/') : [inputFields.owner, repo];
-        const { data: allRepoPRs } = await github.getOctokit(process.env.GH_TOKEN).request('GET /repos/{owner}/{repo}/pulls', {
+        const allRepoPRs = await github.getOctokit(process.env.GH_TOKEN).paginate('GET /repos/{owner}/{repo}/pulls', {
             owner: requestOwner,
             repo: repoName,
-            state: 'all'
+            state: 'all',
         });
 
         allRepoPRs.forEach(async pr => {

@@ -1,6 +1,6 @@
 import { OutputGroup, OutputGroupGroup, QueryGroup, QueryType } from "./shared.types";
 
-const handleIssueGroups = (allIssuesCreated: QueryGroup[], allIssueComents: QueryGroup[]): OutputGroupGroup => {
+const handleIssueGroups = (allIssuesCreated: QueryGroup[], allIssueComments: QueryGroup[]): OutputGroupGroup => {
     const finalIssues: OutputGroupGroup = {
         // primary, meaning directly authored
         primary: {
@@ -29,7 +29,7 @@ const handleIssueGroups = (allIssuesCreated: QueryGroup[], allIssueComents: Quer
         }
     });
 
-    allIssueComents.forEach(repoGroup => {
+    allIssueComments.forEach(repoGroup => {
         repoGroup.data.forEach(comment => {
             // use the specific PR as key
             const key = comment.html_url.split('#')[0];
