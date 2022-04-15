@@ -1,5 +1,5 @@
 import * as core from '@actions/core';
-import { oneDayMs } from './shared';
+import { oneDayMs, performWithDelay } from './shared';
 import { InputFields } from './shared.types';
 import handleSingleUser from './handleSingleUser';
 
@@ -38,18 +38,8 @@ const handleInputAndAggregate = async () => {
 
     const startDate = new Date((new Date()).getTime() - (oneDayMs * (inputFields.timespan || 7)));
 
-    let userIndex = 0;
-    // delay each user call so that we don't get rate limited
-    function loopUsersWithDelay() {
-        setTimeout(function() {
-            handleSingleUser(inputFields, usernames[userIndex], startDate);
-            userIndex++;
-            if (userIndex < usernames.length) {
-                loopUsersWithDelay();
-            }                       
-        }, (userIndex * 1000) + 3000)
-    }
-
-    loopUsersWithDelay();
+    // perform each user with delay so we don't get rate limited
+    const handleSingleUserCallback = (currentIndex) => handleSingleUser(inputFields, usernames[currentIndex], startDate);
+    performWithDelay(handleSingleUserCallback, 0, usernames.length);
 }
 export default handleInputAndAggregate;
