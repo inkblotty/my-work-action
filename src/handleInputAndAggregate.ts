@@ -47,7 +47,7 @@ const handleInputAndAggregate = async () => {
             if (userIndex < usernames.length) {
                 loopUsersWithDelay();
             }                       
-        }, 1500)
+        }, 3000)
     }
 
     loopUsersWithDelay();
