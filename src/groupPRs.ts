@@ -40,7 +40,6 @@ const handlePRGroups = (allPRsCreated: QueryGroup[], allPRComments: QueryGroup[]
     });
 
     allPRComments.forEach(repoGroup => {
-        console.log('repoGroup', repoGroup);
         repoGroup.data.forEach(comment => {
             // use the specific PR as key
             const key = comment.html_url.split('#')[0];
@@ -62,7 +61,7 @@ const handlePRGroups = (allPRsCreated: QueryGroup[], allPRComments: QueryGroup[]
             }
 
             finalPRs.secondary[prUrl].artifacts.push({
-                title: comment.body,
+                title: `#${finalPRs.secondary[prUrl].artifacts.length + 1}`,
                 url: comment.html_url,
             });
         })

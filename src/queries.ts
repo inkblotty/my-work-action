@@ -23,7 +23,7 @@ const getCommitsForPR = async (inputFields: InputFields, username: string, since
             url: pr.html_url,
             username: pr.user.login,
         },
-        data: filterCommitsByAuthorAndCreation(allPrCommits, username, sinceIso, true),
+        data: filterCommitsByAuthorAndCreation(allPrCommits, username, sinceIso),
         type: QueryType['commit'],
     }
 }
