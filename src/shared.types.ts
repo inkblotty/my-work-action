@@ -6,6 +6,7 @@ export enum QueryType {
     'issue-comment-created',
     'pr-created',
     'pr-comment-created',
+    'pr-commit',
 };
 
 export interface QueryGroup {

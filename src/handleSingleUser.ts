@@ -1,6 +1,6 @@
 import { InputFields, OutputGroupGroup } from "./shared.types";
 import handlePRGroups from "./groupPRs";
-import { getIssueCommentsInRange, getIssuesCreatedInRange, getPRCommentsInRange, getPRsCreated } from "./queries";
+import { getAllWorkForRepository, getIssueCommentsInRange, getIssuesCreatedInRange, getPRCommentsInRange, getPRsCreated } from "./queries";
 import makeGroupsIntoMarkdown from "./makeGroupsIntoMarkdown";
 import openBranch from "./openBranch";
 import commitToBranch from "./commitToBranch";
@@ -10,11 +10,19 @@ import handleIssueGroups from "./groupIssues";
 
 async function handleSingleUser(inputFields: InputFields, username: string, startDate: Date) {
     const startDateIso = startDate.toISOString();
-    // query all the things
-    const issuesCreated = await getIssuesCreatedInRange(inputFields, username, startDateIso);
-    const issueComments = await getIssueCommentsInRange(inputFields, username, startDateIso);
-    const prsCreated = await getPRsCreated(inputFields, username, startDateIso);
-    const prComments = await getPRCommentsInRange(inputFields, username, startDateIso);
+    
+    const reposList = inputFields.queried_repos.split(',');
+
+    reposList.forEach(async repo => {
+        const [requestOwner, repoName] = repo.includes('/') ? repo.split('/') : [inputFields.owner, repo];
+        // query all the things
+        const {
+            prComments,
+            prsCreated,
+            issuesCreated,
+            issueComments,
+        } = await getAllWorkForRepository(requestOwner, repoName, username, startDateIso);
+    });
 
     // group all the things
     const prGroups = handlePRGroups(prsCreated, prComments);

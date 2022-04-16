@@ -1,165 +1,151 @@
-import * as github from '@actions/github';
-import { filterCommentsByUser, filterCommitsByAuthorAndCreation, filterPRsByAuthorAndCreation } from './queryFilters';
-import { sleep } from './shared';
+import { graphql } from "@octokit/graphql";
+import { filterCommentsByUser, filterCreatedThingByAuthorAndCreation, getIsWithinRange } from './queryFilters';
 import { InputFields, QueryGroup, QueryType } from './shared.types';
 
-const getCommitsForPR = async (inputFields: InputFields, username: string, sinceIso: string, pr: any) => {
-    if (pr.user.login === username) {
-        return;
+const GH_TOKEN = process.env.GH_TOKEN;
+const repositoryQuery = `\
+query getUserWork($username:String!, $owner:String!, $repo:String!, $sinceIso: String!) { 
+    repository(owner: $owner, name: $repo) {
+        ...repo
     }
+}
 
-    const [repoUrl] = pr.html_url.split('/pull');
-    const [_, repoName] = repoUrl.split('github.com/');
-
-    const requestOwner = repoName.includes('/') ? repoName.split('/')[0] : inputFields.owner;
-    await sleep(1000);
-    const { data: allPrCommits } = await github.getOctokit(process.env.GH_TOKEN).request(pr.commits_url, {
+fragment repo on Repository {
+    discussions(last: 100, orderBy: { field:CREATED_AT, direction: DESC }) {
+      nodes {
+        author {
+          login
+        }
+        createdAt
+        number
+        url
+      }
+    }
+    discussionComments:discussions(last: 100, orderBy: { field:UPDATED_AT, direction: DESC }) {
+      nodes {
+        comments(last:100) {
+          nodes {
+              author {
+              login
+            }
+            bodyText
+            createdAt
+            url 
+          }
+        }
+      }
+    }
+      issues(last: 100, filterBy: {createdBy: $username, since: $sinceIso}, orderBy:{ field: CREATED_AT, direction:DESC }) {
+      nodes {
+        title
+        url
+      }
+    }
+    issueComments:issues(last:100, filterBy:{since:$sinceIso}) {
+      nodes {
+        comments {
+          nodes {
+            author {
+              login
+            }
+            issue {
+              title
+              url
+            }
+            url
+          }
+        }
+      }
+    }
+    pullRequests(last:100, orderBy:{field: CREATED_AT, direction: DESC}) {
+      nodes {
+        createdAt
+        title
+        author {
+          login
+        }
+        comments(last: 100, orderBy: {field: UPDATED_AT, direction: DESC}) {
+          nodes {
+            author {
+              login
+            }
+            createdAt
+          }
+        }
+        commits(last: 100) {
+          nodes {
+            commit {
+              pushedDate
+              author {
+                  user {
+                    login
+                  }
+              }
+            }
+            pullRequest {
+              title
+              url
+            }
+            url
+          }
+        }
+      }
+    }
+  }
+`;
+export const getAllWorkForRepository = async (requestOwner: string, repoName: string, username: string, sinceIso: string): Promise<{ [key: string]: QueryGroup }> => {
+    const { data: { repository } } = await graphql(repositoryQuery, {
+        username,
         owner: requestOwner,
         repo: repoName,
+        sinceIso,
+        headers: {
+            authorization: `token ${GH_TOKEN}`
+        },
     });
+    const commitsToOthersPRs = filterCreatedThingByAuthorAndCreation(repository.pullRequests.nodes.commits.nodes, username, sinceIso, true);
+    const createdPRs = filterCreatedThingByAuthorAndCreation(repository.pullRequests.nodes, username, sinceIso);
+    const commentsOnOthersPRs = [];
+    const createdIssues = repository.issues.nodes;
+    const issueComments = filterCommentsByUser(repository.issueComments.nodes.comments, username);
+    const createdDiscussions = filterCreatedThingByAuthorAndCreation(repository.discussions.nodes, username, sinceIso);
+    const commentsOnDiscussions = filterCreatedThingByAuthorAndCreation(repository.discussionComments.nodes.comments.nodes, username, sinceIso);
 
     return {
-        repo: repoName,
-        titleData: {
-            identifier: pr,
-            title: pr.title,
-            url: pr.html_url,
-            username: pr.user.login,
+        discussionsCreated: {
+            repo: repoName,
+            data: createdDiscussions,
+            type: QueryType['discussion-created'],
         },
-        data: filterCommitsByAuthorAndCreation(allPrCommits, username, sinceIso),
-        type: QueryType['commit'],
-    }
-}
-export const getPRsCreated = async (inputFields: InputFields, username: string, sinceIso: string) => {
-    const allRepos = inputFields.queried_repos.split(',');
-    const allSecondaryPRs = [];
-
-    const allCreatedPRs = await Promise.all(allRepos.map(async repo => {
-        await sleep(1000);
-        const [requestOwner, repoName] = repo.includes('/') ? repo.split('/') : [inputFields.owner, repo];
-        const allRepoPRs = await github.getOctokit(process.env.GH_TOKEN).paginate('GET /repos/{owner}/{repo}/pulls', {
-            owner: requestOwner,
+        discussionComments: {
             repo: repoName,
-            state: 'all',
-        });
-
-        allRepoPRs.forEach(async pr => {
-            const secondaryContribution = await getCommitsForPR(inputFields, username, sinceIso, pr);
-            if (secondaryContribution && secondaryContribution.data.length) {
-                allSecondaryPRs.push(secondaryContribution);
-            }
-        });
-
-        return {
-            repo,
-            data: filterPRsByAuthorAndCreation(allRepoPRs, username, sinceIso),
+            data: commentsOnDiscussions,
+            type: QueryType['discussion-comment-created']
+        },
+        issuesCreated: {
+            repo: repoName,
+            data: createdIssues,
+            type: QueryType['issue-created']
+        },
+        issueComments: {
+            repo: repoName,
+            data: issueComments,
+            type: QueryType['issue-comment-created'],
+        },
+        prsCreated: {
+            repo: repoName,
+            data: createdPRs,
             type: QueryType['pr-created'],
-        };
-    }));
-    return [...allCreatedPRs, ...allSecondaryPRs];
-}
-
-export const getIssuesCreatedInRange = async (inputFields: InputFields, username: string, sinceIso: string) => {
-    const allRepos = inputFields.queried_repos.split(',');
-    const allIssues = await Promise.all(allRepos.map(async repo => {
-        await sleep(1000);
-        const [requestOwner, repoName] = repo.includes('/') ? repo.split('/') : [inputFields.owner, repo];
-        const { data: allRepoIssues } = await github.getOctokit(process.env.GH_TOKEN).request('GET /repos/{owner}/{repo}/issues', {
-            owner: requestOwner,
+        },
+        prCommits: {
             repo: repoName,
-            since: sinceIso,
-            creator: username,
-        });
-        return {
-            repo,
-            data: allRepoIssues,
-            type: QueryType['issue-created'],
-        };
-    }));
-    return allIssues;
-}
-
-export const getDiscussionsCreatedInRange = async (inputFields: InputFields, username: string, sinceIso: string) => {
-
-}
-
-export const getPRCommentsInRange = async (inputFields: InputFields, username: string, sinceIso: string) => {
-    const allRepos = inputFields.queried_repos.split(',');
-    const commentsGroupedByPr: { [key: string]: QueryGroup } = {
-    };
-    await Promise.all(allRepos.map(async repo => {
-        await sleep(1000);
-        const [requestOwner, repoName] = repo.includes('/') ? repo.split('/') : [inputFields.owner, repo];
-        const { data: allPRComments } = await github.getOctokit(process.env.GH_TOKEN).request('GET /repos/{owner}/{repo}/pulls/comments', {
-            owner: requestOwner,
+            data: commitsToOthersPRs,
+            type: QueryType['pr-commit']
+        },
+        prComments: {
             repo: repoName,
-            since: sinceIso,
-            state: 'all'
-        });
-
-        const filteredComments = filterCommentsByUser(allPRComments, username);
-        filteredComments.forEach(comment => {
-            const [prUrl] = comment.html_url.split('#');
-            const [repoUrl, prNumber] = prUrl.split('/pull/');
-            const [_, repoName] = repoUrl.split('github.com/');
-            if (!commentsGroupedByPr[prUrl]) {
-                commentsGroupedByPr[prUrl] = {
-                    repo: repoName,
-                    data: [],
-                    titleData: {
-                        identifier: comment.html_url,
-                        title: `#${prNumber} in ${repo}`,
-                        url: prUrl,
-                        username: comment.user.login,
-                    },
-                    type: QueryType['pr-comment-created'],
-                }
-            }
-            commentsGroupedByPr[prUrl].data.push(comment);
-        });
-
-        return '';
-    }));
-    return Object.values(commentsGroupedByPr);
-}
-
-export const getIssueCommentsInRange = async (inputFields: InputFields, username: string, sinceIso: string) => {
-    const allRepos = inputFields.queried_repos.split(',');
-    const commentsGroupedByIssue: { [key: string]: QueryGroup } = {
-    };
-    await Promise.all(allRepos.map(async repo => {
-        await sleep(1000);
-        const [requestOwner, repoName] = repo.includes('/') ? repo.split('/') : [inputFields.owner, repo];
-        const { data: allRepoIssueComments } = await github.getOctokit(process.env.GH_TOKEN).request('GET /repos/{owner}/{repo}/issues/comments', {
-            owner: requestOwner,
-            repo: repoName,
-            since: sinceIso,
-        });
-        const filteredComments = filterCommentsByUser(allRepoIssueComments, username);
-        filteredComments.forEach(comment => {
-            const [issueUrl] = comment.html_url.split('#');
-            const [repoUrl, issueNumber] = issueUrl.split('/issues/');
-            const [_, repoName] = repoUrl.split('github.com/');
-            if (!commentsGroupedByIssue[issueUrl]) {
-                commentsGroupedByIssue[issueUrl] = {
-                    repo: repoName,
-                    data: [],
-                    titleData: {
-                        identifier: comment.html_url,
-                        title: `#${issueNumber} in ${repo}`,
-                        url: issueUrl,
-                        username: comment.user.login,
-                    },
-                    type: QueryType['issue-comment-created'],
-                }
-            }
-            commentsGroupedByIssue[issueUrl].data.push(comment);
-        });
-        return;
-    }));
-    return Object.values(commentsGroupedByIssue);
-}
-
-export const getDiscussionCommentsInRange = async (inputFields: InputFields, username: string, sinceIso: string) => {
-
+            data: commentsOnOthersPRs,
+            type: QueryType['pr-comment-created']
+        },
+    }
 }
