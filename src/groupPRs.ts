@@ -1,6 +1,6 @@
-import { OutputGroupGroup, QueryGroup, QueryType } from "./shared.types";
+import { OutputGroup, OutputGroupGroup, QueryGroup, QueryType } from "./shared.types";
 
-const handlePRGroups = (allPRsCreated: QueryGroup[], allPRComments: QueryGroup[]): OutputGroupGroup => {
+const handlePRGroups = (allPRsCreated: QueryGroup[], allPRComments: QueryGroup[], allPRCommits: QueryGroup[]): OutputGroupGroup => {
     const finalPRs = {
         // primary, meaning directly authored
         primary: {
@@ -14,8 +14,8 @@ const handlePRGroups = (allPRsCreated: QueryGroup[], allPRComments: QueryGroup[]
     };
 
     allPRsCreated.forEach(repoGroup => {
-        const { data, type, titleData } = repoGroup;
-        if (type === QueryType['pr-created'] && data[0]) {
+        const { data } = repoGroup;
+        if (data[0]) {
             const [repoUrl] = data[0].html_url.split('/pull');
             const [_, repoName] = repoUrl.split('github.com/');
 
@@ -27,16 +27,35 @@ const handlePRGroups = (allPRsCreated: QueryGroup[], allPRComments: QueryGroup[]
                 }))
             }
         }
+    });
 
-        if (type === QueryType['commit']) {
-            finalPRs.secondary[titleData.url] = {
-                groupTitle: `Added ${data.length} commits to @${titleData.username}'s PR: [${titleData.title}](${titleData.url})`,
-                artifacts: data.map(commit => ({
-                    title: commit.message,
-                    url: commit.html_url,
-                })),
-            }
+    allPRCommits.forEach(repoGroup => {
+        const { data } = repoGroup;
+        const tempSecondary: OutputGroup = {}
+        if (data[0]) {
+            repoGroup.data.forEach(group => {
+                const prAuthor = group.pullRequest.author.login;
+                const prUrl = group.pullRequest.url;
+                if (!tempSecondary[prUrl]) {
+                    tempSecondary[prUrl] = {
+                        groupTitle: `Added <data.length> commits to @${prAuthor}'s PR: [${group.pullRequest.title}](${prUrl})`,
+                        artifacts: [],
+                    }
+                }
+
+                tempSecondary[prUrl].artifacts.push({
+                    title: group.commit.pushedDate,
+                    url: group.commit.url,
+                });
+            });
         }
+
+        Object.entries(tempSecondary).forEach(([prUrl, value]) => {
+            finalPRs.secondary[prUrl] = {
+                groupTitle: value.groupTitle.replace('<data.length>', `${value.artifacts.length}`),
+                artifacts: value.artifacts,
+            }
+        });
     });
 
     allPRComments.forEach(repoGroup => {

@@ -75,6 +75,7 @@ fragment repo on Repository {
         commits(last: 100) {
           nodes {
             commit {
+              url
               pushedDate
               author {
                   user {
@@ -85,6 +86,9 @@ fragment repo on Repository {
             pullRequest {
               title
               url
+              author {
+                login
+              }
             }
             url
           }
