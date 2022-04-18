@@ -1,3 +1,4 @@
+import { formatDateTime } from "./shared";
 import { OutputGroup, OutputGroupGroup, QueryGroup, QueryType } from "./shared.types";
 
 const handlePRGroups = (allPRsCreated: QueryGroup[], allPRComments: QueryGroup[], allPRCommits: QueryGroup[]): OutputGroupGroup => {
@@ -16,14 +17,14 @@ const handlePRGroups = (allPRsCreated: QueryGroup[], allPRComments: QueryGroup[]
     allPRsCreated.forEach(repoGroup => {
         const { data } = repoGroup;
         if (data[0]) {
-            const [repoUrl] = data[0].html_url.split('/pull');
+            const [repoUrl] = data[0].url.split('/pull');
             const [_, repoName] = repoUrl.split('github.com/');
 
             finalPRs.primary[repoName] = {
                 groupTitle: `PRs Created in [${repoName}](${repoUrl})`,
                 artifacts: data.map(pr => ({
                     title: pr.title,
-                    url: pr.html_url,
+                    url: pr.url,
                 }))
             }
         }
@@ -33,7 +34,7 @@ const handlePRGroups = (allPRsCreated: QueryGroup[], allPRComments: QueryGroup[]
         const { data } = repoGroup;
         const tempSecondary: OutputGroup = {}
         if (data[0]) {
-            repoGroup.data.forEach(group => {
+            data.forEach(group => {
                 const prAuthor = group.pullRequest.author.login;
                 const prUrl = group.pullRequest.url;
                 if (!tempSecondary[prUrl]) {
@@ -44,7 +45,7 @@ const handlePRGroups = (allPRsCreated: QueryGroup[], allPRComments: QueryGroup[]
                 }
 
                 tempSecondary[prUrl].artifacts.push({
-                    title: group.commit.pushedDate,
+                    title: `Commit at ${formatDateTime(new Date(group.commit.pushedDate))}`,
                     url: group.commit.url,
                 });
             });
@@ -61,7 +62,7 @@ const handlePRGroups = (allPRsCreated: QueryGroup[], allPRComments: QueryGroup[]
     allPRComments.forEach(repoGroup => {
         repoGroup.data.forEach(comment => {
             // use the specific PR as key
-            const key = comment.html_url.split('#')[0];
+            const key = comment.url.split('#')[0];
             const prUrl = key.split('github.com')[1];
             const repo = prUrl.split('/pull')[0];
             // if comment is on own PR, ignore
@@ -81,7 +82,7 @@ const handlePRGroups = (allPRsCreated: QueryGroup[], allPRComments: QueryGroup[]
 
             finalPRs.secondary[prUrl].artifacts.push({
                 title: `#${finalPRs.secondary[prUrl].artifacts.length + 1}`,
-                url: comment.html_url,
+                url: comment.url,
             });
         })
     });

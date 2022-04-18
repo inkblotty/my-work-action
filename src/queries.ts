@@ -35,7 +35,7 @@ fragment repo on Repository {
         }
       }
     }
-      issues(last: 100, filterBy: {createdBy: $username, since: $sinceIso}, orderBy:{ field: CREATED_AT, direction:DESC }) {
+    issues(last: 100, filterBy: {createdBy: $username, since: $sinceIso}, orderBy:{ field: CREATED_AT, direction:DESC }) {
       nodes {
         title
         url
@@ -61,6 +61,7 @@ fragment repo on Repository {
       nodes {
         createdAt
         title
+        url
         author {
           login
         }

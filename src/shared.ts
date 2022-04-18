@@ -3,6 +3,12 @@ export const formatDate = (date: Date): string => {
     return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`
 }
 
+export const formatDateTime = (date: Date): string => {
+    const start = formatDate(date);
+    const time = `${date.getUTCHours()}:${date.getMinutes()}${date.getSeconds()} UTC`;
+    return `${start} at ${time}`;
+}
+
 export const oneDayMs = 1000 * 60 * 60 * 24;
 
 export const base64encode = (str: string) => Buffer.from(str, 'utf-8').toString('base64');

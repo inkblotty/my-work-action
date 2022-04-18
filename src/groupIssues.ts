@@ -16,14 +16,14 @@ const handleIssueGroups = (allIssuesCreated: QueryGroup[], allIssueComments: Que
     allIssuesCreated.forEach(repoGroup => {
         const { data, type } = repoGroup;
         if (type === QueryType['issue-created'] && data[0]) {
-            const [repoUrl] = data[0].html_url.split('/issues');
+            const [repoUrl] = data[0].url.split('/issues');
             const [_, repoName] = repoUrl.split('github.com/');
 
             finalIssues.primary[repoName] = {
                 groupTitle: `Issues Created in [${repoName}](${repoUrl})`,
                 artifacts: data.map(pr => ({
                     title: pr.title,
-                    url: pr.html_url,
+                    url: pr.url,
                 }))
             }
         }
@@ -32,7 +32,7 @@ const handleIssueGroups = (allIssuesCreated: QueryGroup[], allIssueComments: Que
     allIssueComments.forEach(repoGroup => {
         repoGroup.data.forEach(comment => {
             // use the specific PR as key
-            const key = comment.html_url.split('#')[0];
+            const key = comment.url.split('#')[0];
             const issueUrl = key.split('github.com')[1];
             const repo = issueUrl.split('/pull')[0];
             // if comment is on own PR, ignore
@@ -52,7 +52,7 @@ const handleIssueGroups = (allIssuesCreated: QueryGroup[], allIssueComments: Que
 
             finalIssues.secondary[issueUrl].artifacts.push({
                 title: `Comment #${finalIssues.secondary[issueUrl].artifacts.length + 1}`,
-                url: comment.html_url,
+                url: comment.url,
             });
         })
     });
