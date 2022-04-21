@@ -4,14 +4,14 @@ import { InputFields, QueryGroup, QueryType } from './shared.types';
 
 const GH_TOKEN = process.env.GH_TOKEN;
 const repositoryQuery = `\
-query getUserWork($username:String!, $owner:String!, $repo:String!, $sinceIso: String!) { 
+query getUserWork($username:String!, $owner:String!, $repo:String!, $sinceIso: String!, $prsCreated:String!, $prContributions:String!) { 
     repository(owner: $owner, name: $repo) {
         ...repo
     }
 }
 
 fragment repo on Repository {
-    discussions(last: 100, orderBy: { field:CREATED_AT, direction: DESC }) {
+    discussions(last: 50, orderBy: { field:CREATED_AT, direction: DESC }) {
       nodes {
         author {
           login
@@ -35,7 +35,7 @@ fragment repo on Repository {
         }
       }
     }
-    issues(last: 100, filterBy: {createdBy: $username, since: $sinceIso}, orderBy:{ field: CREATED_AT, direction:DESC }) {
+    issues(last: 50, filterBy: {createdBy: $username, since: $sinceIso}, orderBy:{ field: CREATED_AT, direction:DESC }) {
       nodes {
         title
         url
@@ -57,41 +57,49 @@ fragment repo on Repository {
         }
       }
     }
-    pullRequests(last:100, orderBy:{field: CREATED_AT, direction: DESC}) {
-      nodes {
-        createdAt
-        title
-        url
-        author {
-          login
-        }
-        comments(last: 100, orderBy: {field: UPDATED_AT, direction: DESC}) {
-          nodes {
-            author {
-              login
-            }
+    prsCreated:search(type: ISSUE, query: $prQuery, first: 20) {
+      edges {
+        node {
+          ... on PullRequest {
+            title
             createdAt
+            title
+            url
           }
         }
-        commits(last: 100) {
-          nodes {
-            commit {
-              url
-              pushedDate
-              author {
-                  user {
+      }
+    }
+    prReviewsAndCommits:search(type: ISSUE, query: $prContributions, first: 100) {
+      edges {
+        node {
+          ... on PullRequest {
+            commits(first:100) {
+              nodes {
+                commit {
+                  url
+                  pushedDate
+                }
+              }
+            }
+            reviews(first: 50, author:$username) {
+              nodes {
+                createdAt
+                pullRequest {
+                  createdAt
+                  title
+                  url
+                  author {
                     login
                   }
+                }
+                comments(first: 20) {
+                  nodes {
+                    createdAt
+                    url
+                  }
+                }
               }
             }
-            pullRequest {
-              title
-              url
-              author {
-                login
-              }
-            }
-            url
           }
         }
       }
@@ -108,6 +116,8 @@ export const getAllWorkForRepository = async (requestOwner: string, repoName: st
             authorization: `token ${GH_TOKEN}`
         },
     });
+    console.log('data.repository', repository);
+    return {};
     const commitsToOthersPRs = filterCreatedThingByAuthorAndCreation(repository.pullRequests.nodes.commits.nodes, username, sinceIso, true);
     const createdPRs = filterCreatedThingByAuthorAndCreation(repository.pullRequests.nodes, username, sinceIso);
     const commentsOnOthersPRs = [];
