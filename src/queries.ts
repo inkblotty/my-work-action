@@ -78,6 +78,20 @@ fragment repo on Repository {
                 commit {
                   url
                   pushedDate
+                  author {
+                    user {
+                      login
+                    }
+                  }
+                  associatedPullRequests(first:10, orderBy:{field:UPDATED_AT, direction:DESC}) {
+                    nodes {
+                      title
+                      url
+                      author {
+                        login
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -118,6 +132,8 @@ export const getAllWorkForRepository = async (requestOwner: string, repoName: st
     });
     console.log('data.repository', repository);
     return {};
+
+    // 
     const commitsToOthersPRs = filterCreatedThingByAuthorAndCreation(repository.pullRequests.nodes.commits.nodes, username, sinceIso, true);
     const createdPRs = filterCreatedThingByAuthorAndCreation(repository.pullRequests.nodes, username, sinceIso);
     const commentsOnOthersPRs = [];
