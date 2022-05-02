@@ -4,7 +4,7 @@ import { InputFields, QueryGroup, QueryType } from './shared.types';
 
 const GH_TOKEN = process.env.GH_TOKEN;
 const repositoryQuery = `\
-query getUserWork($username:String!, $owner:String!, $repo:String!, $sinceIso: String!, $prsCreated:String!, $prContributions:String!) { 
+query getUserWork($username:String!, $owner:String!, $repo:String!, $sinceIso: DateTime!, $prsCreatedQuery:String!, $prContributionsQuery:String!) { 
     repository(owner: $owner, name: $repo) {
         ...repo
     }
@@ -121,28 +121,32 @@ fragment repo on Repository {
   }
 `;
 export const getAllWorkForRepository = async (requestOwner: string, repoName: string, username: string, sinceIso: string): Promise<{ [key: string]: QueryGroup }> => {
-    const { data: { repository } } = await graphql(repositoryQuery, {
+    const { data: { repository, prsCreated, prReviewsAndCommits } } = await graphql(repositoryQuery, {
         username,
         owner: requestOwner,
         repo: repoName,
         sinceIso,
-        prQuery: `repo:${repoName} is:pr created:>=${sinceIso} author:${username}`,
-        prContributions: `repo:${repoName} is:pr created:>=${sinceIso} -author:${username}`,
+        prsCreatedQuery: `repo:${repoName} is:pr created:>=${sinceIso} author:${username}`,
+        prContributionsQuery: `repo:${repoName} is:pr created:>=${sinceIso} -author:${username}`,
         headers: {
             authorization: `token ${GH_TOKEN}`
         },
     });
-    console.log('data.repository', repository);
-    return {};
+
+    const flattenedIssueComments = repository.issueComments.nodes.reduce((arr, { comments: { nodes }}) => {
+      return [...arr, ...nodes];
+    }, []);
+    const flattenedDiscussionComments = repository.discussionComments.nodes.reduce((arr, { comments: { nodes }}) => {
+      return [...arr, ...nodes];
+    }, []);
 
     // 
-    const commitsToOthersPRs = filterCreatedThingByAuthorAndCreation(repository.pullRequests.nodes.commits.nodes, username, sinceIso, true);
-    const createdPRs = filterCreatedThingByAuthorAndCreation(repository.pullRequests.nodes, username, sinceIso);
-    const commentsOnOthersPRs = [];
+    // const commitsToOthersPRs = filterCreatedThingByAuthorAndCreation(repository.pullRequests.nodes.commits.nodes, username, sinceIso, true);
+    const createdPRs = prsCreated.nodes;
     const createdIssues = repository.issues.nodes;
-    const issueComments = filterCommentsByUser(repository.issueComments.nodes.comments, username);
+    const issueComments = filterCommentsByUser(flattenedIssueComments, username);
     const createdDiscussions = filterCreatedThingByAuthorAndCreation(repository.discussions.nodes, username, sinceIso);
-    const commentsOnDiscussions = filterCreatedThingByAuthorAndCreation(repository.discussionComments.nodes.comments.nodes, username, sinceIso);
+    const commentsOnDiscussions = filterCreatedThingByAuthorAndCreation(flattenedDiscussionComments, username, sinceIso);
 
     return {
         discussionsCreated: {
@@ -170,15 +174,15 @@ export const getAllWorkForRepository = async (requestOwner: string, repoName: st
             data: createdPRs,
             type: QueryType['pr-created'],
         },
-        prCommits: {
-            repo: repoName,
-            data: commitsToOthersPRs,
-            type: QueryType['pr-commit']
-        },
-        prComments: {
-            repo: repoName,
-            data: commentsOnOthersPRs,
-            type: QueryType['pr-comment-created']
-        },
+        // prCommits: {
+        //     repo: repoName,
+        //     data: commitsToOthersPRs,
+        //     type: QueryType['pr-commit']
+        // },
+        // prComments: {
+        //     repo: repoName,
+        //     data: commentsOnOthersPRs,
+        //     type: QueryType['pr-comment-created']
+        // },
     }
 }
