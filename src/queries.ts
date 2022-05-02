@@ -142,7 +142,7 @@ export const getAllWorkForRepository = async (requestOwner: string, repoName: st
 
     // 
     // const commitsToOthersPRs = filterCreatedThingByAuthorAndCreation(repository.pullRequests.nodes.commits.nodes, username, sinceIso, true);
-    const createdPRs = prsCreated.nodes;
+    const createdPRs = prsCreated.edges.map(edge => edge.node);
     const createdIssues = repository.issues.nodes;
     const issueComments = filterCommentsByUser(flattenedIssueComments, username);
     const createdDiscussions = filterCreatedThingByAuthorAndCreation(repository.discussions.nodes, username, sinceIso);
