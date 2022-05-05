@@ -25,6 +25,22 @@ const testArr = [
         html_url: 'https://github.com/somewhere/bloop/pull/3'
     }
 ];
+
+const testReviewCommentArr = [
+    {
+        author: { login: username },
+        html_url: 'https://github.com/somewhere/bloop/pull/1'
+    },
+    {
+        author: { login: 'someone-else' },
+        html_url: 'https://github.com/somewhere/bloop/pull/2'
+    },
+    {
+        author: { login: username },
+        html_url: 'https://github.com/somewhere/bloop/pull/3'
+    }
+];
+
 describe('queryFilters', () => {
     test('filterPRsByAuthorAndCreation', () => {
         const result = filterPRsByAuthorAndCreation(testArr, username, lastWeek.toISOString());
@@ -35,16 +51,16 @@ describe('queryFilters', () => {
 
     describe('filterCommentsByUser', () => {
         test('include single user', () => {
-            const result = filterCommentsByUser(testArr, username);
+            const result = filterCommentsByUser(testReviewCommentArr, username);
             expect(result.length).toEqual(2);
-            expect(result[0].user.login).toEqual(username);
-            expect(result[1].user.login).toEqual(username);
+            expect(result[0].author.login).toEqual(username);
+            expect(result[1].author.login).toEqual(username);
         });
 
         test('exclude single user', () => {
-            const result = filterCommentsByUser(testArr, username, true);
+            const result = filterCommentsByUser(testReviewCommentArr, username, true);
             expect(result.length).toEqual(1);
-            expect(result[0].user.login).toEqual('someone-else');
+            expect(result[0].author.login).toEqual('someone-else');
         })
     });
 });
