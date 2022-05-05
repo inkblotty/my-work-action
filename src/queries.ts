@@ -1,13 +1,74 @@
 import { graphql } from "@octokit/graphql";
+import { arch } from "os";
 import { filterCommentsByUser, filterCreatedThingByAuthorAndCreation, getIsWithinRange } from './queryFilters';
 import { InputFields, QueryGroup, QueryType } from './shared.types';
 
 const GH_TOKEN = process.env.GH_TOKEN;
 const repositoryQuery = `\
-query getUserWork($username:String!, $owner:String!, $repo:String!, $sinceIso: DateTime!, $prsCreatedQuery:String!, $prContributionsQuery:String!) { 
-    repository(owner: $owner, name: $repo) {
-        ...repo
+query getUserWork($username:String!, $owner:String!, $repo:String!, $sinceIso: DateTime!, $prsCreatedQuery:String!, $prContributionsQuery:String!) {
+  repository(owner: $owner, name: $repo) {
+      ...repo
+  }
+  prsCreated:search(type: ISSUE, query: $prsCreatedQuery, first: 20) {
+    edges {
+      node {
+        ... on PullRequest {
+          title
+          createdAt
+          url
+        }
+      }
     }
+  }
+  prReviewsAndCommits:search(type: ISSUE, query: $prContributionsQuery, first: 20) {
+    edges {
+      node {
+        ... on PullRequest {
+          commits(first:20) {
+            nodes {
+              commit {
+                url
+                pushedDate
+                author {
+                  user {
+                    login
+                  }
+                }
+                associatedPullRequests(first:10, orderBy:{field:UPDATED_AT, direction:DESC}) {
+                  nodes {
+                    title
+                    url
+                    author {
+                      login
+                    }
+                  }
+                }
+              }
+            }
+          }
+          reviews(first: 50, author:$username) {
+            nodes {
+              createdAt
+              pullRequest {
+                createdAt
+                title
+                url
+                author {
+                  login
+                }
+              }
+              comments(first: 20) {
+                nodes {
+                  createdAt
+                  url
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 fragment repo on Repository {
@@ -30,7 +91,7 @@ fragment repo on Repository {
             }
             bodyText
             createdAt
-            url 
+            url
           }
         }
       }
@@ -43,7 +104,7 @@ fragment repo on Repository {
     }
     issueComments:issues(last:100, filterBy:{since:$sinceIso}) {
       nodes {
-        comments {
+        comments(last:50) {
           nodes {
             author {
               login
@@ -53,67 +114,6 @@ fragment repo on Repository {
               url
             }
             url
-          }
-        }
-      }
-    }
-    prsCreated:search(type: ISSUE, query: $prQuery, first: 20) {
-      edges {
-        node {
-          ... on PullRequest {
-            title
-            createdAt
-            title
-            url
-          }
-        }
-      }
-    }
-    prReviewsAndCommits:search(type: ISSUE, query: $prContributions, first: 100) {
-      edges {
-        node {
-          ... on PullRequest {
-            commits(first:100) {
-              nodes {
-                commit {
-                  url
-                  pushedDate
-                  author {
-                    user {
-                      login
-                    }
-                  }
-                  associatedPullRequests(first:10, orderBy:{field:UPDATED_AT, direction:DESC}) {
-                    nodes {
-                      title
-                      url
-                      author {
-                        login
-                      }
-                    }
-                  }
-                }
-              }
-            }
-            reviews(first: 50, author:$username) {
-              nodes {
-                createdAt
-                pullRequest {
-                  createdAt
-                  title
-                  url
-                  author {
-                    login
-                  }
-                }
-                comments(first: 20) {
-                  nodes {
-                    createdAt
-                    url
-                  }
-                }
-              }
-            }
           }
         }
       }
@@ -139,9 +139,11 @@ export const getAllWorkForRepository = async (requestOwner: string, repoName: st
     const flattenedDiscussionComments = repository.discussionComments.nodes.reduce((arr, { comments: { nodes }}) => {
       return [...arr, ...nodes];
     }, []);
+    // TODO: Use reduce?
+    const flattenedPRCommits = prReviewsAndCommits.edges.map(edge => edge.node.commits.nodes.map(node => node.commit)).flat();
 
-    // 
-    // const commitsToOthersPRs = filterCreatedThingByAuthorAndCreation(repository.pullRequests.nodes.commits.nodes, username, sinceIso, true);
+    // TODO: Do we only want to return commits to PRs that the original user did NOT create?
+    const commitsToPRs = filterCreatedThingByAuthorAndCreation(flattenedPRCommits, username, sinceIso);
     const createdPRs = prsCreated.edges.map(edge => edge.node);
     const createdIssues = repository.issues.nodes;
     const issueComments = filterCommentsByUser(flattenedIssueComments, username);
@@ -174,11 +176,11 @@ export const getAllWorkForRepository = async (requestOwner: string, repoName: st
             data: createdPRs,
             type: QueryType['pr-created'],
         },
-        // prCommits: {
-        //     repo: repoName,
-        //     data: commitsToOthersPRs,
-        //     type: QueryType['pr-commit']
-        // },
+        prCommits: {
+            repo: repoName,
+            data: commitsToPRs,
+            type: QueryType['pr-commit']
+        },
         // prComments: {
         //     repo: repoName,
         //     data: commentsOnOthersPRs,

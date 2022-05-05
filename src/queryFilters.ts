@@ -4,18 +4,23 @@ export const getIsWithinRange = (date1: string, date2: string): boolean => {
 
 interface CreatedThing {
     author?: {
+      login?: string;
+      user?: {
         login: string;
+      }
     };
     created_at?: string;
     createdAt?: string;
+    pushedDate?: string;
     user?: {
         login: string;
     };
 }
 export const filterCreatedThingByAuthorAndCreation = (list: CreatedThing[], username: string, sinceIso, excludeUser?: boolean) => {
     return list.filter(thing => {
-        const isWithinRange = getIsWithinRange(thing.createdAt, sinceIso);
-        const userField = thing.author?.login;
+        const createdDate = thing?.createdAt || thing?.pushedDate;
+        const isWithinRange = getIsWithinRange(createdDate, sinceIso);
+        const userField = thing.author?.user?.login || thing.author?.login;
         const isAuthoredByUsername = excludeUser ? userField !== username : userField === username;
         return isAuthoredByUsername && isWithinRange;
     })

@@ -19,6 +19,6 @@ describe('getAllWorkForRespository', () => {
         expect(result.issueComments.data.length).toEqual(52);
 
         expect(result.prsCreated.data.length).toEqual(16);
-        console.log('results', result.prsCreated.data.length);
+        expect(result.prCommits.data.length).toEqual(1);
     });
 });
