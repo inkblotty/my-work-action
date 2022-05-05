@@ -1,7 +1,6 @@
 import { graphql } from "@octokit/graphql";
-import { arch } from "os";
-import { filterCommentsByUser, filterCreatedThingByAuthorAndCreation, getIsWithinRange } from './queryFilters';
-import { InputFields, QueryGroup, QueryType } from './shared.types';
+import { filterCommentsByUser, filterCreatedThingByAuthorAndCreation, filterCommitsFromOtherUserOnPR, filterCommentsFromOtherUserOnPR } from './queryFilters';
+import { QueryGroup, QueryType } from './shared.types';
 
 const GH_TOKEN = process.env.GH_TOKEN;
 const repositoryQuery = `\
@@ -139,21 +138,14 @@ export const getAllWorkForRepository = async (requestOwner: string, repoName: st
     const flattenedDiscussionComments = repository.discussionComments.nodes.reduce((arr, { comments: { nodes }}) => {
       return [...arr, ...nodes];
     }, []);
-    // TODO: Use reduce?
-    const flattenedPRCommits = prReviewsAndCommits.edges.map(edge => edge.node.commits.nodes.map(node => node.commit)).flat();
+    // TODO: Refactor to use `.reduce`?
+    const flattenedPRCommits = prReviewsAndCommits.edges.map(edge => edge.node.commits.nodes).flat()
+    const flattenedPRComments = prReviewsAndCommits.edges.map(edge => edge.node.reviews.nodes).flat()
 
-    // TODO: Do we only want to return commits to PRs that the original user did NOT create?
-    const commitsToPRs = filterCreatedThingByAuthorAndCreation(flattenedPRCommits, username, sinceIso);
-
-    const filterCommentsFromOtherUserOnPR = (currentUser: String, reviews) => {
-      const filterOtherAuthors = reviews.filter(review => review.pullRequest.author.login !== currentUser);
-      const comments = filterOtherAuthors.map(item => item.comments.nodes).flat();
-
-      return comments;
-    }
+    const commitsToOtherPRs = filterCommitsFromOtherUserOnPR(username, flattenedPRCommits);
 
     // Comments on PRs by another user
-    const commentsOnOthersPRs = filterCommentsFromOtherUserOnPR(username,  prReviewsAndCommits.edges.map(edge => edge.node.reviews.nodes).flat());
+    const commentsOnOthersPRs = filterCommentsFromOtherUserOnPR(username, flattenedPRComments);
 
     const createdPRs = prsCreated.edges.map(edge => edge.node);
     const createdIssues = repository.issues.nodes;
@@ -189,7 +181,7 @@ export const getAllWorkForRepository = async (requestOwner: string, repoName: st
         },
         prCommits: {
             repo: repoName,
-            data: commitsToPRs,
+            data: commitsToOtherPRs,
             type: QueryType['pr-commit']
         },
         prComments: {

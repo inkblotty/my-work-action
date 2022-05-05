@@ -19,7 +19,7 @@ describe('getAllWorkForRespository', () => {
         expect(result.issueComments.data.length).toEqual(52);
 
         expect(result.prsCreated.data.length).toEqual(16);
-        expect(result.prCommits.data.length).toEqual(1);
+        expect(result.prCommits.data.length).toEqual(2);
         expect(result.prComments.data.length).toEqual(3);
     });
 });
