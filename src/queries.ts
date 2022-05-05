@@ -144,6 +144,17 @@ export const getAllWorkForRepository = async (requestOwner: string, repoName: st
 
     // TODO: Do we only want to return commits to PRs that the original user did NOT create?
     const commitsToPRs = filterCreatedThingByAuthorAndCreation(flattenedPRCommits, username, sinceIso);
+
+    const filterCommentsFromOtherUserOnPR = (currentUser: String, reviews) => {
+      const filterOtherAuthors = reviews.filter(review => review.pullRequest.author.login !== currentUser);
+      const comments = filterOtherAuthors.map(item => item.comments.nodes).flat();
+
+      return comments;
+    }
+
+    // Comments on PRs by another user
+    const commentsOnOthersPRs = filterCommentsFromOtherUserOnPR(username,  prReviewsAndCommits.edges.map(edge => edge.node.reviews.nodes).flat());
+
     const createdPRs = prsCreated.edges.map(edge => edge.node);
     const createdIssues = repository.issues.nodes;
     const issueComments = filterCommentsByUser(flattenedIssueComments, username);
@@ -181,10 +192,10 @@ export const getAllWorkForRepository = async (requestOwner: string, repoName: st
             data: commitsToPRs,
             type: QueryType['pr-commit']
         },
-        // prComments: {
-        //     repo: repoName,
-        //     data: commentsOnOthersPRs,
-        //     type: QueryType['pr-comment-created']
-        // },
+        prComments: {
+            repo: repoName,
+            data: commentsOnOthersPRs,
+            type: QueryType['pr-comment-created']
+        },
     }
 }
