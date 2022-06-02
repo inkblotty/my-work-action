@@ -1,5 +1,4 @@
 {
-    "data": {
       "repository": {
         "discussions": {
           "nodes": [
@@ -6522,5 +6521,4 @@
           }
         ]
       }
-    }
   }

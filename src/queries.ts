@@ -131,9 +131,8 @@ export const getAllWorkForRepository = async (requestOwner: string, repoName: st
             authorization: `token ${GH_TOKEN}`
         },
     });
-    console.log('result', result);
     // @ts-ignore
-    const { data: { repository, prsCreated, prReviewsAndCommits } } = result;
+    const { repository, prsCreated, prReviewsAndCommits } = result;
 
     const flattenedIssueComments = repository.issueComments.nodes.reduce((arr, { comments: { nodes }}) => {
       return [...arr, ...nodes];
