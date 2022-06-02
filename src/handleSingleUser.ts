@@ -1,6 +1,6 @@
-import { InputFields, OutputGroupGroup } from "./shared.types";
+import { InputFields, OutputGroupGroup, QueryGroup } from "./shared.types";
 import handlePRGroups from "./groupPRs";
-import { getIssueCommentsInRange, getIssuesCreatedInRange, getPRCommentsInRange, getPRsCreated } from "./queries";
+import { getAllWorkForRepository } from "./queries";
 import makeGroupsIntoMarkdown from "./makeGroupsIntoMarkdown";
 import openBranch from "./openBranch";
 import commitToBranch from "./commitToBranch";
@@ -10,14 +10,31 @@ import handleIssueGroups from "./groupIssues";
 
 async function handleSingleUser(inputFields: InputFields, username: string, startDate: Date) {
     const startDateIso = startDate.toISOString();
-    // query all the things
-    const issuesCreated = await getIssuesCreatedInRange(inputFields, username, startDateIso);
-    const issueComments = await getIssueCommentsInRange(inputFields, username, startDateIso);
-    const prsCreated = await getPRsCreated(inputFields, username, startDateIso);
-    const prComments = await getPRCommentsInRange(inputFields, username, startDateIso);
+    
+    const reposList = inputFields.queried_repos.split(',');
+    const discussionComments: QueryGroup[] = [];
+    const discussionsCreated: QueryGroup[] = [];
+    const issuesCreated: QueryGroup[] = [];
+    const issueComments: QueryGroup[] = [];
+    const prComments: QueryGroup[] = [];
+    const prCommits: QueryGroup[] = [];
+    const prsCreated: QueryGroup[] = [];
+
+    reposList.map(async repo => {
+        const [requestOwner, repoName] = repo.includes('/') ? repo.split('/') : [inputFields.owner, repo];
+        // query all the things
+        const repoData = await getAllWorkForRepository(requestOwner, repoName, username, startDateIso);
+        discussionComments.push(repoData.discussionComments);
+        discussionsCreated.push(repoData.discussionsCreated);
+        issuesCreated.push(repoData.issuesCreated);
+        issueComments.push(repoData.issueComments);
+        prComments.push(repoData.prComments);
+        prCommits.push(repoData.prCommits);
+        prsCreated.push(repoData.prsCreated);
+    });
 
     // group all the things
-    const prGroups = handlePRGroups(prsCreated, prComments);
+    const prGroups = handlePRGroups(prsCreated, prComments, prCommits);
     const issueGroups = handleIssueGroups(issuesCreated, issueComments);
 
     // format the groups into markdown

@@ -1,6 +1,7 @@
-import { OutputGroupGroup, QueryGroup, QueryType } from "./shared.types";
+import { formatDateTime } from "./shared";
+import { OutputGroup, OutputGroupGroup, QueryGroup, QueryType } from "./shared.types";
 
-const handlePRGroups = (allPRsCreated: QueryGroup[], allPRComments: QueryGroup[]): OutputGroupGroup => {
+const handlePRGroups = (allPRsCreated: QueryGroup[], allPRComments: QueryGroup[], allPRCommits: QueryGroup[]): OutputGroupGroup => {
     const finalPRs = {
         // primary, meaning directly authored
         primary: {
@@ -14,37 +15,57 @@ const handlePRGroups = (allPRsCreated: QueryGroup[], allPRComments: QueryGroup[]
     };
 
     allPRsCreated.forEach(repoGroup => {
-        const { data, type, titleData } = repoGroup;
-        if (type === QueryType['pr-created'] && data[0]) {
-            const [repoUrl] = data[0].html_url.split('/pull');
+        const { data } = repoGroup;
+        if (data[0]) {
+            const [repoUrl] = data[0].url.split('/pull');
             const [_, repoName] = repoUrl.split('github.com/');
 
             finalPRs.primary[repoName] = {
                 groupTitle: `PRs Created in [${repoName}](${repoUrl})`,
                 artifacts: data.map(pr => ({
                     title: pr.title,
-                    url: pr.html_url,
+                    url: pr.url,
                 }))
             }
         }
+    });
 
-        if (type === QueryType['commit']) {
-            finalPRs.secondary[titleData.url] = {
-                groupTitle: `Added ${data.length} commits to @${titleData.username}'s PR: [${titleData.title}](${titleData.url})`,
-                artifacts: data.map(commit => ({
-                    title: commit.message,
-                    url: commit.html_url,
-                })),
-            }
+    allPRCommits.forEach(repoGroup => {
+        const { data } = repoGroup;
+        const tempSecondary: OutputGroup = {}
+        if (data[0]) {
+            data.forEach(({ commit }) => {
+                const [firstPR] = commit.associatedPullRequests.nodes;
+                const prAuthor = firstPR.author.user;
+                const prUrl = firstPR.url;
+                if (!tempSecondary[prUrl]) {
+                    tempSecondary[prUrl] = {
+                        groupTitle: `Added <data.length> commits to @${prAuthor}'s PR: [${firstPR.title}](${prUrl})`,
+                        artifacts: [],
+                    }
+                }
+
+                tempSecondary[prUrl].artifacts.push({
+                    title: `Commit at ${formatDateTime(new Date(commit.pushedDate))}`,
+                    url: commit.url,
+                });
+            });
         }
+
+        Object.entries(tempSecondary).forEach(([prUrl, value]) => {
+            finalPRs.secondary[prUrl] = {
+                groupTitle: value.groupTitle.replace('<data.length>', `${value.artifacts.length}`),
+                artifacts: value.artifacts,
+            }
+        });
     });
 
     allPRComments.forEach(repoGroup => {
         repoGroup.data.forEach(comment => {
             // use the specific PR as key
-            const key = comment.html_url.split('#')[0];
+            const key = comment.url.split('#')[0];
             const prUrl = key.split('github.com')[1];
-            const repo = prUrl.split('/pull')[0];
+            const [repo, prNumber] = prUrl.split('/pull/');
             // if comment is on own PR, ignore
             if (finalPRs.primary[repo]) {
                 if (finalPRs.primary[repo].artifacts.find(url => url === key)) {
@@ -55,14 +76,14 @@ const handlePRGroups = (allPRsCreated: QueryGroup[], allPRComments: QueryGroup[]
             // make sure that comment belongs to a PR group
             if (!finalPRs.secondary[prUrl]) {
                 finalPRs.secondary[prUrl] = {
-                    groupTitle: `Reviewed and left comments on PR [${repoGroup.titleData.title}](${prUrl})`,
+                    groupTitle: `Reviewed and left comments on PR [#${prNumber}](${prUrl}) in ${repoGroup.repo}`,
                     artifacts: [],
                 }
             }
 
             finalPRs.secondary[prUrl].artifacts.push({
                 title: `#${finalPRs.secondary[prUrl].artifacts.length + 1}`,
-                url: comment.html_url,
+                url: comment.url,
             });
         })
     });
