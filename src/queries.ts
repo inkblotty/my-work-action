@@ -131,6 +131,7 @@ export const getAllWorkForRepository = async (requestOwner: string, repoName: st
             authorization: `token ${GH_TOKEN}`
         },
     });
+    console.log('query input', '\nsince iso:', sinceIso, '\nrepo', repoName, '\nowner', requestOwner)
     console.log('query result', '\nrepository: ', repository, '\nprsCreated: ', prsCreated, '\nprReviewsAndCommits: ', prReviewsAndCommits)
 
     const flattenedIssueComments = repository.issueComments.nodes.reduce((arr, { comments: { nodes }}) => {
