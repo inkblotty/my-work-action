@@ -34,19 +34,20 @@ const handlePRGroups = (allPRsCreated: QueryGroup[], allPRComments: QueryGroup[]
         const { data } = repoGroup;
         const tempSecondary: OutputGroup = {}
         if (data[0]) {
-            data.forEach(group => {
-                const prAuthor = group.pullRequest.author.login;
-                const prUrl = group.pullRequest.url;
+            data.forEach(({ commit }) => {
+                const [firstPR] = commit.associatedPullRequests.nodes;
+                const prAuthor = firstPR.author.user;
+                const prUrl = firstPR.url;
                 if (!tempSecondary[prUrl]) {
                     tempSecondary[prUrl] = {
-                        groupTitle: `Added <data.length> commits to @${prAuthor}'s PR: [${group.pullRequest.title}](${prUrl})`,
+                        groupTitle: `Added <data.length> commits to @${prAuthor}'s PR: [${firstPR.title}](${prUrl})`,
                         artifacts: [],
                     }
                 }
 
                 tempSecondary[prUrl].artifacts.push({
-                    title: `Commit at ${formatDateTime(new Date(group.commit.pushedDate))}`,
-                    url: group.commit.url,
+                    title: `Commit at ${formatDateTime(new Date(commit.pushedDate))}`,
+                    url: commit.url,
                 });
             });
         }
@@ -64,7 +65,7 @@ const handlePRGroups = (allPRsCreated: QueryGroup[], allPRComments: QueryGroup[]
             // use the specific PR as key
             const key = comment.url.split('#')[0];
             const prUrl = key.split('github.com')[1];
-            const repo = prUrl.split('/pull')[0];
+            const [repo, prNumber] = prUrl.split('/pull/');
             // if comment is on own PR, ignore
             if (finalPRs.primary[repo]) {
                 if (finalPRs.primary[repo].artifacts.find(url => url === key)) {
@@ -75,7 +76,7 @@ const handlePRGroups = (allPRsCreated: QueryGroup[], allPRComments: QueryGroup[]
             // make sure that comment belongs to a PR group
             if (!finalPRs.secondary[prUrl]) {
                 finalPRs.secondary[prUrl] = {
-                    groupTitle: `Reviewed and left comments on PR [${repoGroup.titleData.title}](${prUrl})`,
+                    groupTitle: `Reviewed and left comments on PR [#${prNumber}](${prUrl}) in ${repoGroup.repo}`,
                     artifacts: [],
                 }
             }

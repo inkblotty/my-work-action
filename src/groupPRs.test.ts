@@ -10,9 +10,9 @@ import handlePRGroups from './groupPRs';
 import { QueryGroup } from './shared.types';
 
 interface MockData {
-    prsCreated: QueryGroup[];
-    prComments: QueryGroup[];
-    prCommits: QueryGroup[];
+    prsCreated?: QueryGroup;
+    prComments?: QueryGroup;
+    prCommits?: QueryGroup;
 }
 let mockData: MockData = {};
 
@@ -24,6 +24,11 @@ describe('groupPRs', () => {
     });
 
     test('handlePRGroups', async () => {
-        const result = await handlePRGroups(mockData.prsCreated, mockData.prComments, mockData.prCommits);
+        const result = await handlePRGroups([mockData.prsCreated], [mockData.prComments], [mockData.prCommits]);
+        expect(result.primary['github/accessibility']).toBeTruthy();
+        expect(result.primary['github/accessibility'].artifacts.length).toEqual(16);
+
+        // interacted with 3 PRs secondarily
+        expect(Object.keys(result.secondary).length).toEqual(3);
     });
 });
