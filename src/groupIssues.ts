@@ -45,7 +45,7 @@ const handleIssueGroups = (allIssuesCreated: QueryGroup[], allIssueComments: Que
             // make sure that comment belongs to a PR group
             if (!finalIssues.secondary[issueUrl]) {
                 finalIssues.secondary[issueUrl] = {
-                    groupTitle: `Left comments on issue: [${repoGroup.titleData.title}](${issueUrl})`,
+                    groupTitle: `Left comments on issue: [${comment.issue.title}](${issueUrl}) in ${repoGroup.repo}`,
                     artifacts: [],
                 }
             }
