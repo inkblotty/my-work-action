@@ -20,7 +20,7 @@ export const performWithDelay = (func: DelayedFunction, currentIndex: number, lo
         if (currentIndex < loopLimit) {
             performWithDelay(func, currentIndex + 1, loopLimit);
         }            
-    }, (currentIndex * 1000) + 1000)
+    }, (currentIndex * 5000))
 }
 
 export const sleep = async (time: number): Promise<void> => {
