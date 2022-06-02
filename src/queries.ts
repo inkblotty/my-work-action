@@ -120,7 +120,7 @@ fragment repo on Repository {
   }
 `;
 export const getAllWorkForRepository = async (requestOwner: string, repoName: string, username: string, sinceIso: string): Promise<{ [key: string]: QueryGroup }> => {
-    const { data: { repository, prsCreated, prReviewsAndCommits } } = await graphql(repositoryQuery, {
+    const result = await graphql(repositoryQuery, {
         username,
         owner: requestOwner,
         repo: repoName,
@@ -131,6 +131,9 @@ export const getAllWorkForRepository = async (requestOwner: string, repoName: st
             authorization: `token ${GH_TOKEN}`
         },
     });
+    console.log('result', result);
+    // @ts-ignore
+    const { data: { repository, prsCreated, prReviewsAndCommits } } = result;
 
     const flattenedIssueComments = repository.issueComments.nodes.reduce((arr, { comments: { nodes }}) => {
       return [...arr, ...nodes];
