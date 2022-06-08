@@ -37,9 +37,6 @@ async function handleSingleUser(inputFields: InputFields, username: string, star
     const prGroups = handlePRGroups(prsCreated, prComments, prCommits);
     const issueGroups = handleIssueGroups(issuesCreated, issueComments);
 
-    console.log('prGroups', prGroups);
-    console.log('issueGroups', issueGroups);
-
     // format the groups into markdown
     const documentBody = makeGroupsIntoMarkdown([prGroups, issueGroups], username, startDate);
 
