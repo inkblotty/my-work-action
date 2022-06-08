@@ -20,7 +20,7 @@ async function handleSingleUser(inputFields: InputFields, username: string, star
     const prCommits: QueryGroup[] = [];
     const prsCreated: QueryGroup[] = [];
 
-    reposList.map(async repo => {
+    await Promise.all(reposList.map(async repo => {
         const [requestOwner, repoName] = repo.includes('/') ? repo.split('/') : [inputFields.owner, repo];
         // query all the things
         const repoData = await getAllWorkForRepository(requestOwner, repoName, username, startDateIso);
@@ -31,7 +31,7 @@ async function handleSingleUser(inputFields: InputFields, username: string, star
         prComments.push(repoData.prComments);
         prCommits.push(repoData.prCommits);
         prsCreated.push(repoData.prsCreated);
-    });
+    }));
 
     // group all the things
     const prGroups = handlePRGroups(prsCreated, prComments, prCommits);

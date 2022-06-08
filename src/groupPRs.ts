@@ -14,6 +14,8 @@ const handlePRGroups = (allPRsCreated: QueryGroup[], allPRComments: QueryGroup[]
         }
     };
 
+    console.log('handle PRs', allPRsCreated, allPRComments, allPRComments);
+
     allPRsCreated.forEach(repoGroup => {
         console.log('repoGroup', repoGroup);
         const { data } = repoGroup;
