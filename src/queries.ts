@@ -155,6 +155,10 @@ export const getAllWorkForRepository = async (requestOwner: string, repoName: st
     const createdDiscussions = filterCreatedThingByAuthorAndCreation(repository.discussions.nodes, username, sinceIso);
     const commentsOnDiscussions = filterCreatedThingByAuthorAndCreation(flattenedDiscussionComments, username, sinceIso);
 
+    console.log('createdPRs', createdPRs);
+    console.log('contributedPRs', commitsToOtherPRs, commentsOnOthersPRs);
+    console.log('issues', createdIssues);
+
     return {
         discussionsCreated: {
             repo: repoName,
