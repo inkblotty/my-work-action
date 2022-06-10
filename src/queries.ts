@@ -2,6 +2,56 @@ import { graphql } from "@octokit/graphql";
 import { filterCommentsByUser, filterCreatedThingByAuthorAndCreation, filterCommitsFromOtherUserOnPR, filterCommentsFromOtherUserOnPR } from './queryFilters';
 import { QueryGroup, QueryType } from './shared.types';
 
+  // prReviewsAndCommits:search(type: ISSUE, query: $prContributionsQuery, first: 20) {
+  //   edges {
+  //     node {
+  //       ... on PullRequest {
+  //         commits(first:20) {
+  //           nodes {
+  //             commit {
+  //               url
+  //               pushedDate
+  //               author {
+  //                 user {
+  //                   login
+  //                 }
+  //               }
+  //               associatedPullRequests(first:10, orderBy:{field:UPDATED_AT, direction:DESC}) {
+  //                 nodes {
+  //                   title
+  //                   url
+  //                   author {
+  //                     login
+  //                   }
+  //                 }
+  //               }
+  //             }
+  //           }
+  //         }
+  //         reviews(first: 50, author:$username) {
+  //           nodes {
+  //             createdAt
+  //             pullRequest {
+  //               createdAt
+  //               title
+  //               url
+  //               author {
+  //                 login
+  //               }
+  //             }
+  //             comments(first: 20) {
+  //               nodes {
+  //                 createdAt
+  //                 url
+  //               }
+  //             }
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
+
 const GH_TOKEN = process.env.GH_TOKEN;
 const repositoryQuery = `\
 query getUserWork($username:String!, $owner:String!, $repo:String!, $sinceIso: DateTime!, $prsCreatedQuery:String!, $prContributionsQuery:String!) {
@@ -15,55 +65,6 @@ query getUserWork($username:String!, $owner:String!, $repo:String!, $sinceIso: D
           title
           createdAt
           url
-        }
-      }
-    }
-  }
-  prReviewsAndCommits:search(type: ISSUE, query: $prContributionsQuery, first: 20) {
-    edges {
-      node {
-        ... on PullRequest {
-          commits(first:20) {
-            nodes {
-              commit {
-                url
-                pushedDate
-                author {
-                  user {
-                    login
-                  }
-                }
-                associatedPullRequests(first:10, orderBy:{field:UPDATED_AT, direction:DESC}) {
-                  nodes {
-                    title
-                    url
-                    author {
-                      login
-                    }
-                  }
-                }
-              }
-            }
-          }
-          reviews(first: 50, author:$username) {
-            nodes {
-              createdAt
-              pullRequest {
-                createdAt
-                title
-                url
-                author {
-                  login
-                }
-              }
-              comments(first: 20) {
-                nodes {
-                  createdAt
-                  url
-                }
-              }
-            }
-          }
         }
       }
     }
