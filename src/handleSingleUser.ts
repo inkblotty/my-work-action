@@ -23,7 +23,7 @@ async function handleSingleUser(inputFields: InputFields, username: string, star
     await Promise.all(reposList.map(async repo => {
         const [requestOwner, repoName] = repo.includes('/') ? repo.split('/') : [inputFields.owner, repo];
         // query all the things
-        const repoData = await getAllWorkForRepository(requestOwner, repoName, username, startDateIso);
+        const repoData = await getAllWorkForRepository(requestOwner, repoName, username, startDateIso, inputFields.secondary_prs_label);
         discussionComments.push(repoData.discussionComments);
         discussionsCreated.push(repoData.discussionsCreated);
         issuesCreated.push(repoData.issuesCreated);
