@@ -11,6 +11,9 @@ inputs:
   repo:
     description: "The name of the repo where the PR should be created."
     required: true
+  secondary_prs_label:
+    description: "The label to query for PRs that should be counted as secondary work (reviews and commits, but not created)."
+    required: true
   timespan:
     description: "Number of days to query, with today as the end date. Defaults to 7 days."
     required: false

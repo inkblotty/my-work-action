@@ -5929,71 +5929,22 @@
         "edges": [
           {
             "node": {
+              "createdAt": "2022-06-08T20:12:03Z",
+              "title": "Add CODEOWNERS file",
+              "url": "https://github.com/github/accessibility-scorecard/pull/13",
+              "author": {
+                "login": "khiga8"
+              },
               "commits": {
                 "nodes": [
                   {
                     "commit": {
-                      "url": "https://github.com/github/accessibility/commit/8daed6677ff72c7ce4449fff8a0caec16d471b5e",
-                      "pushedDate": "2022-04-22T18:17:29Z",
+                      "url": "https://github.com/github/accessibility-scorecard/commit/e53c7ba561fd052db68dc067c088105121afff7a",
+                      "pushedDate": "2022-06-08T20:10:52Z",
                       "author": {
                         "user": {
                           "login": "khiga8"
                         }
-                      },
-                      "associatedPullRequests": {
-                        "nodes": [
-                          {
-                            "title": "Update track-pull-requests-for-poe.yml",
-                            "url": "https://github.com/github/accessibility/pull/1070",
-                            "author": {
-                              "login": "khiga8"
-                            }
-                          }
-                        ]
-                      }
-                    }
-                  },
-                  {
-                    "commit": {
-                      "url": "https://github.com/github/accessibility/commit/7fd8ac045abfd98a0e645c1a4aa5d23f2e17e9f3",
-                      "pushedDate": "2022-04-22T18:19:41Z",
-                      "author": {
-                        "user": {
-                          "login": "khiga8"
-                        }
-                      },
-                      "associatedPullRequests": {
-                        "nodes": [
-                          {
-                            "title": "Update track-pull-requests-for-poe.yml",
-                            "url": "https://github.com/github/accessibility/pull/1070",
-                            "author": {
-                              "login": "khiga8"
-                            }
-                          }
-                        ]
-                      }
-                    }
-                  },
-                  {
-                    "commit": {
-                      "url": "https://github.com/github/accessibility/commit/8177f2713f5ee158dfd4adab0a3a24d9741e3105",
-                      "pushedDate": "2022-04-22T18:21:02Z",
-                      "author": {
-                        "user": {
-                          "login": "khiga8"
-                        }
-                      },
-                      "associatedPullRequests": {
-                        "nodes": [
-                          {
-                            "title": "Update track-pull-requests-for-poe.yml",
-                            "url": "https://github.com/github/accessibility/pull/1070",
-                            "author": {
-                              "login": "khiga8"
-                            }
-                          }
-                        ]
                       }
                     }
                   }
@@ -6002,15 +5953,7 @@
               "reviews": {
                 "nodes": [
                   {
-                    "createdAt": "2022-04-25T17:50:57Z",
-                    "pullRequest": {
-                      "createdAt": "2022-04-22T18:18:19Z",
-                      "title": "Update track-pull-requests-for-poe.yml",
-                      "url": "https://github.com/github/accessibility/pull/1070",
-                      "author": {
-                        "login": "khiga8"
-                      }
-                    },
+                    "createdAt": "2022-06-08T22:48:06Z",
                     "comments": {
                       "nodes": []
                     }
@@ -6021,27 +5964,121 @@
           },
           {
             "node": {
+              "createdAt": "2022-06-08T19:57:25Z",
+              "title": "Adding stale issues requirement for Accessibility Audit objective",
+              "url": "https://github.com/github/accessibility-scorecard/pull/12",
+              "author": {
+                "login": "kendallgassner"
+              },
               "commits": {
                 "nodes": [
                   {
                     "commit": {
-                      "url": "https://github.com/github/accessibility/commit/ab2bf1d42893cbc041db4f60364223f2c6c49dc7",
-                      "pushedDate": "2022-04-21T17:49:24Z",
+                      "url": "https://github.com/github/accessibility-scorecard/commit/d1c19927115d1950576932abdae18e8ea6f104f3",
+                      "pushedDate": "2022-06-08T18:20:35Z",
                       "author": {
                         "user": {
-                          "login": "khiga8"
+                          "login": "kendallgassner"
                         }
-                      },
-                      "associatedPullRequests": {
-                        "nodes": [
-                          {
-                            "title": "Add track-pull-requests-for-poe.yml",
-                            "url": "https://github.com/github/accessibility/pull/1066",
-                            "author": {
-                              "login": "khiga8"
-                            }
-                          }
-                        ]
+                      }
+                    }
+                  },
+                  {
+                    "commit": {
+                      "url": "https://github.com/github/accessibility-scorecard/commit/b0c71fa8f6b8dbbb9949d408602030197236baa6",
+                      "pushedDate": "2022-06-08T18:29:20Z",
+                      "author": {
+                        "user": {
+                          "login": "kendallgassner"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "commit": {
+                      "url": "https://github.com/github/accessibility-scorecard/commit/7e2992d0a6a4a6c4c9c2693e76898cf6eb4fcbc2",
+                      "pushedDate": "2022-06-08T20:17:22Z",
+                      "author": {
+                        "user": {
+                          "login": "kendallgassner"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "commit": {
+                      "url": "https://github.com/github/accessibility-scorecard/commit/3a731add3857d56f20e96037589ffaca43000817",
+                      "pushedDate": "2022-06-08T23:42:29Z",
+                      "author": {
+                        "user": {
+                          "login": "kendallgassner"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "commit": {
+                      "url": "https://github.com/github/accessibility-scorecard/commit/9a877d16bd5f5d06df6c06e418cb2c5e933c0ea3",
+                      "pushedDate": "2022-06-08T23:57:11Z",
+                      "author": {
+                        "user": {
+                          "login": "kendallgassner"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "commit": {
+                      "url": "https://github.com/github/accessibility-scorecard/commit/b4ab99800afceef3eb389f4b319fde5b7f71f0f6",
+                      "pushedDate": "2022-06-09T00:17:22Z",
+                      "author": {
+                        "user": {
+                          "login": "kendallgassner"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "commit": {
+                      "url": "https://github.com/github/accessibility-scorecard/commit/a220a7b43d36f8b8d3cfe00b9f915563853b1c3c",
+                      "pushedDate": "2022-06-09T16:27:07Z",
+                      "author": {
+                        "user": {
+                          "login": "kendallgassner"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "commit": {
+                      "url": "https://github.com/github/accessibility-scorecard/commit/fa996d405c16613c99734e78054a9842eebfb883",
+                      "pushedDate": "2022-06-09T17:11:01Z",
+                      "author": {
+                        "user": {
+                          "login": "kendallgassner"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "commit": {
+                      "url": "https://github.com/github/accessibility-scorecard/commit/f37a82586e80e523f8fd8074278706e089de7e01",
+                      "pushedDate": "2022-06-09T17:26:21Z",
+                      "author": {
+                        "user": {
+                          "login": "kendallgassner"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "commit": {
+                      "url": "https://github.com/github/accessibility-scorecard/commit/e840679497a4258909ba8232ecd3d4b7f6ff4fa4",
+                      "pushedDate": "2022-06-10T15:42:38Z",
+                      "author": {
+                        "user": {
+                          "login": "kendallgassner"
+                        }
                       }
                     }
                   }
@@ -6050,475 +6087,461 @@
               "reviews": {
                 "nodes": [
                   {
-                    "createdAt": "2022-04-22T17:12:38Z",
-                    "pullRequest": {
-                      "createdAt": "2022-04-21T17:56:49Z",
-                      "title": "Add track-pull-requests-for-poe.yml",
-                      "url": "https://github.com/github/accessibility/pull/1066",
-                      "author": {
-                        "login": "khiga8"
-                      }
-                    },
-                    "comments": {
-                      "nodes": []
-                    }
-                  }
-                ]
-              }
-            }
-          },
-          {
-            "node": {
-              "commits": {
-                "nodes": [
-                  {
-                    "commit": {
-                      "url": "https://github.com/github/accessibility/commit/417bb5305275aea2a61d063a147d7a5c1815f146",
-                      "pushedDate": "2022-04-20T23:41:00Z",
-                      "author": {
-                        "user": {
-                          "login": "khiga8"
-                        }
-                      },
-                      "associatedPullRequests": {
-                        "nodes": [
-                          {
-                            "title": "DRAFT: Add the points of engagement PR workflow",
-                            "url": "https://github.com/github/accessibility/pull/1063",
-                            "author": {
-                              "login": "khiga8"
-                            }
-                          }
-                        ]
-                      }
-                    }
-                  }
-                ]
-              },
-              "reviews": {
-                "nodes": []
-              }
-            }
-          },
-          {
-            "node": {
-              "commits": {
-                "nodes": [
-                  {
-                    "commit": {
-                      "url": "https://github.com/github/accessibility/commit/0980c4597a5e94771b0b7f34e41597c6eb5623d5",
-                      "pushedDate": "2022-04-20T17:03:46Z",
-                      "author": {
-                        "user": {
-                          "login": "khiga8"
-                        }
-                      },
-                      "associatedPullRequests": {
-                        "nodes": [
-                          {
-                            "title": "Deep dive notes for markdown",
-                            "url": "https://github.com/github/accessibility/pull/1058",
-                            "author": {
-                              "login": "khiga8"
-                            }
-                          }
-                        ]
-                      }
-                    }
-                  },
-                  {
-                    "commit": {
-                      "url": "https://github.com/github/accessibility/commit/968792c81c12003d13c6fc4e56ee1c70fadae6b9",
-                      "pushedDate": "2022-04-20T17:44:04Z",
-                      "author": {
-                        "user": {
-                          "login": "khiga8"
-                        }
-                      },
-                      "associatedPullRequests": {
-                        "nodes": [
-                          {
-                            "title": "Deep dive notes for markdown",
-                            "url": "https://github.com/github/accessibility/pull/1058",
-                            "author": {
-                              "login": "khiga8"
-                            }
-                          }
-                        ]
-                      }
-                    }
-                  },
-                  {
-                    "commit": {
-                      "url": "https://github.com/github/accessibility/commit/27107cfae8c6c951752e19a170dbc6f9bc325177",
-                      "pushedDate": "2022-04-20T17:57:22Z",
-                      "author": {
-                        "user": {
-                          "login": "khiga8"
-                        }
-                      },
-                      "associatedPullRequests": {
-                        "nodes": [
-                          {
-                            "title": "Deep dive notes for markdown",
-                            "url": "https://github.com/github/accessibility/pull/1058",
-                            "author": {
-                              "login": "khiga8"
-                            }
-                          }
-                        ]
-                      }
-                    }
-                  },
-                  {
-                    "commit": {
-                      "url": "https://github.com/github/accessibility/commit/2dad6de9ac1dd708acabe3d078ac4331bedd88f5",
-                      "pushedDate": "2022-04-20T17:57:28Z",
-                      "author": {
-                        "user": {
-                          "login": "khiga8"
-                        }
-                      },
-                      "associatedPullRequests": {
-                        "nodes": [
-                          {
-                            "title": "Deep dive notes for markdown",
-                            "url": "https://github.com/github/accessibility/pull/1058",
-                            "author": {
-                              "login": "khiga8"
-                            }
-                          }
-                        ]
-                      }
-                    }
-                  }
-                ]
-              },
-              "reviews": {
-                "nodes": [
-                  {
-                    "createdAt": "2022-04-20T17:45:52Z",
-                    "pullRequest": {
-                      "createdAt": "2022-04-20T17:03:53Z",
-                      "title": "Deep dive notes for markdown",
-                      "url": "https://github.com/github/accessibility/pull/1058",
-                      "author": {
-                        "login": "khiga8"
-                      }
-                    },
+                    "createdAt": "2022-06-09T01:33:50Z",
                     "comments": {
                       "nodes": [
                         {
-                          "createdAt": "2022-04-20T17:45:52Z",
-                          "url": "https://github.com/github/accessibility/pull/1058#discussion_r854399447"
+                          "createdAt": "2022-06-09T01:33:50Z",
+                          "url": "https://github.com/github/accessibility-scorecard/pull/12#discussion_r892994772"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "createdAt": "2022-06-09T01:35:17Z",
+                    "comments": {
+                      "nodes": [
+                        {
+                          "createdAt": "2022-06-09T01:35:18Z",
+                          "url": "https://github.com/github/accessibility-scorecard/pull/12#discussion_r892995249"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "createdAt": "2022-06-09T01:35:57Z",
+                    "comments": {
+                      "nodes": [
+                        {
+                          "createdAt": "2022-06-09T01:35:58Z",
+                          "url": "https://github.com/github/accessibility-scorecard/pull/12#discussion_r892995503"
                         },
                         {
-                          "createdAt": "2022-04-20T17:47:18Z",
-                          "url": "https://github.com/github/accessibility/pull/1058#discussion_r854401058"
-                        }
-                      ]
-                    }
-                  },
-                  {
-                    "createdAt": "2022-04-20T18:00:45Z",
-                    "pullRequest": {
-                      "createdAt": "2022-04-20T17:03:53Z",
-                      "title": "Deep dive notes for markdown",
-                      "url": "https://github.com/github/accessibility/pull/1058",
-                      "author": {
-                        "login": "khiga8"
-                      }
-                    },
-                    "comments": {
-                      "nodes": []
-                    }
-                  }
-                ]
-              }
-            }
-          },
-          {
-            "node": {
-              "commits": {
-                "nodes": [
-                  {
-                    "commit": {
-                      "url": "https://github.com/github/accessibility/commit/84ab11b1a959cdd473326f5583a6573e88eb378f",
-                      "pushedDate": "2022-04-19T17:33:23Z",
-                      "author": {
-                        "user": {
-                          "login": "inkblotty"
-                        }
-                      },
-                      "associatedPullRequests": {
-                        "nodes": [
-                          {
-                            "title": "Update hww.yml",
-                            "url": "https://github.com/github/accessibility/pull/1049",
-                            "author": {
-                              "login": "inkblotty"
-                            }
-                          }
-                        ]
-                      }
-                    }
-                  }
-                ]
-              },
-              "reviews": {
-                "nodes": [
-                  {
-                    "createdAt": "2022-04-19T17:51:13Z",
-                    "pullRequest": {
-                      "createdAt": "2022-04-19T17:33:25Z",
-                      "title": "Update hww.yml",
-                      "url": "https://github.com/github/accessibility/pull/1049",
-                      "author": {
-                        "login": "inkblotty"
-                      }
-                    },
-                    "comments": {
-                      "nodes": []
-                    }
-                  }
-                ]
-              }
-            }
-          },
-          {
-            "node": {
-              "commits": {
-                "nodes": [
-                  {
-                    "commit": {
-                      "url": "https://github.com/github/accessibility/commit/db2b9e7ddc90c72dd2f7d105537cea0b3d58ca30",
-                      "pushedDate": "2022-04-19T03:15:48Z",
-                      "author": {
-                        "user": {
-                          "login": "ichelsea"
-                        }
-                      },
-                      "associatedPullRequests": {
-                        "nodes": [
-                          {
-                            "title": "Create point of engagement slash command",
-                            "url": "https://github.com/github/accessibility/pull/1047",
-                            "author": {
-                              "login": "ichelsea"
-                            }
-                          }
-                        ]
-                      }
-                    }
-                  },
-                  {
-                    "commit": {
-                      "url": "https://github.com/github/accessibility/commit/50c7eb77b3ab719023679af45720023b02ce007b",
-                      "pushedDate": "2022-04-19T03:21:39Z",
-                      "author": {
-                        "user": {
-                          "login": "ichelsea"
-                        }
-                      },
-                      "associatedPullRequests": {
-                        "nodes": [
-                          {
-                            "title": "Create point of engagement slash command",
-                            "url": "https://github.com/github/accessibility/pull/1047",
-                            "author": {
-                              "login": "ichelsea"
-                            }
-                          }
-                        ]
-                      }
-                    }
-                  }
-                ]
-              },
-              "reviews": {
-                "nodes": [
-                  {
-                    "createdAt": "2022-04-19T19:21:21Z",
-                    "pullRequest": {
-                      "createdAt": "2022-04-19T03:20:33Z",
-                      "title": "Create point of engagement slash command",
-                      "url": "https://github.com/github/accessibility/pull/1047",
-                      "author": {
-                        "login": "ichelsea"
-                      }
-                    },
-                    "comments": {
-                      "nodes": []
-                    }
-                  }
-                ]
-              }
-            }
-          },
-          {
-            "node": {
-              "commits": {
-                "nodes": [
-                  {
-                    "commit": {
-                      "url": "https://github.com/github/accessibility/commit/5b68452f8e3c03ee5dccce5918b9f51f9c2d4c7d",
-                      "pushedDate": "2022-04-19T01:23:07Z",
-                      "author": {
-                        "user": {
-                          "login": "inkblotty"
-                        }
-                      },
-                      "associatedPullRequests": {
-                        "nodes": [
-                          {
-                            "title": "🤖 Howie Update",
-                            "url": "https://github.com/github/accessibility/pull/1046",
-                            "author": {
-                              "login": "howie-work"
-                            }
-                          }
-                        ]
-                      }
-                    }
-                  },
-                  {
-                    "commit": {
-                      "url": "https://github.com/github/accessibility/commit/53a03403f42a44445870cd33ed215884422c6dfd",
-                      "pushedDate": "2022-04-19T01:23:33Z",
-                      "author": {
-                        "user": {
-                          "login": "inkblotty"
-                        }
-                      },
-                      "associatedPullRequests": {
-                        "nodes": [
-                          {
-                            "title": "🤖 Howie Update",
-                            "url": "https://github.com/github/accessibility/pull/1046",
-                            "author": {
-                              "login": "howie-work"
-                            }
-                          }
-                        ]
-                      }
-                    }
-                  }
-                ]
-              },
-              "reviews": {
-                "nodes": [
-                  {
-                    "createdAt": "2022-04-19T15:28:56Z",
-                    "pullRequest": {
-                      "createdAt": "2022-04-19T01:23:07Z",
-                      "title": "🤖 Howie Update",
-                      "url": "https://github.com/github/accessibility/pull/1046",
-                      "author": {
-                        "login": "howie-work"
-                      }
-                    },
-                    "comments": {
-                      "nodes": [
+                          "createdAt": "2022-06-09T01:43:06Z",
+                          "url": "https://github.com/github/accessibility-scorecard/pull/12#discussion_r892998140"
+                        },
                         {
-                          "createdAt": "2022-04-19T15:28:57Z",
-                          "url": "https://github.com/github/accessibility/pull/1046#discussion_r853210902"
+                          "createdAt": "2022-06-09T01:44:56Z",
+                          "url": "https://github.com/github/accessibility-scorecard/pull/12#discussion_r892998794"
+                        },
+                        {
+                          "createdAt": "2022-06-09T01:47:21Z",
+                          "url": "https://github.com/github/accessibility-scorecard/pull/12#discussion_r892999751"
+                        },
+                        {
+                          "createdAt": "2022-06-09T01:48:41Z",
+                          "url": "https://github.com/github/accessibility-scorecard/pull/12#discussion_r893000227"
+                        },
+                        {
+                          "createdAt": "2022-06-09T01:49:38Z",
+                          "url": "https://github.com/github/accessibility-scorecard/pull/12#discussion_r893000593"
+                        },
+                        {
+                          "createdAt": "2022-06-09T01:53:18Z",
+                          "url": "https://github.com/github/accessibility-scorecard/pull/12#discussion_r893001944"
                         }
                       ]
                     }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "node": {
+              "createdAt": "2022-06-08T16:39:19Z",
+              "title": "Break down linter requirements to be granular",
+              "url": "https://github.com/github/accessibility-scorecard/pull/11",
+              "author": {
+                "login": "khiga8"
+              },
+              "commits": {
+                "nodes": [
+                  {
+                    "commit": {
+                      "url": "https://github.com/github/accessibility-scorecard/commit/3450d9950a3bb5bda9461480df905a2d2ccdfd1e",
+                      "pushedDate": null,
+                      "author": {
+                        "user": {
+                          "login": "khiga8"
+                        }
+                      }
+                    }
                   },
                   {
-                    "createdAt": "2022-04-19T16:10:57Z",
-                    "pullRequest": {
-                      "createdAt": "2022-04-19T01:23:07Z",
-                      "title": "🤖 Howie Update",
-                      "url": "https://github.com/github/accessibility/pull/1046",
+                    "commit": {
+                      "url": "https://github.com/github/accessibility-scorecard/commit/687dea35d191ec2b4ec9d79aae9ac95e531ef3d3",
+                      "pushedDate": "2022-06-08T16:42:48Z",
                       "author": {
-                        "login": "howie-work"
+                        "user": {
+                          "login": "khiga8"
+                        }
                       }
-                    },
+                    }
+                  },
+                  {
+                    "commit": {
+                      "url": "https://github.com/github/accessibility-scorecard/commit/af6dd35547997c2171fc4f58d4c532a44a669b32",
+                      "pushedDate": "2022-06-08T17:06:22Z",
+                      "author": {
+                        "user": {
+                          "login": "khiga8"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "commit": {
+                      "url": "https://github.com/github/accessibility-scorecard/commit/3b197d76027887c6cb97db9ad16b2eb2459669ab",
+                      "pushedDate": "2022-06-08T17:43:08Z",
+                      "author": {
+                        "user": {
+                          "login": "khiga8"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "commit": {
+                      "url": "https://github.com/github/accessibility-scorecard/commit/67cd56f9ce6f71688c9ae4e44477b064afbeaf0f",
+                      "pushedDate": "2022-06-08T18:40:00Z",
+                      "author": {
+                        "user": {
+                          "login": "khiga8"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "commit": {
+                      "url": "https://github.com/github/accessibility-scorecard/commit/2951e4a86f362e63418657d77f8c81564943d1bc",
+                      "pushedDate": "2022-06-09T13:12:33Z",
+                      "author": {
+                        "user": {
+                          "login": "khiga8"
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              "reviews": {
+                "nodes": []
+              }
+            }
+          },
+          {
+            "node": {
+              "createdAt": "2022-06-08T15:04:15Z",
+              "title": "Test removing lib",
+              "url": "https://github.com/github/accessibility-scorecard/pull/10",
+              "author": {
+                "login": "kendallgassner"
+              },
+              "commits": {
+                "nodes": [
+                  {
+                    "commit": {
+                      "url": "https://github.com/github/accessibility-scorecard/commit/b3d99463558c78d7392fd82511db67473233555d",
+                      "pushedDate": "2022-06-08T15:02:37Z",
+                      "author": {
+                        "user": {
+                          "login": "kendallgassner"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "commit": {
+                      "url": "https://github.com/github/accessibility-scorecard/commit/e439fc7dcd51302c15b87c1478b52936a55e5168",
+                      "pushedDate": "2022-06-08T15:06:14Z",
+                      "author": {
+                        "user": {
+                          "login": "kendallgassner"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "commit": {
+                      "url": "https://github.com/github/accessibility-scorecard/commit/bf4cdcb7db48cd3b0974d40b0265ab6cad8bf378",
+                      "pushedDate": "2022-06-08T15:29:56Z",
+                      "author": {
+                        "user": {
+                          "login": "kendallgassner"
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              "reviews": {
+                "nodes": []
+              }
+            }
+          },
+          {
+            "node": {
+              "createdAt": "2022-06-07T20:55:11Z",
+              "title": "Cleaning up getLabels and getService",
+              "url": "https://github.com/github/accessibility-scorecard/pull/9",
+              "author": {
+                "login": "kendallgassner"
+              },
+              "commits": {
+                "nodes": [
+                  {
+                    "commit": {
+                      "url": "https://github.com/github/accessibility-scorecard/commit/ef73f3579642e211625275004b9e3c1a1090c7a1",
+                      "pushedDate": "2022-06-07T20:25:22Z",
+                      "author": {
+                        "user": {
+                          "login": "kendallgassner"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "commit": {
+                      "url": "https://github.com/github/accessibility-scorecard/commit/c0308d1f5f2f491832583599e5a02ff530a50a16",
+                      "pushedDate": "2022-06-07T20:38:27Z",
+                      "author": {
+                        "user": {
+                          "login": "kendallgassner"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "commit": {
+                      "url": "https://github.com/github/accessibility-scorecard/commit/74369b7dd9d6f7d86244f7d2eafc003f727fce92",
+                      "pushedDate": "2022-06-07T20:57:33Z",
+                      "author": {
+                        "user": {
+                          "login": "kendallgassner"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "commit": {
+                      "url": "https://github.com/github/accessibility-scorecard/commit/6d0ca1cf814846e0ab639e32214543bcda54a2fc",
+                      "pushedDate": "2022-06-08T14:30:31Z",
+                      "author": {
+                        "user": {
+                          "login": "kendallgassner"
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              "reviews": {
+                "nodes": []
+              }
+            }
+          },
+          {
+            "node": {
+              "createdAt": "2022-06-06T21:03:30Z",
+              "title": "Add score: Percentage of Issues closed ",
+              "url": "https://github.com/github/accessibility-scorecard/pull/8",
+              "author": {
+                "login": "kendallgassner"
+              },
+              "commits": {
+                "nodes": [
+                  {
+                    "commit": {
+                      "url": "https://github.com/github/accessibility-scorecard/commit/e3c1543743822b06d191a6e3a012f712ff8f66d6",
+                      "pushedDate": "2022-06-06T20:47:53Z",
+                      "author": {
+                        "user": {
+                          "login": "kendallgassner"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "commit": {
+                      "url": "https://github.com/github/accessibility-scorecard/commit/df849173e4b2e3fe75d98cc4fb77cecb7c38b46e",
+                      "pushedDate": "2022-06-06T21:05:38Z",
+                      "author": {
+                        "user": {
+                          "login": "kendallgassner"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "commit": {
+                      "url": "https://github.com/github/accessibility-scorecard/commit/299edaf1ea7ebb1d0e0fb3e8666345b9815f9b57",
+                      "pushedDate": "2022-06-06T22:04:04Z",
+                      "author": {
+                        "user": {
+                          "login": "kendallgassner"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "commit": {
+                      "url": "https://github.com/github/accessibility-scorecard/commit/65cb36e6a8afee518d5789d784010e0223f382dc",
+                      "pushedDate": "2022-06-06T22:07:59Z",
+                      "author": {
+                        "user": {
+                          "login": "kendallgassner"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "commit": {
+                      "url": "https://github.com/github/accessibility-scorecard/commit/92b9330c9816ebc55aa52713ed65ea494515580e",
+                      "pushedDate": "2022-06-06T22:09:03Z",
+                      "author": {
+                        "user": {
+                          "login": "kendallgassner"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "commit": {
+                      "url": "https://github.com/github/accessibility-scorecard/commit/9cef073779ac9992a79a523c0dde72b66e555eb3",
+                      "pushedDate": "2022-06-06T22:10:20Z",
+                      "author": {
+                        "user": {
+                          "login": "kendallgassner"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "commit": {
+                      "url": "https://github.com/github/accessibility-scorecard/commit/cec86dd7dee62408b9aa845b07f3ae9c2e6f62c9",
+                      "pushedDate": "2022-06-06T22:15:20Z",
+                      "author": {
+                        "user": {
+                          "login": "kendallgassner"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "commit": {
+                      "url": "https://github.com/github/accessibility-scorecard/commit/2658e64e1912b98ed70e5a8c8f33febb570f57a6",
+                      "pushedDate": "2022-06-06T22:17:22Z",
+                      "author": {
+                        "user": {
+                          "login": "kendallgassner"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "commit": {
+                      "url": "https://github.com/github/accessibility-scorecard/commit/d6a312662f2abcb6d232a6fb12ce2d0c5636b369",
+                      "pushedDate": "2022-06-06T22:17:54Z",
+                      "author": {
+                        "user": {
+                          "login": "kendallgassner"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "commit": {
+                      "url": "https://github.com/github/accessibility-scorecard/commit/a37a29e35a7fcbb1c63fa0fb9bf48ba2e25a3438",
+                      "pushedDate": "2022-06-06T22:18:43Z",
+                      "author": {
+                        "user": {
+                          "login": "kendallgassner"
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              "reviews": {
+                "nodes": []
+              }
+            }
+          },
+          {
+            "node": {
+              "createdAt": "2022-06-01T18:46:10Z",
+              "title": "Update update-scorecard-staging.yml",
+              "url": "https://github.com/github/accessibility-scorecard/pull/7",
+              "author": {
+                "login": "khiga8"
+              },
+              "commits": {
+                "nodes": [
+                  {
+                    "commit": {
+                      "url": "https://github.com/github/accessibility-scorecard/commit/e7dd9d605382e3266172a5403d4f52f4b4693695",
+                      "pushedDate": "2022-06-01T18:45:17Z",
+                      "author": {
+                        "user": {
+                          "login": "khiga8"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "commit": {
+                      "url": "https://github.com/github/accessibility-scorecard/commit/df9a29dd042e9302f68e81ecf1346df206ca9248",
+                      "pushedDate": "2022-06-01T18:50:18Z",
+                      "author": {
+                        "user": {
+                          "login": "khiga8"
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              "reviews": {
+                "nodes": []
+              }
+            }
+          },
+          {
+            "node": {
+              "createdAt": "2022-06-01T10:57:53Z",
+              "title": "docs: updates overall readme for scorecard work",
+              "url": "https://github.com/github/accessibility-scorecard/pull/6",
+              "author": {
+                "login": "lindseywild"
+              },
+              "commits": {
+                "nodes": [
+                  {
+                    "commit": {
+                      "url": "https://github.com/github/accessibility-scorecard/commit/aca00a24c16fb3fdaa9b3562b114319b56a94276",
+                      "pushedDate": "2022-06-01T10:56:41Z",
+                      "author": {
+                        "user": {
+                          "login": "lindseywild"
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              "reviews": {
+                "nodes": [
+                  {
+                    "createdAt": "2022-06-01T14:08:32Z",
                     "comments": {
                       "nodes": []
                     }
                   }
                 ]
-              }
-            }
-          },
-          {
-            "node": {
-              "commits": {
-                "nodes": [
-                  {
-                    "commit": {
-                      "url": "https://github.com/github/accessibility/commit/40c8d15e10171c76d3b956dfa97003728421734c",
-                      "pushedDate": "2022-04-15T18:59:14Z",
-                      "author": {
-                        "user": {
-                          "login": "accessibility-bot"
-                        }
-                      },
-                      "associatedPullRequests": {
-                        "nodes": []
-                      }
-                    }
-                  }
-                ]
-              },
-              "reviews": {
-                "nodes": []
-              }
-            }
-          },
-          {
-            "node": {
-              "commits": {
-                "nodes": [
-                  {
-                    "commit": {
-                      "url": "https://github.com/github/accessibility/commit/08e3434f0d27c2fecbfbaaa47851064593d02f0c",
-                      "pushedDate": "2022-04-15T18:34:12Z",
-                      "author": {
-                        "user": {
-                          "login": "accessibility-bot"
-                        }
-                      },
-                      "associatedPullRequests": {
-                        "nodes": []
-                      }
-                    }
-                  }
-                ]
-              },
-              "reviews": {
-                "nodes": []
-              }
-            }
-          },
-          {
-            "node": {
-              "commits": {
-                "nodes": [
-                  {
-                    "commit": {
-                      "url": "https://github.com/github/accessibility/commit/21c9212a6803fabf974aa78e7794d67e2852e533",
-                      "pushedDate": "2022-04-15T18:20:19Z",
-                      "author": {
-                        "user": {
-                          "login": "accessibility-bot"
-                        }
-                      },
-                      "associatedPullRequests": {
-                        "nodes": []
-                      }
-                    }
-                  }
-                ]
-              },
-              "reviews": {
-                "nodes": []
               }
             }
           }
         ]
       }
-  }
+}
