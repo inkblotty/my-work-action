@@ -57,22 +57,7 @@ export const filterCommentsByUser = (commentsArr: ReviewComment[], username: str
 // TODO: Refactor; can we use one of the existing filters instead?
 // TODO: Add proper types and tests
 export const filterCommitsFromOtherUserOnPR = (currentUser: String, commits) => {
-  const filterPRsByOtherAuthors = commits.filter(commit => {
-      const [filteredPRs] = commit.commit.associatedPullRequests.nodes.filter(node => !node.author.login.includes(currentUser));
-
-    return filteredPRs
-  });
-
-  const filterCommitsByCurrentUser = filterPRsByOtherAuthors.filter(pr => pr.commit.author.user.login.includes(currentUser))
+  const filterCommitsByCurrentUser = commits.filter(commit => commit.pullRequest.author.login === currentUser)
 
   return filterCommitsByCurrentUser;
-}
-
-// TODO: Refactor; can we use one of the existing filters instead?
-// TODO: Add proper types and tests
-export const filterCommentsFromOtherUserOnPR = (currentUser: String, reviews) => {
-  const filterOtherAuthors = reviews.filter(review => review.pullRequest.author.login !== currentUser);
-  const comments = filterOtherAuthors.map(item => item.comments.nodes).flat();
-
-  return comments;
 }

@@ -31,6 +31,9 @@ The repos that should be searched for relevant work, comma-separated.
 - `repo`
 The name of the repo where the PR should be created.
 
+- `secondary_prs_label`
+The label to query for PRs that should be counted as secondary work (reviews and commits, but not created).
+
 - `timespan` (optional)
 Number of days to query, with today as the end date. Defaults to 7 days.
 

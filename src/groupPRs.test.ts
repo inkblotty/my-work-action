@@ -28,7 +28,7 @@ describe('groupPRs', () => {
         expect(result.primary['github/accessibility']).toBeTruthy();
         expect(result.primary['github/accessibility'].artifacts.length).toEqual(16);
 
-        // interacted with 3 PRs secondarily
-        expect(Object.keys(result.secondary).length).toEqual(3);
+        // interacted with 1 PR secondarily
+        expect(Object.keys(result.secondary).length).toEqual(1);
     });
 });

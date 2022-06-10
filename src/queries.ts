@@ -1,56 +1,6 @@
 import { graphql } from "@octokit/graphql";
-import { filterCommentsByUser, filterCreatedThingByAuthorAndCreation, filterCommitsFromOtherUserOnPR, filterCommentsFromOtherUserOnPR } from './queryFilters';
+import { filterCommentsByUser, filterCreatedThingByAuthorAndCreation, filterCommitsFromOtherUserOnPR } from './queryFilters';
 import { QueryGroup, QueryType } from './shared.types';
-
-  // prReviewsAndCommits:search(type: ISSUE, query: $prContributionsQuery, first: 20) {
-  //   edges {
-  //     node {
-  //       ... on PullRequest {
-  //         commits(first:20) {
-  //           nodes {
-  //             commit {
-  //               url
-  //               pushedDate
-  //               author {
-  //                 user {
-  //                   login
-  //                 }
-  //               }
-  //               associatedPullRequests(first:10, orderBy:{field:UPDATED_AT, direction:DESC}) {
-  //                 nodes {
-  //                   title
-  //                   url
-  //                   author {
-  //                     login
-  //                   }
-  //                 }
-  //               }
-  //             }
-  //           }
-  //         }
-  //         reviews(first: 50, author:$username) {
-  //           nodes {
-  //             createdAt
-  //             pullRequest {
-  //               createdAt
-  //               title
-  //               url
-  //               author {
-  //                 login
-  //               }
-  //             }
-  //             comments(first: 20) {
-  //               nodes {
-  //                 createdAt
-  //                 url
-  //               }
-  //             }
-  //           }
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
 
 const GH_TOKEN = process.env.GH_TOKEN;
 const repositoryQuery = `\
@@ -65,6 +15,43 @@ query getUserWork($username:String!, $owner:String!, $repo:String!, $sinceIso: D
           title
           createdAt
           url
+        }
+      }
+    }
+  }
+  prReviewsAndCommits:search(type: ISSUE, query: $prContributionsQuery, first: 20) {
+    edges {
+      node {
+        ... on PullRequest {
+          createdAt
+          title
+          url
+          author {
+            login
+          }
+          commits(first:10) {
+            nodes {
+              commit {
+                url
+                pushedDate
+                author {
+                  user {
+                    login
+                  }
+                }
+              }
+            }
+          }
+          reviews(first: 10, author:$username) {
+            nodes {
+              comments(first: 20) {
+                nodes {
+                  createdAt
+                  url
+                }
+              }
+            }
+          }
         }
       }
     }
@@ -120,14 +107,14 @@ fragment repo on Repository {
     }
   }
 `;
-export const getAllWorkForRepository = async (requestOwner: string, repoName: string, username: string, sinceIso: string): Promise<{ [key: string]: QueryGroup }> => {
+export const getAllWorkForRepository = async (requestOwner: string, repoName: string, username: string, sinceIso: string, secondaryPRsLabel: string): Promise<{ [key: string]: QueryGroup }> => {
     const { repository, prsCreated, prReviewsAndCommits } = await graphql(repositoryQuery, {
         username,
         owner: requestOwner,
         repo: repoName,
         sinceIso,
         prsCreatedQuery: `repo:${requestOwner}/${repoName} is:pr created:>=${sinceIso} author:${username}`,
-        prContributionsQuery: `repo:${requestOwner}/${repoName} is:pr created:>=${sinceIso} -author:${username}`,
+        prContributionsQuery: `repo:${requestOwner}/${repoName} is:pr created:>=${sinceIso} -author:${username} label:${secondaryPRsLabel}`,
         headers: {
             authorization: `token ${GH_TOKEN}`
         },
@@ -140,14 +127,13 @@ export const getAllWorkForRepository = async (requestOwner: string, repoName: st
     const flattenedDiscussionComments = repository.discussionComments.nodes.reduce((arr, { comments: { nodes }}) => {
       return [...arr, ...nodes];
     }, []);
-    // TODO: Refactor to use `.reduce`?
-    const flattenedPRCommits = prReviewsAndCommits.edges.map(edge => edge.node.commits.nodes).flat()
-    const flattenedPRComments = prReviewsAndCommits.edges.map(edge => edge.node.reviews.nodes).flat()
+    const flattenedPRCommits = prReviewsAndCommits.edges.reduce((arr, { node }) => {
+      const commitNodes = node.commits.nodes;
+      return [...arr, ...commitNodes.map(commitNode => ({ ...commitNode, pullRequest: { author: node.author } }))]
+    }, []);
+    const flattenedPRComments = prReviewsAndCommits.edges.map(edge => edge.node.reviews.nodes.map(node => node.comments.nodes)).flat().flat();
 
     const commitsToOtherPRs = filterCommitsFromOtherUserOnPR(username, flattenedPRCommits);
-
-    // Comments on PRs by another user
-    const commentsOnOthersPRs = filterCommentsFromOtherUserOnPR(username, flattenedPRComments);
 
     const createdPRs = prsCreated.edges.map(edge => edge.node);
     const createdIssues = repository.issues.nodes;
@@ -188,7 +174,7 @@ export const getAllWorkForRepository = async (requestOwner: string, repoName: st
         },
         prComments: {
             repo: repoName,
-            data: commentsOnOthersPRs,
+            data: flattenedPRComments,
             type: QueryType['pr-comment-created']
         },
     }

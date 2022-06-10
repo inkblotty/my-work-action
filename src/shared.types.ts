@@ -39,6 +39,7 @@ export interface OutputGroupGroup {
 export interface InputFields {
     owner: string;
     queried_repos: string;
+    secondary_prs_label: string;
     repo: string;
     timespan: number;
     usernames: string;

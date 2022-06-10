@@ -14,10 +14,7 @@ const handlePRGroups = (allPRsCreated: QueryGroup[], allPRComments: QueryGroup[]
         }
     };
 
-    console.log('handle PRs', allPRsCreated, allPRComments, allPRComments);
-
     allPRsCreated.forEach(repoGroup => {
-        console.log('repoGroup', repoGroup);
         const { data } = repoGroup;
         if (data[0]) {
             const [repoUrl] = data[0].url.split('/pull');
