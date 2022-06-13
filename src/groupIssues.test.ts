@@ -10,16 +10,20 @@ import handleIssueGroups from './groupIssues';
 import { QueryGroup } from './shared.types';
 
 interface MockData {
-    issuesCreated?: QueryGroup;
-    issueComments?: QueryGroup;
+    issuesCreated: QueryGroup;
+    issueComments: QueryGroup;
 }
-let mockData: MockData = {};
+const mockData: MockData = {
+    issuesCreated: {} as QueryGroup,
+    issueComments: {} as QueryGroup,
+};
 
 describe('groupIssues', () => {
     beforeAll(async () => {
         mockGraphQlFunction.mockResolvedValue(prData);
-        const result = await getAllWorkForRepository('github', 'accessibility', 'inkblotty', '2021-12-01');
-        mockData = result;
+        const result = await getAllWorkForRepository('github', 'accessibility', 'inkblotty', '2021-12-01', '');
+        mockData.issueComments = result.issueComments;
+        mockData.issuesCreated = result.issuesCreated;
     });
 
     test('handleIssueGroups', async () => {

@@ -16,6 +16,14 @@ interface CreatedThing {
         login: string;
     };
 }
+export const filterCreatedThingByCreation = (list: CreatedThing[], sinceIso: string) => {
+    return list.filter(thing => {
+        const createdDate = thing?.createdAt || thing?.pushedDate;
+        const isWithinRange = getIsWithinRange(createdDate, sinceIso);
+        return isWithinRange;
+    })
+}
+
 export const filterCreatedThingByAuthorAndCreation = (list: CreatedThing[], username: string, sinceIso, excludeUser?: boolean) => {
     return list.filter(thing => {
         const createdDate = thing?.createdAt || thing?.pushedDate;
