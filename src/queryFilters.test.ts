@@ -46,7 +46,7 @@ describe('queryFilters', () => {
         const result = filterPRsByAuthorAndCreation(testArr, username, lastWeek.toISOString());
         expect(result.length).toEqual(1);
         expect(result[0].created_at).toEqual(lastWeek.toISOString());
-        expect(result[0].user.login).toEqual(username);
+        expect(result[0].user?.login).toEqual(username);
     });
 
     describe('filterCommentsByUser', () => {

@@ -1,5 +1,5 @@
 import { graphql } from "@octokit/graphql";
-import { filterCommentsByUser, filterCreatedThingByAuthorAndCreation, filterCommitsFromOtherUserOnPR } from './queryFilters';
+import { filterCommentsByUser, filterCreatedThingByAuthorAndCreation, filterCommitsFromOtherUserOnPR, filterCreatedThingByCreation } from './queryFilters';
 import { QueryGroup, QueryType } from './shared.types';
 
 const GH_TOKEN = process.env.GH_TOKEN;
@@ -85,6 +85,7 @@ fragment repo on Repository {
     }
     issues(last: 50, filterBy: {createdBy: $username, since: $sinceIso}, orderBy:{ field: CREATED_AT, direction:DESC }) {
       nodes {
+        createdAt
         title
         url
       }
@@ -136,7 +137,7 @@ export const getAllWorkForRepository = async (requestOwner: string, repoName: st
     const commitsToOtherPRs = filterCommitsFromOtherUserOnPR(username, flattenedPRCommits);
 
     const createdPRs = prsCreated.edges.map(edge => edge.node);
-    const createdIssues = repository.issues.nodes;
+    const createdIssues = filterCreatedThingByCreation(repository.issues.nodes, sinceIso);
     const issueComments = filterCommentsByUser(flattenedIssueComments, username);
     const createdDiscussions = filterCreatedThingByAuthorAndCreation(repository.discussions.nodes, username, sinceIso);
     const commentsOnDiscussions = filterCreatedThingByAuthorAndCreation(flattenedDiscussionComments, username, sinceIso);
