@@ -31,7 +31,7 @@ describe('groupIssues', () => {
         expect(result.primary['github/accessibility']).toBeTruthy();
         expect(result.primary['github/accessibility'].artifacts.length).toEqual(50);
 
-        // number of issues commented on
-        expect(Object.keys(result.secondary).length).toEqual(27);
+        // number of issues commented on by inkblotty since Dec 1, 2021
+        expect(Object.keys(result.secondary).length).toEqual(1);
     });
 });

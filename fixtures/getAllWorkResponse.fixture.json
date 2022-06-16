@@ -3315,6 +3315,7 @@
               "comments": {
                 "nodes": [
                   {
+                    "createdAt": "2022-04-06T01:53:21Z",
                     "author": {
                       "login": "owenniblock"
                     },
@@ -3331,6 +3332,7 @@
               "comments": {
                 "nodes": [
                   {
+                    "createdAt": "2022-04-06T01:53:21Z",
                     "author": {
                       "login": "lindseywild"
                     },
@@ -3341,6 +3343,7 @@
                     "url": "https://github.com/github/accessibility/issues/931#issuecomment-1099203434"
                   },
                   {
+                    "createdAt": "2022-04-06T01:53:21Z",
                     "author": {
                       "login": "inkblotty"
                     },
@@ -3362,6 +3365,7 @@
               "comments": {
                 "nodes": [
                   {
+                    "createdAt": "2022-04-06T01:53:21Z",
                     "author": {
                       "login": "alebourne"
                     },
@@ -3382,6 +3386,7 @@
                     "url": "https://github.com/github/accessibility/issues/933#issuecomment-1093358575"
                   },
                   {
+                    "createdAt": "2021-04-06T01:53:21Z",
                     "author": {
                       "login": "alebourne"
                     },
@@ -3408,6 +3413,7 @@
               "comments": {
                 "nodes": [
                   {
+                    "createdAt": "2021-04-06T01:53:21Z",
                     "author": {
                       "login": "inkblotty"
                     },
