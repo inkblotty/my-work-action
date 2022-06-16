@@ -94,6 +94,7 @@ fragment repo on Repository {
       nodes {
         comments(last:50) {
           nodes {
+            createdAt
             author {
               login
             }
@@ -138,7 +139,7 @@ export const getAllWorkForRepository = async (requestOwner: string, repoName: st
 
     const createdPRs = prsCreated.edges.map(edge => edge.node);
     const createdIssues = filterCreatedThingByCreation(repository.issues.nodes, sinceIso);
-    const issueComments = filterCommentsByUser(flattenedIssueComments, username);
+    const issueComments = filterCreatedThingByAuthorAndCreation(flattenedIssueComments, username, sinceIso);
     const createdDiscussions = filterCreatedThingByAuthorAndCreation(repository.discussions.nodes, username, sinceIso);
     const commentsOnDiscussions = filterCreatedThingByAuthorAndCreation(flattenedDiscussionComments, username, sinceIso);
 
