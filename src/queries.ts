@@ -1,5 +1,5 @@
 import { graphql } from "@octokit/graphql";
-import { filterCommentsByUser, filterCreatedThingByAuthorAndCreation, filterCommitsFromOtherUserOnPR, filterCreatedThingByCreation } from './queryFilters';
+import { filterCreatedThingByAuthorAndCreation, filterCommitsFromOtherUserOnPR, filterCreatedThingByCreation } from './queryFilters';
 import { QueryGroup, QueryType } from './shared.types';
 
 const GH_TOKEN = process.env.GH_TOKEN;
@@ -59,7 +59,7 @@ query getUserWork($username:String!, $owner:String!, $repo:String!, $sinceIso: D
 }
 
 fragment repo on Repository {
-    discussions(last: 50, orderBy: { field:CREATED_AT, direction: DESC }) {
+    discussions(last: 30, orderBy: { field:CREATED_AT, direction: DESC }) {
       nodes {
         author {
           login
@@ -69,7 +69,7 @@ fragment repo on Repository {
         url
       }
     }
-    discussionComments:discussions(last: 100, orderBy: { field:UPDATED_AT, direction: DESC }) {
+    discussionComments:discussions(last: 50, orderBy: { field:UPDATED_AT, direction: DESC }) {
       nodes {
         comments(last:100) {
           nodes {
@@ -83,18 +83,18 @@ fragment repo on Repository {
         }
       }
     }
-    issues(last: 50, filterBy: {createdBy: $username, since: $sinceIso}, orderBy:{ field: CREATED_AT, direction:DESC }) {
+    issues(last: 20, filterBy: {createdBy: $username, since: $sinceIso}, orderBy:{ field: CREATED_AT, direction:DESC }) {
       nodes {
         createdAt
         title
         url
       }
     }
-    issueComments:issues(last:100, filterBy:{since:$sinceIso}) {
+    issueComments:issues(last:50, filterBy:{since:$sinceIso}) {
       nodes {
         title
         url
-        comments(last:50) {
+        comments(last:30) {
           nodes {
             createdAt
             author {
