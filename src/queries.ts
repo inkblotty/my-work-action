@@ -92,15 +92,13 @@ fragment repo on Repository {
     }
     issueComments:issues(last:100, filterBy:{since:$sinceIso}) {
       nodes {
+        title
+        url
         comments(last:50) {
           nodes {
             createdAt
             author {
               login
-            }
-            issue {
-              title
-              url
             }
             url
           }
@@ -123,8 +121,8 @@ export const getAllWorkForRepository = async (requestOwner: string, repoName: st
     });
     console.log('query input', '\nsince iso:', sinceIso, '\nrepo', repoName, '\nowner', requestOwner)
 
-    const flattenedIssueComments = repository.issueComments.nodes.reduce((arr, { comments: { nodes }}) => {
-      return [...arr, ...nodes];
+    const flattenedIssueComments = repository.issueComments.nodes.reduce((arr, { title, url, comments: { nodes }}) => {
+      return [...arr, ...nodes.map(comment => ({ ...comment, issue: { title, url }}))];
     }, []);
     const flattenedDiscussionComments = repository.discussionComments.nodes.reduce((arr, { comments: { nodes }}) => {
       return [...arr, ...nodes];
