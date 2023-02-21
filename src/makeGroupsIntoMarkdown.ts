@@ -18,37 +18,52 @@ const makeGroupsIntoMarkdown = (groupGroups: OutputGroupGroup[], username: strin
         '## Unknown Work\n\n'
     ];
 
-    groupGroups.forEach(groups => {
-        Object.values(groups.primary).forEach(primaryVal => {
+    for (const groups of groupGroups) {
+        for (const primaryVal of Object.values(groups.primary)) {
             primaryArr.push(`### ${primaryVal.groupTitle}\n`);
-            primaryVal.artifacts.forEach(lineItem => primaryArr.push(`- [${lineItem.title}](${lineItem.url})\n`))
-        });
+
+        for (const lineItem of primaryVal.artifacts) {
+            primaryArr.push(`- [${lineItem.title}](${lineItem.url})\n`)
+        }
+           
+        };
     
-        Object.values(groups.secondary).forEach(secondaryVal => {
+        for (const secondaryVal of Object.values(groups.secondary)) {
             secondaryArr.push(`### ${secondaryVal.groupTitle}\n`);
-            secondaryVal.artifacts.forEach(lineItem => secondaryArr.push(`- [${lineItem.title}](${lineItem.url})\n`))
-        });
+            for (const lineItem of secondaryVal.artifacts) { d
+                secondaryArr.push(`- [${lineItem.title}](${lineItem.url})\n`)
+            }
+        };
     
-        Object.values(groups.unknown).forEach(unknownVal => {
+        for (const unknownVal of Object.values(groups.unknown)) {
             unknownArr.push(`### ${unknownVal.groupTitle}\n`);
-            unknownVal.artifacts.forEach(lineItem => unknownArr.push(`- [${lineItem.title}](${lineItem.url})\n`))
-        });
-    })
+            for (const lineItem of unknownVal.artifacts) {
+                unknownArr.push(`- [${lineItem.title}](${lineItem.url})\n`)
+            }
+        };
+    }
 
     if (primaryArr.length === 1) {
         primaryArr.push(noWorkMessage);
     }
-    primaryArr.forEach(item => markdownBodyArr.push(item));
+    for (const item of primaryArr) {
+        markdownBodyArr.push(item)
+    }
+   
     markdownBodyArr.push('\n');
 
     if (secondaryArr.length === 1) {
         secondaryArr.push(noWorkMessage);
     }
-    secondaryArr.forEach(item => markdownBodyArr.push(item));
+    for (const item of secondaryArr) {
+        markdownBodyArr.push(item)
+    }
     markdownBodyArr.push('\n');
 
     if (unknownArr.length !== 1) {
-        unknownArr.forEach(item => markdownBodyArr.push(item));
+        for (const item of unknownArr) {
+            markdownBodyArr.push(item)
+        }
     }
 
     return markdownBodyArr.join('');

@@ -13,7 +13,8 @@ const handleIssueGroups = (allIssuesCreated: QueryGroup[], allIssueComments: Que
         }
     };
 
-    allIssuesCreated.forEach(repoGroup => {
+    for (const repoGroup of allIssuesCreated) {
+    
         const { data, type } = repoGroup;
         if (type === QueryType['issue-created'] && data[0]) {
             const [repoUrl] = data[0].url.split('/issues');
@@ -27,10 +28,10 @@ const handleIssueGroups = (allIssuesCreated: QueryGroup[], allIssueComments: Que
                 }))
             }
         }
-    });
+    };
 
-    allIssueComments.forEach(repoGroup => {
-        repoGroup.data.forEach(comment => {
+    for (const repoGroup of allIssueComments) {
+        for (const comment of repoGroup.data) {
             // use the specific PR as key
             const key = comment.url.split('#')[0];
             const issueUrl = key.split('github.com')[1];
@@ -54,8 +55,8 @@ const handleIssueGroups = (allIssuesCreated: QueryGroup[], allIssueComments: Que
                 title: `Comment #${finalIssues.secondary[issueUrl].artifacts.length + 1}`,
                 url: comment.url,
             });
-        })
-    });
+        }
+    };
     return finalIssues as OutputGroupGroup;
 }
 export default handleIssueGroups;

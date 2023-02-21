@@ -14,7 +14,7 @@ const handlePRGroups = (allPRsCreated: QueryGroup[], allPRComments: QueryGroup[]
         }
     };
 
-    allPRsCreated.forEach(repoGroup => {
+    for (const repoGroup of allPRsCreated) {
         const { data } = repoGroup;
         if (data[0]) {
             const [repoUrl] = data[0].url.split('/pull');
@@ -28,13 +28,13 @@ const handlePRGroups = (allPRsCreated: QueryGroup[], allPRComments: QueryGroup[]
                 }))
             }
         }
-    });
+    }
 
-    allPRCommits.forEach(repoGroup => {
+    for (const repoGroup of allPRCommits) {
         const { data } = repoGroup;
         const tempSecondary: OutputGroup = {}
         if (data[0]) {
-            data.forEach(({ commit }) => {
+            for (const commit of data) {
                 const [firstPR] = commit.associatedPullRequests.nodes;
                 const prAuthor = firstPR.author.user;
                 const prUrl = firstPR.url;
@@ -49,19 +49,19 @@ const handlePRGroups = (allPRsCreated: QueryGroup[], allPRComments: QueryGroup[]
                     title: `Commit at ${formatDateTime(new Date(commit.pushedDate))}`,
                     url: commit.url,
                 });
-            });
+            };
         }
 
-        Object.entries(tempSecondary).forEach(([prUrl, value]) => {
+        for (const [prUrl, value] of tempSecondary) {
             finalPRs.secondary[prUrl] = {
                 groupTitle: value.groupTitle.replace('<data.length>', `${value.artifacts.length}`),
                 artifacts: value.artifacts,
             }
-        });
-    });
+        };
+    };
 
-    allPRComments.forEach(repoGroup => {
-        repoGroup.data.forEach(comment => {
+    for (const repoGroup of allPRComments) {
+        for (const comment of repoGroup.data) {
             // use the specific PR as key
             const key = comment.url.split('#')[0];
             const prUrl = key.split('github.com')[1];
@@ -85,8 +85,8 @@ const handlePRGroups = (allPRsCreated: QueryGroup[], allPRComments: QueryGroup[]
                 title: `#${finalPRs.secondary[prUrl].artifacts.length + 1}`,
                 url: comment.url,
             });
-        })
-    });
+        }
+    };
 
     return finalPRs;
 }
