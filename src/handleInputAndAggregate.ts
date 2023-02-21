@@ -21,14 +21,14 @@ export const makeValidatedInput = (GH_TOKEN: string) => {
         usernames: '',
     };
     const requiredInputs = ["owner", "repo", "queried_repos", "secondary_prs_label", "usernames"];
-    requiredInputs.forEach(inputName => {
+    for (const inputName of requiredInputs) {
         const workflowValue = core.getInput(inputName, { required: true });
         if (!workflowValue) {
             throw new Error(makeRequiredErrorMessage(inputName));
         }
 
         endObj[inputName] = workflowValue;
-    });
+    };
 
     return endObj;
 }
