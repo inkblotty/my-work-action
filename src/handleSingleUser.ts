@@ -7,6 +7,7 @@ import commitToBranch from "./commitToBranch";
 import openPR from "./openPR";
 import { createPRBodyText } from "./createPRContent";
 import handleIssueGroups from "./groupIssues";
+import { sleep } from './shared';
 
 async function handleSingleUser(inputFields: InputFields, username: string, startDate: Date) {
     const startDateIso = startDate.toISOString();
@@ -20,7 +21,7 @@ async function handleSingleUser(inputFields: InputFields, username: string, star
     const prCommits: QueryGroup[] = [];
     const prsCreated: QueryGroup[] = [];
 
-    await Promise.all(reposList.map(async repo => {
+    const promises = reposList.map(async repo => {
         const [requestOwner, repoName] = repo.includes('/') ? repo.split('/') : [inputFields.owner, repo];
         // query all the things
         const repoData = await getAllWorkForRepository(requestOwner, repoName, username, startDateIso, inputFields.secondary_prs_label);
@@ -31,7 +32,9 @@ async function handleSingleUser(inputFields: InputFields, username: string, star
         prComments.push(repoData.prComments);
         prCommits.push(repoData.prCommits);
         prsCreated.push(repoData.prsCreated);
-    }));
+        sleep(2000);
+    });
+    await Promise.all(promises);
 
     // group all the things
     const prGroups = handlePRGroups(prsCreated, prComments, prCommits);
