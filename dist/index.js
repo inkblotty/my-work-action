@@ -8646,23 +8646,19 @@ function handleSingleUser(inputFields, username, startDate) {
         const prComments = [];
         const prCommits = [];
         const prsCreated = [];
-        const promises = [];
         for (const repo of reposList) {
-            promises.push(() => __awaiter(this, void 0, void 0, function* () {
-                const [requestOwner, repoName] = repo.includes('/') ? repo.split('/') : [inputFields.owner, repo];
-                // query all the things
-                const repoData = yield (0, queries_1.getAllWorkForRepository)(requestOwner, repoName, username, startDateIso, inputFields.secondary_prs_label);
-                discussionComments.push(repoData.discussionComments);
-                discussionsCreated.push(repoData.discussionsCreated);
-                issuesCreated.push(repoData.issuesCreated);
-                issueComments.push(repoData.issueComments);
-                prComments.push(repoData.prComments);
-                prCommits.push(repoData.prCommits);
-                prsCreated.push(repoData.prsCreated);
-            }));
-            (0, shared_1.sleep)(2000);
+            const [requestOwner, repoName] = repo.includes('/') ? repo.split('/') : [inputFields.owner, repo];
+            // query all the things
+            const repoData = yield (0, queries_1.getAllWorkForRepository)(requestOwner, repoName, username, startDateIso, inputFields.secondary_prs_label);
+            yield (0, shared_1.sleep)(1000);
+            discussionComments.push(repoData.discussionComments);
+            discussionsCreated.push(repoData.discussionsCreated);
+            issuesCreated.push(repoData.issuesCreated);
+            issueComments.push(repoData.issueComments);
+            prComments.push(repoData.prComments);
+            prCommits.push(repoData.prCommits);
+            prsCreated.push(repoData.prsCreated);
         }
-        yield Promise.all(promises);
         // group all the things
         const prGroups = (0, groupPRs_1.default)(prsCreated, prComments, prCommits);
         const issueGroups = (0, groupIssues_1.default)(issuesCreated, issueComments);
