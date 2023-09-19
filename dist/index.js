@@ -8646,19 +8646,22 @@ function handleSingleUser(inputFields, username, startDate) {
         const prComments = [];
         const prCommits = [];
         const prsCreated = [];
-        const promises = reposList.map((repo) => __awaiter(this, void 0, void 0, function* () {
-            const [requestOwner, repoName] = repo.includes('/') ? repo.split('/') : [inputFields.owner, repo];
-            // query all the things
-            const repoData = yield (0, queries_1.getAllWorkForRepository)(requestOwner, repoName, username, startDateIso, inputFields.secondary_prs_label);
-            discussionComments.push(repoData.discussionComments);
-            discussionsCreated.push(repoData.discussionsCreated);
-            issuesCreated.push(repoData.issuesCreated);
-            issueComments.push(repoData.issueComments);
-            prComments.push(repoData.prComments);
-            prCommits.push(repoData.prCommits);
-            prsCreated.push(repoData.prsCreated);
+        const promises = [];
+        for (const repo of reposList) {
+            promises.push(() => __awaiter(this, void 0, void 0, function* () {
+                const [requestOwner, repoName] = repo.includes('/') ? repo.split('/') : [inputFields.owner, repo];
+                // query all the things
+                const repoData = yield (0, queries_1.getAllWorkForRepository)(requestOwner, repoName, username, startDateIso, inputFields.secondary_prs_label);
+                discussionComments.push(repoData.discussionComments);
+                discussionsCreated.push(repoData.discussionsCreated);
+                issuesCreated.push(repoData.issuesCreated);
+                issueComments.push(repoData.issueComments);
+                prComments.push(repoData.prComments);
+                prCommits.push(repoData.prCommits);
+                prsCreated.push(repoData.prsCreated);
+            }));
             (0, shared_1.sleep)(2000);
-        }));
+        }
         yield Promise.all(promises);
         // group all the things
         const prGroups = (0, groupPRs_1.default)(prsCreated, prComments, prCommits);
