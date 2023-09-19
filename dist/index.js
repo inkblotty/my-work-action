@@ -8634,6 +8634,7 @@ const commitToBranch_1 = __nccwpck_require__(6595);
 const openPR_1 = __nccwpck_require__(5885);
 const createPRContent_1 = __nccwpck_require__(1727);
 const groupIssues_1 = __nccwpck_require__(2411);
+const shared_1 = __nccwpck_require__(3826);
 function handleSingleUser(inputFields, username, startDate) {
     return __awaiter(this, void 0, void 0, function* () {
         const startDateIso = startDate.toISOString();
@@ -8645,7 +8646,7 @@ function handleSingleUser(inputFields, username, startDate) {
         const prComments = [];
         const prCommits = [];
         const prsCreated = [];
-        yield Promise.all(reposList.map((repo) => __awaiter(this, void 0, void 0, function* () {
+        const promises = reposList.map((repo) => __awaiter(this, void 0, void 0, function* () {
             const [requestOwner, repoName] = repo.includes('/') ? repo.split('/') : [inputFields.owner, repo];
             // query all the things
             const repoData = yield (0, queries_1.getAllWorkForRepository)(requestOwner, repoName, username, startDateIso, inputFields.secondary_prs_label);
@@ -8656,7 +8657,9 @@ function handleSingleUser(inputFields, username, startDate) {
             prComments.push(repoData.prComments);
             prCommits.push(repoData.prCommits);
             prsCreated.push(repoData.prsCreated);
-        })));
+            (0, shared_1.sleep)(2000);
+        }));
+        yield Promise.all(promises);
         // group all the things
         const prGroups = (0, groupPRs_1.default)(prsCreated, prComments, prCommits);
         const issueGroups = (0, groupIssues_1.default)(issuesCreated, issueComments);
