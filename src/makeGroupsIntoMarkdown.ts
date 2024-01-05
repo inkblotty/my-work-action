@@ -15,10 +15,10 @@ const makeGroupsIntoMarkdown = (
   ];
 
   const primaryArr = [
-    "## Primary Work\n\nThis usually refers to work that you created, started, and drove forward\n\n",
+    "## Driver Work\n\nThis usually refers to work that you created, started, and drove forward\n\n",
   ];
   const secondaryArr = [
-    "## Secondary Work\n\nThis usually refers to reviews, contributions to other's PRs, and other secondary work\n\n",
+    "## Partnership Work\n\nThis usually refers to reviews, contributions to other's PRs, and other secondary work\n\n",
   ];
   const unknownArr = ["## Unknown Work\n\n"];
 
