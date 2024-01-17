@@ -69,3 +69,49 @@ export const filterCommitsFromOtherUserOnPR = (currentUser: String, commits) => 
 
   return filterCommitsByCurrentUser;
 }
+
+export type EpicForPR = {
+    projectName: string;
+    epicName: string;
+}
+
+export type EpicsForPRs = Record<string, EpicForPR[]>;
+
+export const getEpicsForPRs = (prs, prReviewsAndCommits) => {
+  const epicsForPRs: EpicsForPRs = getEpicsFromPRs(prs);
+  const epicsForPRCommits: EpicsForPRs = getEpicsFromPRs(prReviewsAndCommits);
+
+  const allEpicsForPRs = {};
+  for (const prUrl in epicsForPRs) {
+    allEpicsForPRs[prUrl] = epicsForPRs[prUrl];
+  }
+  for (const prUrl in epicsForPRCommits) {
+    if (!allEpicsForPRs.hasOwnProperty(prUrl)) {
+      allEpicsForPRs[prUrl] = epicsForPRCommits[prUrl];
+    } else {
+        allEpicsForPRs[prUrl] = allEpicsForPRs[prUrl].concat(epicsForPRCommits[prUrl]);
+    }
+  }
+  return allEpicsForPRs;
+}
+
+const getEpicsFromPRs = (prs) => {
+    const epicsForPRs: Record<string, EpicForPR[]> = {};
+
+    for (const pr of prs) {
+      for (const closingReference of pr.closingReferences.edges) {
+          for (const projectItem of closingReference.node.projectItems.edges) {
+              const projectName = projectItem.node.project.title;
+              const epicName = projectItem.node.fieldValueByName.name;
+              if (projectName && epicName) {
+                  if (!epicsForPRs.hasOwnProperty(pr.url)) {
+                      epicsForPRs[pr.url] = [];
+                  }
+                  epicsForPRs[pr.url].push({ projectName, epicName });
+              }
+          }
+      }
+    }
+
+    return epicsForPRs;
+}

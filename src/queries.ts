@@ -1,5 +1,5 @@
 import { graphql } from "@octokit/graphql";
-import { filterCreatedThingByAuthorAndCreation, filterCommitsFromOtherUserOnPR, filterCreatedThingByCreation } from './queryFilters';
+import { filterCreatedThingByAuthorAndCreation, filterCommitsFromOtherUserOnPR, filterCreatedThingByCreation, getEpicsForPRs } from './queryFilters';
 import { QueryGroup, QueryType } from './shared.types';
 
 const GH_TOKEN = process.env.GH_TOKEN;
@@ -15,6 +15,26 @@ query getUserWork($username:String!, $owner:String!, $repo:String!, $sinceIso: D
           title
           createdAt
           url
+          closingIssuesReferences(first: 10) {
+            edges {
+              node {
+                projectItems(first: 10) {
+                  edges {
+                    node {
+                      project {
+                        title
+                      }
+                      fieldValueByName(name: "Epic") {
+                        ... on ProjectV2ItemFieldSingleSelectValue {
+                          name
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }
@@ -28,6 +48,26 @@ query getUserWork($username:String!, $owner:String!, $repo:String!, $sinceIso: D
           url
           author {
             login
+          }
+          closingIssuesReferences(first: 10) {
+            edges {
+              node {
+                projectItems(first: 10) {
+                  edges {
+                    node {
+                      project {
+                        title
+                      }
+                      fieldValueByName(name: "Epic") {
+                        ... on ProjectV2ItemFieldSingleSelectValue {
+                          name
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
           commits(first:10) {
             nodes {
@@ -140,6 +180,8 @@ export const getAllWorkForRepository = async (requestOwner: string, repoName: st
     const issueComments = filterCreatedThingByAuthorAndCreation(flattenedIssueComments, username, sinceIso);
     const createdDiscussions = filterCreatedThingByAuthorAndCreation(repository.discussions.nodes, username, sinceIso);
     const commentsOnDiscussions = filterCreatedThingByAuthorAndCreation(flattenedDiscussionComments, username, sinceIso);
+
+    const epicsForPRs = getEpicsForPRs(createdPRs, prReviewsAndCommits.edges.map(edge => edge.node));
 
     return {
         discussionsCreated: {
