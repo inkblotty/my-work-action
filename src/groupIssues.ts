@@ -14,7 +14,7 @@ const handleIssueGroups = (allIssuesCreated: QueryGroup[], allIssueComments: Que
     };
 
     for (const repoGroup of allIssuesCreated) {
-    
+
         const { data, type } = repoGroup;
         if (type === QueryType['issue-created'] && data[0]) {
             const [repoUrl] = data[0].url.split('/issues');
@@ -42,11 +42,11 @@ const handleIssueGroups = (allIssuesCreated: QueryGroup[], allIssueComments: Que
                     return;
                 }
             }
-            
+
             // make sure that comment belongs to a PR group
             if (!finalIssues.secondary[issueUrl]) {
                 finalIssues.secondary[issueUrl] = {
-                    groupTitle: `Left comments on issue: [${comment.issue.title}](${issueUrl}) in ${repoGroup.repo}`,
+                    groupTitle: `Left comments on issue: [${comment.issue.title}](${issueUrl})`,
                     artifacts: [],
                 }
             }

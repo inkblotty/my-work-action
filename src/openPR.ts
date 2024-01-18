@@ -2,17 +2,18 @@ import * as github from '@actions/github';
 import { formatDate } from "./shared";
 import { InputFields } from "./shared.types";
 
-const openPR = async ({ owner, repo }: InputFields, username: string, branchName: string, body: string): Promise<{ html_url: string }> => {
+const openPR = async ({ output_repo }: InputFields, username: string, branchName: string, body: string): Promise<{ html_url: string }> => {
     const now = formatDate(new Date());
-    const requestOwner = repo.includes('/') ? repo.split('/')[0] : owner;
+    const requestOwner = output_repo.split('/')[0]
+    const requestRepo = output_repo.split('/')[1]
     const prData = {
         owner: requestOwner,
-        repo,
+        repo: requestRepo,
         base: 'main',
         head: `refs/heads/${branchName}`,
         title: `@${username}'s Work: ${now}`,
         draft: true,
-        body, 
+        body,
         headers: {
             authorization: `token ${process.env.GH_TOKEN}`
         },

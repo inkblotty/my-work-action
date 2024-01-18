@@ -24,14 +24,15 @@ interface PRData {
 }
 // object to be submitted for PR creation
 // see https://docs.github.com/en/rest/reference/pulls#create-a-pull-request
-const createPRObj = ({ owner, repo }: Pick<InputFields, 'owner' | 'repo'>, currentUsername: string, prData: PRData) => {
-    const requestOwner = repo.includes('/') ? repo.split('/')[0] : owner;
+const createPRObj = ({ output_repo }: Pick<InputFields, 'output_repo'>, currentUsername: string, prData: PRData) => {
+    const requestOwner = output_repo.split('/')[0]
+    const requestRepo = output_repo.split('/')[1]
     return {
         body: createPRBodyText(prData.startDate, prData.endDate, currentUsername),
         base: prData.destinationBranch,
         head: prData.tempBranch,
         owner: requestOwner,
-        repo,
+        repo: requestRepo,
         title: prData.title,
     }
 }

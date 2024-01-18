@@ -13,14 +13,15 @@ export const makeValidatedInput = (GH_TOKEN: string) => {
     }
 
     const endObj: InputFields = {
-        owner: '',
-        repo: '',
-        queried_repos: '',
-        secondary_prs_label: '',
-        timespan: parseInt(core.getInput('timespan') || '7'),
+        output_repo: '',
         usernames: '',
+        timespan: parseInt(core.getInput('timespan') || '7'),
+        queried_orgs: core.getInput('queried_orgs') || '',
+        queried_repos: core.getInput('queried_repos') || '',
+        excluded_repos: core.getInput('excluded_repos') || '',
     };
-    const requiredInputs = ["owner", "repo", "queried_repos", "secondary_prs_label", "usernames"];
+
+    const requiredInputs = ["output_repo", "usernames"];
     for (const inputName of requiredInputs) {
         const workflowValue = core.getInput(inputName, { required: true });
         if (!workflowValue) {
@@ -29,6 +30,12 @@ export const makeValidatedInput = (GH_TOKEN: string) => {
 
         endObj[inputName] = workflowValue;
     };
+
+    // TOOD: validate output_repo to use NWO format
+    // TODO: move usernames splitting to here and make usernames field of type [string]
+    // TODO: move queried_orgs splitting to here and make usernames field of type [string]
+    // TODO: move queried_repos splitting to here and make usernames field of type [string], add validation if repo is of NWO format
+    // TODO: move excluded_repos splitting to here and make usernames field of type [string], add validation if repo is of NWO format
 
     return endObj;
 }

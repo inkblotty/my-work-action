@@ -41,12 +41,11 @@ const handlePRGroups = (
     const tempSecondary: OutputGroup = {};
     if (data[0]) {
       for (const commit of data) {
-        const [firstPR] = commit.associatedPullRequests.nodes;
-        const prAuthor = firstPR.author.user;
-        const prUrl = firstPR.url;
+        const prAuthor = commit.pullRequest.author.user;
+        const prUrl = commit.pullRequest.url;
         if (!tempSecondary[prUrl]) {
           tempSecondary[prUrl] = {
-            groupTitle: `Added <data.length> commits to @${prAuthor}'s PR: [${firstPR.title}](${prUrl})`,
+            groupTitle: `Added <data.length> commits to @${prAuthor}'s PR: [${commit.pullRequest.title}](${prUrl})`,
             artifacts: [],
           };
         }
@@ -86,7 +85,7 @@ const handlePRGroups = (
       // make sure that comment belongs to a PR group
       if (!finalPRs.secondary[prUrl]) {
         finalPRs.secondary[prUrl] = {
-          groupTitle: `Reviewed and left comments on PR [#${prNumber}](${prUrl}) in ${repoGroup.repo}`,
+          groupTitle: `Reviewed and left comments on PR [#${prNumber}](${prUrl})`,
           artifacts: [],
         };
       }

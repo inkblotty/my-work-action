@@ -10,7 +10,6 @@ export enum QueryType {
 };
 
 export interface QueryGroup {
-    repo: string;
     titleData?: {
         identifier: string;
         title: string;
@@ -37,12 +36,12 @@ export interface OutputGroupGroup {
 }
 
 export interface InputFields {
-    owner: string;
-    queried_repos: string;
-    secondary_prs_label: string;
-    repo: string;
-    timespan: number;
+    output_repo: string;
     usernames: string;
+    timespan: number;
+    queried_orgs: string;
+    queried_repos: string;
+    excluded_repos: string;
 }
 
 type WorkItemType = 'pull-request' | 'discussion' | 'issue' | 'review' | 'commit' | 'comment';
