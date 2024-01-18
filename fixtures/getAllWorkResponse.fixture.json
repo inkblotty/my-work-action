@@ -6260,112 +6260,160 @@
             "node": {
               "title": "Create sprint-overview.md",
               "createdAt": "2022-04-20T21:22:40Z",
-              "url": "https://github.com/github/accessibility/pull/1062"
+              "url": "https://github.com/github/accessibility/pull/1062",
+              "closingIssuesReferences": {
+                "edges": []
+              }
             }
           },
           {
             "node": {
               "title": "[Proposal] New FR policy",
               "createdAt": "2022-04-20T15:12:15Z",
-              "url": "https://github.com/github/accessibility/pull/1055"
+              "url": "https://github.com/github/accessibility/pull/1055",
+              "closingIssuesReferences": {
+                "edges": []
+              }
             }
           },
           {
             "node": {
               "title": "Create my-work.yml",
               "createdAt": "2022-04-15T14:58:38Z",
-              "url": "https://github.com/github/accessibility/pull/1029"
+              "url": "https://github.com/github/accessibility/pull/1029",
+              "closingIssuesReferences": {
+                "edges": []
+              }
             }
           },
           {
             "node": {
               "title": "Update how-we-work.md to improve tab stops",
               "createdAt": "2022-04-07T15:03:32Z",
-              "url": "https://github.com/github/accessibility/pull/1001"
+              "url": "https://github.com/github/accessibility/pull/1001",
+              "closingIssuesReferences": {
+                "edges": []
+              }
             }
           },
           {
             "node": {
               "title": "All the updates to our Daily Update workflow",
               "createdAt": "2022-04-05T19:32:54Z",
-              "url": "https://github.com/github/accessibility/pull/990"
+              "url": "https://github.com/github/accessibility/pull/990",
+              "closingIssuesReferences": {
+                "edges": []
+              }
             }
           },
           {
             "node": {
               "title": "Update office-hours-meeting.md to align with deep dive template",
               "createdAt": "2022-04-05T18:31:36Z",
-              "url": "https://github.com/github/accessibility/pull/988"
+              "url": "https://github.com/github/accessibility/pull/988",
+              "closingIssuesReferences": {
+                "edges": []
+              }
             }
           },
           {
             "node": {
               "title": "Create daily-update-comment.yml",
               "createdAt": "2022-04-05T15:52:21Z",
-              "url": "https://github.com/github/accessibility/pull/986"
+              "url": "https://github.com/github/accessibility/pull/986",
+              "closingIssuesReferences": {
+                "edges": []
+              }
             }
           },
           {
             "node": {
               "title": "Automation: Testing daily-update",
               "createdAt": "2022-04-04T19:46:16Z",
-              "url": "https://github.com/github/accessibility/pull/985"
+              "url": "https://github.com/github/accessibility/pull/985",
+              "closingIssuesReferences": {
+                "edges": []
+              }
             }
           },
           {
             "node": {
               "title": "Update Audit Process to cross-link to The Hub",
               "createdAt": "2022-04-01T14:58:58Z",
-              "url": "https://github.com/github/accessibility/pull/977"
+              "url": "https://github.com/github/accessibility/pull/977",
+              "closingIssuesReferences": {
+                "edges": []
+              }
             }
           },
           {
             "node": {
               "title": "[Docs] Process for Primer audit issues & Initial outline of Accessibility ownership between a11y Eng and Primer",
               "createdAt": "2022-03-31T23:58:05Z",
-              "url": "https://github.com/github/accessibility/pull/972"
+              "url": "https://github.com/github/accessibility/pull/972",
+              "closingIssuesReferences": {
+                "edges": []
+              }
             }
           },
           {
             "node": {
               "title": "Update hww.env",
               "createdAt": "2022-03-17T22:32:03Z",
-              "url": "https://github.com/github/accessibility/pull/915"
+              "url": "https://github.com/github/accessibility/pull/915",
+              "closingIssuesReferences": {
+                "edges": []
+              }
             }
           },
           {
             "node": {
               "title": "Update deep-dive.yml",
               "createdAt": "2022-03-17T17:27:59Z",
-              "url": "https://github.com/github/accessibility/pull/911"
+              "url": "https://github.com/github/accessibility/pull/911",
+              "closingIssuesReferences": {
+                "edges": []
+              }
             }
           },
           {
             "node": {
               "title": "Update a11y-audit-request.md",
               "createdAt": "2022-03-11T19:30:54Z",
-              "url": "https://github.com/github/accessibility/pull/886"
+              "url": "https://github.com/github/accessibility/pull/886",
+              "closingIssuesReferences": {
+                "edges": []
+              }
             }
           },
           {
             "node": {
               "title": "Fix labels on Refining template",
               "createdAt": "2022-03-10T18:41:52Z",
-              "url": "https://github.com/github/accessibility/pull/880"
+              "url": "https://github.com/github/accessibility/pull/880",
+              "closingIssuesReferences": {
+                "edges": []
+              }
             }
           },
           {
             "node": {
               "title": "Create Folder for Axe Con notes",
               "createdAt": "2022-03-09T15:49:27Z",
-              "url": "https://github.com/github/accessibility/pull/872"
+              "url": "https://github.com/github/accessibility/pull/872",
+              "closingIssuesReferences": {
+                "edges": []
+              }
             }
           },
           {
             "node": {
               "title": "Update deep-dive.yml to add timezones",
               "createdAt": "2022-03-02T16:05:00Z",
-              "url": "https://github.com/github/accessibility/pull/835"
+              "url": "https://github.com/github/accessibility/pull/835",
+              "closingIssuesReferences": {
+                "edges": []
+              }
             }
           }
         ]
@@ -6377,6 +6425,9 @@
               "createdAt": "2022-06-08T20:12:03Z",
               "title": "Add CODEOWNERS file",
               "url": "https://github.com/github/accessibility-scorecard/pull/13",
+              "closingIssuesReferences": {
+                "edges": []
+              },
               "author": {
                 "login": "khiga8"
               },
@@ -6412,6 +6463,9 @@
               "createdAt": "2022-06-08T19:57:25Z",
               "title": "Adding stale issues requirement for Accessibility Audit objective",
               "url": "https://github.com/github/accessibility-scorecard/pull/12",
+              "closingIssuesReferences": {
+                "edges": []
+              },
               "author": {
                 "login": "kendallgassner"
               },
@@ -6597,6 +6651,9 @@
               "createdAt": "2022-06-08T16:39:19Z",
               "title": "Break down linter requirements to be granular",
               "url": "https://github.com/github/accessibility-scorecard/pull/11",
+              "closingIssuesReferences": {
+                "edges": []
+              },
               "author": {
                 "login": "khiga8"
               },
@@ -6680,6 +6737,9 @@
               "createdAt": "2022-06-08T15:04:15Z",
               "title": "Test removing lib",
               "url": "https://github.com/github/accessibility-scorecard/pull/10",
+              "closingIssuesReferences": {
+                "edges": []
+              },
               "author": {
                 "login": "kendallgassner"
               },
@@ -6730,6 +6790,9 @@
               "createdAt": "2022-06-07T20:55:11Z",
               "title": "Cleaning up getLabels and getService",
               "url": "https://github.com/github/accessibility-scorecard/pull/9",
+              "closingIssuesReferences": {
+                "edges": []
+              },
               "author": {
                 "login": "kendallgassner"
               },
@@ -6791,6 +6854,9 @@
               "createdAt": "2022-06-06T21:03:30Z",
               "title": "Add score: Percentage of Issues closed ",
               "url": "https://github.com/github/accessibility-scorecard/pull/8",
+              "closingIssuesReferences": {
+                "edges": []
+              },
               "author": {
                 "login": "kendallgassner"
               },
@@ -6918,6 +6984,9 @@
               "createdAt": "2022-06-01T18:46:10Z",
               "title": "Update update-scorecard-staging.yml",
               "url": "https://github.com/github/accessibility-scorecard/pull/7",
+              "closingIssuesReferences": {
+                "edges": []
+              },
               "author": {
                 "login": "khiga8"
               },
@@ -6957,6 +7026,9 @@
               "createdAt": "2022-06-01T10:57:53Z",
               "title": "docs: updates overall readme for scorecard work",
               "url": "https://github.com/github/accessibility-scorecard/pull/6",
+              "closingIssuesReferences": {
+                "edges": []
+              },
               "author": {
                 "login": "lindseywild"
               },

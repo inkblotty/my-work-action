@@ -99,7 +99,7 @@ const getEpicsFromPRs = (prs) => {
     const epicsForPRs: Record<string, EpicForPR[]> = {};
 
     for (const pr of prs) {
-      for (const closingReference of pr.closingReferences.edges) {
+      for (const closingReference of pr.closingIssuesReferences.edges) {
           for (const projectItem of closingReference.node.projectItems.edges) {
               const projectName = projectItem.node.project.title;
               const epicName = projectItem.node.fieldValueByName.name;
