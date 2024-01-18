@@ -131,22 +131,25 @@ query getUserWork($username:String!, $issuesCreatedQuery:String!, $issuesInvolve
   }
 }
 `;
-export const getAllWork = async (username: string, sinceIso: string, excluded_repos: string[], focused_repos: string[]): Promise<{ [key: string]: QueryGroup }> => {
+export const getAllWork = async (org: string | null, username: string, sinceIso: string, excluded_repos: string[], focused_repos: string[]): Promise<{ [key: string]: QueryGroup }> => {
   // TODO: add pagination
   // TODO: add issues closed & prs merged
+  const orgFilter = org ? `org:${org}` : ``;
+  const baseQuery = `${orgFilter} created:>=${sinceIso}`;
+  console.log('query input', 'since iso:', sinceIso, 'username', username, 'org', org)
+
   const { issuesCreated, issuesComments, discussionsCreated, discussionComments, prsCreated, prReviewsAndCommits } = await graphql(repositoryQuery, {
       username,
-      issuesCreatedQuery: `is:issue created:>=${sinceIso} author:${username}`,
-      issuesInvolvedQuery: `is:issue created:>=${sinceIso} involves:${username}`,
-      discussionsCreatedQuery: `created:>=${sinceIso} author:${username}`,
-      discussionsInvolvedQuery: `created:>=${sinceIso} involves:${username}`,
-      prsCreatedQuery: `is:pr created:>=${sinceIso} author:${username}`,
-      prContributionsQuery: `is:pr created:>=${sinceIso} involves:${username} -author:${username}`,
+      issuesCreatedQuery: `${baseQuery} is:issue author:${username}`,
+      issuesInvolvedQuery: `${baseQuery} is:issue involves:${username}`,
+      discussionsCreatedQuery: `${baseQuery} author:${username}`,
+      discussionsInvolvedQuery: `${baseQuery} involves:${username}`,
+      prsCreatedQuery: `${baseQuery} is:pr author:${username}`,
+      prContributionsQuery: `${baseQuery} is:pr involves:${username} -author:${username}`,
       headers: {
           authorization: `token ${GH_TOKEN}`
       },
     });
-    console.log('query input', '\nsince iso:', sinceIso, '\nusername', username)
 
     // ===
     // Filter results by excluded_repos & focused_repos

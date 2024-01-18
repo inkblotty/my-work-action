@@ -13,25 +13,28 @@ import { sleep } from './shared';
 async function handleSingleUser(inputFields: InputFields, username: string, startDate: Date) {
     const startDateIso = startDate.toISOString();
 
-    const discussionComments: QueryGroup[] = [];
-    const discussionsCreated: QueryGroup[] = [];
-    const issuesCreated: QueryGroup[] = [];
-    const issueComments: QueryGroup[] = [];
-    const prComments: QueryGroup[] = [];
-    const prCommits: QueryGroup[] = [];
-    const prsCreated: QueryGroup[] = [];
+    const workData: { [key: string]: QueryGroup }[] = []
+    if (inputFields.focused_orgs.length === 0) {
+        // Query global activity
+        const globalData = await getAllWork(null, username, startDateIso, inputFields.excluded_repos, inputFields.focused_repos);
+        workData.push(globalData);
+        await sleep(1000);
+    } else {
+        // Query activity per each org
+        for (const org of inputFields.focused_orgs) {
+            const orgData = await getAllWork(org, username, startDateIso, inputFields.excluded_repos, inputFields.focused_repos);
+            workData.push(orgData);
+            await sleep(1000);
+        }
+    }
 
-    // TODO: query for selected orgs.
-    // query all the things
-    const repoData = await getAllWork(username, startDateIso, inputFields.excluded_repos, inputFields.focused_repos);
-    await sleep(1000);
-    discussionComments.push(repoData.discussionComments);
-    discussionsCreated.push(repoData.discussionsCreated);
-    issuesCreated.push(repoData.issuesCreated);
-    issueComments.push(repoData.issueComments);
-    prComments.push(repoData.prComments);
-    prCommits.push(repoData.prCommits);
-    prsCreated.push(repoData.prsCreated);
+    const discussionComments = workData.flatMap((data) => data.discussionComments);
+    const discussionsCreated = workData.flatMap((data) => data.discussionsCreated);
+    const issuesCreated = workData.flatMap((data) => data.issuesCreated);
+    const issueComments = workData.flatMap((data) => data.issueComments);
+    const prComments = workData.flatMap((data) => data.prComments);
+    const prCommits = workData.flatMap((data) => data.prCommits);
+    const prsCreated = workData.flatMap((data) => data.prsCreated);
 
     // group all the things
     const prGroups = handlePRGroups(prsCreated, prComments, prCommits);
