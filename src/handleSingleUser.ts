@@ -23,7 +23,7 @@ async function handleSingleUser(inputFields: InputFields, username: string, star
 
     // TODO: query for selected orgs.
     // query all the things
-    const repoData = await getAllWork(username, startDateIso);
+    const repoData = await getAllWork(username, startDateIso, inputFields.excluded_repos, inputFields.focused_repos);
     await sleep(1000);
     discussionComments.push(repoData.discussionComments);
     discussionsCreated.push(repoData.discussionsCreated);
@@ -32,9 +32,6 @@ async function handleSingleUser(inputFields: InputFields, username: string, star
     prComments.push(repoData.prComments);
     prCommits.push(repoData.prCommits);
     prsCreated.push(repoData.prsCreated);
-
-    // TODO: filter out excluded repos
-    // TODO: filter in selected repos
 
     // group all the things
     const prGroups = handlePRGroups(prsCreated, prComments, prCommits);

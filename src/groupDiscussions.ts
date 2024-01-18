@@ -32,9 +32,7 @@ const handleDiscussionGroups = (allDiscussionsCreated: QueryGroup[], allDiscussi
     };
 
     for (const repoGroup of allDiscussionComments) {
-        log('repoGroup', repoGroup)
         for (const comment of repoGroup.data) {
-            log('comment', comment)
             const discussionUrl = comment.url.split('#')[0];
 
             // make sure that comment belongs to a group

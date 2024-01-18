@@ -1,5 +1,5 @@
 import { graphql } from "@octokit/graphql";
-import { filterCreatedThingByAuthorAndCreation, filterCommitsFromOtherUserOnPR, filterCreatedThingByCreation } from './queryFilters';
+import { filterCreatedThingByAuthorAndCreation, filterCommitsFromOtherUserOnPR, filterCreatedThingByCreation, filterItemsByRepo } from './queryFilters';
 import { QueryGroup, QueryType } from './shared.types';
 
 const GH_TOKEN = process.env.GH_TOKEN;
@@ -11,6 +11,9 @@ query getUserWork($username:String!, $issuesCreatedQuery:String!, $issuesInvolve
         title
         createdAt
         url
+        repository {
+          nameWithOwner
+        }
       }
     }
   }
@@ -28,6 +31,9 @@ query getUserWork($username:String!, $issuesCreatedQuery:String!, $issuesInvolve
             url
           }
         }
+        repository {
+          nameWithOwner
+        }
       }
     }
   }
@@ -42,6 +48,9 @@ query getUserWork($username:String!, $issuesCreatedQuery:String!, $issuesInvolve
         createdAt
         number
         url
+        repository {
+          nameWithOwner
+        }
       }
     }
   }
@@ -60,6 +69,9 @@ query getUserWork($username:String!, $issuesCreatedQuery:String!, $issuesInvolve
             url
           }
         }
+        repository {
+          nameWithOwner
+        }
       }
     }
   }
@@ -70,6 +82,9 @@ query getUserWork($username:String!, $issuesCreatedQuery:String!, $issuesInvolve
           title
           createdAt
           url
+          repository {
+            nameWithOwner
+          }
         }
       }
     }
@@ -81,6 +96,9 @@ query getUserWork($username:String!, $issuesCreatedQuery:String!, $issuesInvolve
           createdAt
           title
           url
+          repository {
+            nameWithOwner
+          }
           author {
             login
           }
@@ -113,7 +131,7 @@ query getUserWork($username:String!, $issuesCreatedQuery:String!, $issuesInvolve
   }
 }
 `;
-export const getAllWork = async (username: string, sinceIso: string): Promise<{ [key: string]: QueryGroup }> => {
+export const getAllWork = async (username: string, sinceIso: string, excluded_repos: string[], focused_repos: string[]): Promise<{ [key: string]: QueryGroup }> => {
   // TODO: add pagination
   // TODO: add issues closed & prs merged
   const { issuesCreated, issuesComments, discussionsCreated, discussionComments, prsCreated, prReviewsAndCommits } = await graphql(repositoryQuery, {
@@ -130,10 +148,20 @@ export const getAllWork = async (username: string, sinceIso: string): Promise<{ 
     });
     console.log('query input', '\nsince iso:', sinceIso, '\nusername', username)
 
-    const flattenedIssueComments = issuesComments.nodes.reduce((arr, { title, url, comments: { nodes }}) => {
+    // ===
+    // Filter results by excluded_repos & focused_repos
+    issuesCreated.nodes = filterItemsByRepo(issuesCreated.nodes, excluded_repos, focused_repos)
+    issuesComments.nodes = filterItemsByRepo(issuesComments.nodes, excluded_repos, focused_repos)
+    discussionsCreated.nodes = filterItemsByRepo(discussionsCreated.nodes, excluded_repos, focused_repos)
+    discussionComments.nodes = filterItemsByRepo(discussionComments.nodes, excluded_repos, focused_repos)
+    prsCreated.edges = filterItemsByRepo(prsCreated.edges.map(item => item.node), excluded_repos, focused_repos).map(item => ({ node: item }))
+    prReviewsAndCommits.edges = filterItemsByRepo(prReviewsAndCommits.edges.map(item => item.node), excluded_repos, focused_repos).map(item => ({ node: item }))
+    // ===
+
+    const flattenedIssueComments = issuesComments.nodes.reduce((arr, { title, url, repository, comments: { nodes } }) => {
       return [...arr, ...nodes.map(comment => ({ ...comment, issue: { title, url }}))];
     }, []);
-  const flattenedDiscussionComments = discussionComments.nodes.reduce((arr, { title, url, comments: { nodes }}) => {
+    const flattenedDiscussionComments = discussionComments.nodes.reduce((arr, { title, url, comments: { nodes }}) => {
       return [...arr, ...nodes.map(comment => ({ ...comment, discussion: { title, url } }))];
     }, []);
     const flattenedPRCommits = prReviewsAndCommits.edges.reduce((arr, { node }) => {
@@ -146,7 +174,6 @@ export const getAllWork = async (username: string, sinceIso: string): Promise<{ 
 
       return [...arr, ...commentsNodes.map(commitNode => ({ ...commitNode, pullRequest: { author: node.author, title: node.title, url: node.url } }))]
     }, []);
-    // const flattenedPRComments = prReviewsAndCommits.edges.map(edge => edge.node.reviews.nodes.map(node => node.comments.nodes)).flat().flat();
 
     const commitsToOtherPRs = filterCommitsFromOtherUserOnPR(username, flattenedPRCommits);
 

@@ -11,10 +11,10 @@ inputs:
   timespan:
     description: "Number of days to query, with today as the end date. Defaults to 7 days."
     required: false
-  queried_orgs:
+  focused_orgs:
     description: "The orgs that should be searched for relevant work, comma-separated."
     required: false
-  queried_repos: string;
+  focused_repos: string;
     description: "The repos that should be searched for relevant work, comma-separated."
     required: false
   excluded_repos:

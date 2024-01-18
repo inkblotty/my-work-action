@@ -31,7 +31,7 @@ If the resource limits are still being hit, consider breaking up your workflow i
 - `owner`
 The owner of the repo where the PR should be created. Often, either an organizaiton name or a user's handle.
 
-- `queried_repos`
+- `focused_repos`
 The repos that should be searched for relevant work, comma-separated.
 
 - `repo`

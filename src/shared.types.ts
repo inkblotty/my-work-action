@@ -39,9 +39,9 @@ export interface InputFields {
     output_repo: string;
     usernames: string;
     timespan: number;
-    queried_orgs: string;
-    queried_repos: string;
-    excluded_repos: string;
+    focused_orgs: string[];
+    focused_repos: string[];
+    excluded_repos: string[];
 }
 
 type WorkItemType = 'pull-request' | 'discussion' | 'issue' | 'review' | 'commit' | 'comment';

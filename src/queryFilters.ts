@@ -69,3 +69,13 @@ export const filterCommitsFromOtherUserOnPR = (currentUser: String, commits) => 
 
   return filterCommitsByCurrentUser;
 }
+
+export const filterItemsByRepo = (items: [{ repository: { nameWithOwner: string } }], excluded_repos: string[], focused_repos: string[]): any => {
+    return items.filter(item => {
+        if (focused_repos.length === 0) {
+            return !excluded_repos.includes(item.repository.nameWithOwner)
+        }
+
+        return focused_repos.includes(item.repository.nameWithOwner) && !excluded_repos.includes(item.repository.nameWithOwner)
+    })
+}
