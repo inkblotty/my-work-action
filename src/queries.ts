@@ -1,5 +1,5 @@
 import { graphql } from "@octokit/graphql";
-import { filterCreatedThingByAuthorAndCreation, filterCommitsFromOtherUserOnPR, filterCreatedThingByCreation, getEpicsForPRs } from './queryFilters';
+import { filterCreatedThingByAuthorAndCreation, filterCommitsFromOtherUserOnPR, filterCreatedThingByCreation, getEpicsForPRs, getEpicsForIssues, addEpicsToItems } from './queryFilters';
 import { QueryGroup, QueryType } from './shared.types';
 
 const GH_TOKEN = process.env.GH_TOKEN;
@@ -128,6 +128,20 @@ fragment repo on Repository {
         createdAt
         title
         url
+        projectItems(first: 10) {
+          edges {
+            node {
+              project {
+                title
+              }
+              fieldValueByName(name: "Epic") {
+                ... on ProjectV2ItemFieldSingleSelectValue {
+                  name
+                }
+              }
+            }
+          }
+        }
       }
     }
     issueComments:issues(last:50, filterBy:{since:$sinceIso}) {
@@ -182,6 +196,11 @@ export const getAllWorkForRepository = async (requestOwner: string, repoName: st
     const commentsOnDiscussions = filterCreatedThingByAuthorAndCreation(flattenedDiscussionComments, username, sinceIso);
 
     const epicsForPRs = getEpicsForPRs(createdPRs, prReviewsAndCommits.edges.map(edge => edge.node));
+    const epicsForIssues = getEpicsForIssues(repository.issues.nodes);
+
+    const issuesCreatedWithEpics = addEpicsToItems(createdIssues, epicsForIssues);
+    const issueCommentsWithEpics = addEpicsToItems(issueComments, epicsForIssues);
+    const createdPRsWithEpics = addEpicsToItems(createdPRs, epicsForPRs);
 
     return {
         discussionsCreated: {
@@ -196,17 +215,17 @@ export const getAllWorkForRepository = async (requestOwner: string, repoName: st
         },
         issuesCreated: {
             repo: repoName,
-            data: createdIssues,
+            data: issuesCreatedWithEpics,
             type: QueryType['issue-created']
         },
         issueComments: {
             repo: repoName,
-            data: issueComments,
+            data: issueCommentsWithEpics,
             type: QueryType['issue-comment-created'],
         },
         prsCreated: {
             repo: repoName,
-            data: createdPRs,
+            data: createdPRsWithEpics,
             type: QueryType['pr-created'],
         },
         prCommits: {

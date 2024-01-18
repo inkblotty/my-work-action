@@ -1,3 +1,5 @@
+import { EpicForIssueOrPR } from "./queryFilters";
+
 export enum QueryType {
     'commit',
     'discussion-created',
@@ -24,9 +26,11 @@ export interface QueryGroup {
 export interface OutputGroup {
     [repoOrEventString: string]: {
         groupTitle: string;
+        itemType: string;
         artifacts: {
             title: string;
             url: string;
+            epics: EpicForIssueOrPR[];
         }[];
     };
 }

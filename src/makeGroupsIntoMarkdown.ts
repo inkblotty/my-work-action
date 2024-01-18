@@ -25,23 +25,47 @@ const makeGroupsIntoMarkdown = (
   for (const groups of groupGroups) {
     for (const primaryVal of Object.values(groups.primary)) {
       primaryArr.push(`### ${primaryVal.groupTitle}\n`);
+      if (primaryVal.itemType === "PR" || primaryVal.itemType === "Issue") {
+        primaryArr.push(`| ${primaryVal.itemType} | Epic (Project) |\n| ------------- | ------------- |\n`)
+      }
 
       for (const lineItem of primaryVal.artifacts) {
-        primaryArr.push(`- [${lineItem.title}](${lineItem.url})\n`);
+        const epics = lineItem.epics ? lineItem.epics.map((epic) => `\`${epic.epicName}\` (${epic.projectName})`).join(", ") : "";
+        if (primaryVal.itemType === "PR" || primaryVal.itemType === "Issue") {
+          primaryArr.push(`| [${lineItem.title}](${lineItem.url}) | ${epics} |\n`);
+        } else {
+          primaryArr.push(`- [${lineItem.title}](${lineItem.url})\n`);
+        }
       }
     }
 
     for (const secondaryVal of Object.values(groups.secondary)) {
       secondaryArr.push(`### ${secondaryVal.groupTitle}\n`);
+      if (secondaryVal.itemType === "PR" || secondaryVal.itemType === "Issue") {
+        secondaryArr.push(`| ${secondaryVal.itemType} | Epic (Project) |\n| ------------- | ------------- |\n`)
+      }
       for (const lineItem of secondaryVal.artifacts) {
-        secondaryArr.push(`- [${lineItem.title}](${lineItem.url})\n`);
+        const epics = lineItem.epics ? lineItem.epics.map((epic) => `\`${epic.epicName}\` (${epic.projectName})`).join(", ") : "";
+        if (secondaryVal.itemType === "PR" || secondaryVal.itemType === "Issue") {
+          secondaryArr.push(`| [${lineItem.title}](${lineItem.url}) | ${epics} |\n`);
+        } else {
+          secondaryArr.push(`- [${lineItem.title}](${lineItem.url})\n`);
+        }
       }
     }
 
     for (const unknownVal of Object.values(groups.unknown)) {
       unknownArr.push(`### ${unknownVal.groupTitle}\n`);
+      if (unknownVal.itemType === "PR" || unknownVal.itemType === "Issue") {
+        unknownArr.push(`| ${unknownVal.itemType} | Epic (Project) |\n| ------------- | ------------- |\n`)
+      }
       for (const lineItem of unknownVal.artifacts) {
-        unknownArr.push(`- [${lineItem.title}](${lineItem.url})\n`);
+        const epics = lineItem.epics ? lineItem.epics.map((epic) => `\`${epic.epicName}\` (${epic.projectName})`).join(", ") : "";
+        if (unknownVal.itemType === "PR" || unknownVal.itemType === "Issue") {
+          unknownArr.push(`| [${lineItem.title}](${lineItem.url}) | ${epics} |\n`);
+        } else {
+          unknownArr.push(`- [${lineItem.title}](${lineItem.url})\n`);
+        }
       }
     }
   }

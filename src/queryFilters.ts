@@ -9,12 +9,14 @@ interface CreatedThing {
         login: string;
       }
     };
+    url?: string;
     created_at?: string;
     createdAt?: string;
     pushedDate?: string;
     user?: {
         login: string;
     };
+    epics?: EpicForIssueOrPR[];
 }
 export const filterCreatedThingByCreation = (list: CreatedThing[], sinceIso: string) => {
     return list.filter(thing => {
@@ -70,16 +72,16 @@ export const filterCommitsFromOtherUserOnPR = (currentUser: String, commits) => 
   return filterCommitsByCurrentUser;
 }
 
-export type EpicForPR = {
+export type EpicForIssueOrPR = {
     projectName: string;
     epicName: string;
 }
 
-export type EpicsForPRs = Record<string, EpicForPR[]>;
+export type EpicsForIssuesOrPRs = Record<string, EpicForIssueOrPR[]>;
 
 export const getEpicsForPRs = (prs, prReviewsAndCommits) => {
-  const epicsForPRs: EpicsForPRs = getEpicsFromPRs(prs);
-  const epicsForPRCommits: EpicsForPRs = getEpicsFromPRs(prReviewsAndCommits);
+  const epicsForPRs: EpicsForIssuesOrPRs = getEpicsFromPRs(prs);
+  const epicsForPRCommits: EpicsForIssuesOrPRs = getEpicsFromPRs(prReviewsAndCommits);
 
   const allEpicsForPRs = {};
   for (const prUrl in epicsForPRs) {
@@ -95,14 +97,33 @@ export const getEpicsForPRs = (prs, prReviewsAndCommits) => {
   return allEpicsForPRs;
 }
 
+export const getEpicsForIssues = (issues) => {
+    const epicsForIssues: Record<string, EpicForIssueOrPR[]> = {};
+
+    for (const issue of issues) {
+        for (const projectItem of issue.projectItems.edges) {
+            const projectName = projectItem.node.project.title;
+            const epicName = projectItem.node.fieldValueByName && projectItem.node.fieldValueByName.name;
+            if (projectName && epicName) {
+                if (!epicsForIssues.hasOwnProperty(issue.url)) {
+                    epicsForIssues[issue.url] = [];
+                }
+                epicsForIssues[issue.url].push({ projectName, epicName });
+            }
+        }
+    }
+
+    return epicsForIssues;
+}
+
 const getEpicsFromPRs = (prs) => {
-    const epicsForPRs: Record<string, EpicForPR[]> = {};
+    const epicsForPRs: Record<string, EpicForIssueOrPR[]> = {};
 
     for (const pr of prs) {
       for (const closingReference of pr.closingIssuesReferences.edges) {
           for (const projectItem of closingReference.node.projectItems.edges) {
               const projectName = projectItem.node.project.title;
-              const epicName = projectItem.node.fieldValueByName.name;
+              const epicName = projectItem.node.fieldValueByName && projectItem.node.fieldValueByName.name;
               if (projectName && epicName) {
                   if (!epicsForPRs.hasOwnProperty(pr.url)) {
                       epicsForPRs[pr.url] = [];
@@ -115,3 +136,16 @@ const getEpicsFromPRs = (prs) => {
 
     return epicsForPRs;
 }
+
+ export const addEpicsToItems = (items: { url?: string }[], epics: EpicsForIssuesOrPRs) => {
+    return items.map(item => {
+        const epicsForItem = epics[item.url];
+        if (!epicsForItem) {
+            return item;
+        }
+        return {
+            ...item,
+            epics: epicsForItem
+        }
+    })
+ }
