@@ -38,6 +38,7 @@ query getUserWork($username:String!, $issuesCreatedQuery:String!, $issuesInvolve
         author {
           login
         }
+        title
         createdAt
         number
         url
@@ -47,6 +48,8 @@ query getUserWork($username:String!, $issuesCreatedQuery:String!, $issuesInvolve
   discussionComments:search(type: DISCUSSION, query: $discussionsInvolvedQuery, first: 20) {
     nodes {
       ... on Discussion {
+        title
+        url
         comments(last:30) {
           nodes {
               author {
@@ -130,15 +133,20 @@ export const getAllWork = async (username: string, sinceIso: string): Promise<{ 
     const flattenedIssueComments = issuesComments.nodes.reduce((arr, { title, url, comments: { nodes }}) => {
       return [...arr, ...nodes.map(comment => ({ ...comment, issue: { title, url }}))];
     }, []);
-    const flattenedDiscussionComments = discussionComments.nodes.reduce((arr, { comments: { nodes }}) => {
-      return [...arr, ...nodes];
+  const flattenedDiscussionComments = discussionComments.nodes.reduce((arr, { title, url, comments: { nodes }}) => {
+      return [...arr, ...nodes.map(comment => ({ ...comment, discussion: { title, url } }))];
     }, []);
     const flattenedPRCommits = prReviewsAndCommits.edges.reduce((arr, { node }) => {
       const commitNodes = node.commits.nodes;
 
       return [...arr, ...commitNodes.map(commitNode => ({ ...commitNode, pullRequest: { author: node.author, title: node.title, url: node.url } }))]
     }, []);
-    const flattenedPRComments = prReviewsAndCommits.edges.map(edge => edge.node.reviews.nodes.map(node => node.comments.nodes)).flat().flat();
+    const flattenedPRComments = prReviewsAndCommits.edges.reduce((arr, { node }) => {
+      const commentsNodes = node.reviews.nodes.map(review => review.comments.nodes).flat();
+
+      return [...arr, ...commentsNodes.map(commitNode => ({ ...commitNode, pullRequest: { author: node.author, title: node.title, url: node.url } }))]
+    }, []);
+    // const flattenedPRComments = prReviewsAndCommits.edges.map(edge => edge.node.reviews.nodes.map(node => node.comments.nodes)).flat().flat();
 
     const commitsToOtherPRs = filterCommitsFromOtherUserOnPR(username, flattenedPRCommits);
 

@@ -7,6 +7,7 @@ import commitToBranch from "./commitToBranch";
 import openPR from "./openPR";
 import { createPRBodyText } from "./createPRContent";
 import handleIssueGroups from "./groupIssues";
+import handleDiscussionGroups from "./groupDiscussions";
 import { sleep } from './shared';
 
 async function handleSingleUser(inputFields: InputFields, username: string, startDate: Date) {
@@ -38,11 +39,10 @@ async function handleSingleUser(inputFields: InputFields, username: string, star
     // group all the things
     const prGroups = handlePRGroups(prsCreated, prComments, prCommits);
     const issueGroups = handleIssueGroups(issuesCreated, issueComments);
-    // TODO: Group discussions
-    // const discussionsGroups = handleDiscussionGroups(discussionsCreated, discussionComments);
+    const discussionsGroups = handleDiscussionGroups(discussionsCreated, discussionComments);
 
     // format the groups into markdown
-    const documentBody = makeGroupsIntoMarkdown([prGroups, issueGroups], username, startDate);
+    const documentBody = makeGroupsIntoMarkdown([prGroups, issueGroups, discussionsGroups], username, startDate);
 
     // create a branch
     const { ref } = await openBranch(inputFields, username);

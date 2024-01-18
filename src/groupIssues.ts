@@ -32,16 +32,8 @@ const handleIssueGroups = (allIssuesCreated: QueryGroup[], allIssueComments: Que
 
     for (const repoGroup of allIssueComments) {
         for (const comment of repoGroup.data) {
-            // use the specific PR as key
-            const key = comment.url.split('#')[0];
-            const issueUrl = key.split('github.com')[1];
-            const repo = issueUrl.split('/pull')[0];
-            // if comment is on own PR, ignore
-            if (finalIssues.primary[repo]) {
-                if (finalIssues.primary[repo].artifacts.find(url => url === key)) {
-                    return;
-                }
-            }
+            // use the specific issue as key
+            const issueUrl = comment.url.split('#')[0];
 
             // make sure that comment belongs to a PR group
             if (!finalIssues.secondary[issueUrl]) {
