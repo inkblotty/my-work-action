@@ -12,6 +12,7 @@ interface CreatedThing {
     created_at?: string;
     createdAt?: string;
     pushedDate?: string;
+    committedDate?: string;
     user?: {
         login: string;
     };
@@ -26,7 +27,7 @@ export const filterCreatedThingByCreation = (list: CreatedThing[], sinceIso: str
 
 export const filterCreatedThingByAuthorAndCreation = (list: CreatedThing[], username: string, sinceIso, excludeUser?: boolean) => {
     return list.filter(thing => {
-        const createdDate = thing?.createdAt || thing?.pushedDate;
+        const createdDate = thing?.createdAt || thing?.pushedDate || thing?.committedDate;
         const isWithinRange = getIsWithinRange(createdDate, sinceIso);
         const userField = thing.author?.user?.login || thing.author?.login;
         const isAuthoredByUsername = excludeUser ? userField !== username : userField === username;
@@ -62,14 +63,7 @@ export const filterCommentsByUser = (commentsArr: ReviewComment[], username: str
     return commentsArr.filter(({ author }) => excludeUser ? author.login !== username : author.login === username);
 }
 
-// TODO: Refactor; can we use one of the existing filters instead?
 // TODO: Add proper types and tests
-export const filterCommitsFromOtherUserOnPR = (currentUser: String, commits) => {
-  const filterCommitsByCurrentUser = commits.filter(commit => commit.pullRequest.author.login === currentUser)
-
-  return filterCommitsByCurrentUser;
-}
-
 export const filterItemsByRepo = (items: [{ repository: { nameWithOwner: string } }], excluded_repos: string[], focused_repos: string[]): any => {
     return items.filter(item => {
         if (focused_repos.length === 0) {

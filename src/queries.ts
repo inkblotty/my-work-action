@@ -1,5 +1,5 @@
 import { graphql } from "@octokit/graphql";
-import { filterCreatedThingByAuthorAndCreation, filterCommitsFromOtherUserOnPR, filterCreatedThingByCreation, filterItemsByRepo } from './queryFilters';
+import { filterCreatedThingByAuthorAndCreation, filterItemsByRepo } from './queryFilters';
 import { QueryGroup, QueryType } from './shared.types';
 
 const GH_TOKEN = process.env.GH_TOKEN;
@@ -102,11 +102,12 @@ query getUserWork($username:String!, $issuesCreatedQuery:String!, $issuesInvolve
           author {
             login
           }
-          commits(first:10) {
+          commits(last:10) {
             nodes {
               commit {
                 url
                 pushedDate
+                committedDate
                 author {
                   user {
                     login
@@ -117,7 +118,7 @@ query getUserWork($username:String!, $issuesCreatedQuery:String!, $issuesInvolve
           }
           reviews(first: 10, author:$username) {
             nodes {
-              comments(first: 20) {
+              comments(last: 20) {
                 nodes {
                   createdAt
                   url
@@ -134,18 +135,20 @@ query getUserWork($username:String!, $issuesCreatedQuery:String!, $issuesInvolve
 export const getAllWork = async (org: string | null, username: string, sinceIso: string, excluded_repos: string[], focused_repos: string[]): Promise<{ [key: string]: QueryGroup }> => {
   // TODO: add pagination
   // TODO: add issues closed & prs merged
+  // TODO: add pr revires (without comments)
   const orgFilter = org ? `org:${org}` : ``;
-  const baseQuery = `${orgFilter} created:>=${sinceIso}`;
+  const createdBaseQuery = `${orgFilter} created:>=${sinceIso}`;
+  const involvedBaseQuery = `${orgFilter} updated:>=${sinceIso}`;
   console.log('query input', 'since iso:', sinceIso, 'username', username, 'org', org)
 
   const { issuesCreated, issuesComments, discussionsCreated, discussionComments, prsCreated, prReviewsAndCommits } = await graphql(repositoryQuery, {
       username,
-      issuesCreatedQuery: `${baseQuery} is:issue author:${username}`,
-      issuesInvolvedQuery: `${baseQuery} is:issue involves:${username}`,
-      discussionsCreatedQuery: `${baseQuery} author:${username}`,
-      discussionsInvolvedQuery: `${baseQuery} involves:${username}`,
-      prsCreatedQuery: `${baseQuery} is:pr author:${username}`,
-      prContributionsQuery: `${baseQuery} is:pr involves:${username} -author:${username}`,
+      issuesCreatedQuery: `${createdBaseQuery} is:issue author:${username}`,
+      issuesInvolvedQuery: `${involvedBaseQuery} is:issue involves:${username}`,
+      discussionsCreatedQuery: `${createdBaseQuery} author:${username}`,
+      discussionsInvolvedQuery: `${involvedBaseQuery} involves:${username}`,
+      prsCreatedQuery: `${createdBaseQuery} is:pr author:${username}`,
+      prContributionsQuery: `${involvedBaseQuery} is:pr involves:${username} -author:${username}`,
       headers: {
           authorization: `token ${GH_TOKEN}`
       },
@@ -170,15 +173,15 @@ export const getAllWork = async (org: string | null, username: string, sinceIso:
     const flattenedPRCommits = prReviewsAndCommits.edges.reduce((arr, { node }) => {
       const commitNodes = node.commits.nodes;
 
-      return [...arr, ...commitNodes.map(commitNode => ({ ...commitNode, pullRequest: { author: node.author, title: node.title, url: node.url } }))]
+      return [...arr, ...commitNodes.map(commitNode => ({ ...commitNode.commit, pullRequest: { author: node.author, title: node.title, url: node.url } }))]
     }, []);
     const flattenedPRComments = prReviewsAndCommits.edges.reduce((arr, { node }) => {
       const commentsNodes = node.reviews.nodes.map(review => review.comments.nodes).flat();
 
-      return [...arr, ...commentsNodes.map(commitNode => ({ ...commitNode, pullRequest: { author: node.author, title: node.title, url: node.url } }))]
+      return [...arr, ...commentsNodes.map(commentNode => ({ ...commentNode, pullRequest: { author: node.author, title: node.title, url: node.url } }))]
     }, []);
 
-    const commitsToOtherPRs = filterCommitsFromOtherUserOnPR(username, flattenedPRCommits);
+  const commitsToOtherPRs = filterCreatedThingByAuthorAndCreation(flattenedPRCommits, username, sinceIso);
 
     const createdPRs = prsCreated.edges.map(edge => edge.node);
     const createdIssues = issuesCreated.nodes;

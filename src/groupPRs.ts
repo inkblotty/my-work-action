@@ -41,7 +41,7 @@ const handlePRGroups = (
     const tempSecondary: OutputGroup = {};
     if (data[0]) {
       for (const commit of data) {
-        const prAuthor = commit.pullRequest.author.user;
+        const prAuthor = commit.pullRequest.author.login;
         const prUrl = commit.pullRequest.url;
         if (!tempSecondary[prUrl]) {
           tempSecondary[prUrl] = {
@@ -51,7 +51,7 @@ const handlePRGroups = (
         }
 
         tempSecondary[prUrl].artifacts.push({
-          title: `Commit at ${formatDateTime(new Date(commit.pushedDate))}`,
+          title: `Commit at ${formatDateTime(new Date(commit?.pushedDate || commit?.committedDate))}`,
           url: commit.url,
         });
       }
