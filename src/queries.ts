@@ -135,7 +135,7 @@ query getUserWork($username:String!, $issuesCreatedQuery:String!, $issuesInvolve
 export const getAllWork = async (org: string | null, username: string, sinceIso: string, excluded_repos: string[], focused_repos: string[]): Promise<{ [key: string]: QueryGroup }> => {
   // TODO: add pagination
   // TODO: add issues closed & prs merged
-  // TODO: add pr revires (without comments)
+  // TODO: add pr reviews (without comments)
   const orgFilter = org ? `org:${org}` : ``;
   const createdBaseQuery = `${orgFilter} created:>=${sinceIso}`;
   const involvedBaseQuery = `${orgFilter} updated:>=${sinceIso}`;

@@ -14,7 +14,7 @@ inputs:
   focused_orgs:
     description: "The orgs that should be searched for relevant work, comma-separated."
     required: false
-  focused_repos: string;
+  focused_repos:
     description: "The repos that should be searched for relevant work, comma-separated."
     required: false
   excluded_repos:
