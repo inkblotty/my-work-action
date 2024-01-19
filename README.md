@@ -17,31 +17,28 @@ Use this action to help you pick out the important stuff you've accomplished. Sh
 ### Managers & Direct Reports
 Use this action as a tool to reflect on where your team member's time is spent. How much time do they contribute to their peers' success versus staying laser-focused on their own work? Are they pushing large chunks of work that are hard to review, or incremental changes that contribute to a larger story? Whatever workflows you prefer, use this tool to help.
 
-## Limitations
-### Resource limits
-Currently, due to the architecture of GitHub's API, querying large repos for secondary work may result in timeouts. Using the `secondary_prs_label` helps mitigate this problem.
-
-If the resource limits are still being hit, consider breaking up your workflow into individual users and/or separate grouping of repos.
-
 ## Required Fields
 ### Environment variables
 - `GH_TOKEN`
 
 ### Input variables
-- `owner`
-The owner of the repo where the PR should be created. Often, either an organizaiton name or a user's handle.
+- `output_repo`
+The repo where the PR should be created. It should follow name-with-owner format, egz. github/docs
 
-- `focused_repos`
-The repos that should be searched for relevant work, comma-separated.
-
-- `repo`
-The name of the repo where the PR should be created.
-
-- `secondary_prs_label`
-The label to query for PRs that should be counted as secondary work (reviews and commits, but not created).
+- `usernames`
+Your user handle, or your list of teammates, comma-separated.
 
 - `timespan` (optional)
 Number of days to query, with today as the end date. Defaults to 7 days.
 
-- `usernames`
-Your user handle, or your list of teammates, comma-separated.
+- `focused_orgs` (optional)
+The orgs that should be searched for relevant work, comma-separated. When not specified, global data will be sourced.
+
+- `focused_repos` (optional)
+The repos that should be searched for relevant work, comma-separated. When not specified, results form all repos are going to be included.
+
+- `excluded_repos` (optional)
+The repos that should be exluded from the output, comma-separated. When not specified, results form all repos are going to be included.
+
+## Limitation
+Current implementation doesn't support pagination yet. For long time spanns, action may timeout. It is recommended to use `focused_orgs`, `focused_repos` & `excluded_repos` to mitigate this limitation.
