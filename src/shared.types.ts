@@ -37,7 +37,7 @@ export interface OutputGroupGroup {
 
 export interface InputFields {
     output_repo: string;
-    usernames: string;
+    usernames: string[];
     timespan: number;
     focused_orgs: string[];
     focused_repos: string[];
