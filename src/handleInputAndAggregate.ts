@@ -14,9 +14,9 @@ export const makeInput = () => {
         output_repo: '',
         usernames: [],
         timespan: parseInt(core.getInput('timespan') || '7'),
-        focused_orgs: core.getInput('focused_orgs').split(",") || [],
-        focused_repos: core.getInput('focused_repos').split(",") || [],
-        excluded_repos: core.getInput('excluded_repos').split(",") || [],
+        focused_orgs: core.getInput('focused_orgs').trim().length > 0 ? core.getInput('focused_orgs').split(",") : [],
+        focused_repos: core.getInput('focused_repos').trim().length > 0 ? core.getInput('focused_repos').split(",") : [],
+        excluded_repos: core.getInput('excluded_repos').trim().length > 0 ? core.getInput('excluded_repos').split(",") : [],
     };
     for (const input of requiredInputs) {
         const workflowValue = core.getInput(input.name, { required: true });
