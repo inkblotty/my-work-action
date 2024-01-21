@@ -16,11 +16,10 @@ export const makeValidatedInput = (GH_TOKEN: string) => {
         owner: '',
         repo: '',
         queried_repos: '',
-        secondary_prs_label: '',
         timespan: parseInt(core.getInput('timespan') || '7'),
         usernames: '',
     };
-    const requiredInputs = ["owner", "repo", "queried_repos", "secondary_prs_label", "usernames"];
+    const requiredInputs = ["owner", "repo", "queried_repos", "usernames"];
     for (const inputName of requiredInputs) {
         const workflowValue = core.getInput(inputName, { required: true });
         if (!workflowValue) {

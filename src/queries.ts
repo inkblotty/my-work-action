@@ -107,14 +107,14 @@ fragment repo on Repository {
     }
   }
 `;
-export const getAllWorkForRepository = async (requestOwner: string, repoName: string, username: string, sinceIso: string, secondaryPRsLabel: string): Promise<{ [key: string]: QueryGroup }> => {
+export const getAllWorkForRepository = async (requestOwner: string, repoName: string, username: string, sinceIso: string): Promise<{ [key: string]: QueryGroup }> => {
     const { repository, prsCreated, prReviewsAndCommits } = await graphql(repositoryQuery, {
         username,
         owner: requestOwner,
         repo: repoName,
         sinceIso,
         prsCreatedQuery: `repo:${requestOwner}/${repoName} is:pr created:>=${sinceIso} author:${username}`,
-        prContributionsQuery: `repo:${requestOwner}/${repoName} is:pr created:>=${sinceIso} -author:${username} label:${secondaryPRsLabel}`,
+        prContributionsQuery: `repo:${requestOwner}/${repoName} is:pr created:>=${sinceIso} -author:${username} involves:${username}`,
         headers: {
             authorization: `token ${GH_TOKEN}`
         },
