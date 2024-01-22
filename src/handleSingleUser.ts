@@ -1,46 +1,48 @@
 import { InputFields, OutputGroupGroup, QueryGroup } from "./shared.types";
 import handlePRGroups from "./groupPRs";
-import { getAllWorkForRepository } from "./queries";
+import { getAllWork } from "./queries";
 import makeGroupsIntoMarkdown from "./makeGroupsIntoMarkdown";
 import openBranch from "./openBranch";
 import commitToBranch from "./commitToBranch";
 import openPR from "./openPR";
 import { createPRBodyText } from "./createPRContent";
 import handleIssueGroups from "./groupIssues";
+import handleDiscussionGroups from "./groupDiscussions";
 import { sleep } from './shared';
 
 async function handleSingleUser(inputFields: InputFields, username: string, startDate: Date) {
     const startDateIso = startDate.toISOString();
-    
-    const reposList = inputFields.queried_repos.split(',');
-    const discussionComments: QueryGroup[] = [];
-    const discussionsCreated: QueryGroup[] = [];
-    const issuesCreated: QueryGroup[] = [];
-    const issueComments: QueryGroup[] = [];
-    const prComments: QueryGroup[] = [];
-    const prCommits: QueryGroup[] = [];
-    const prsCreated: QueryGroup[] = [];
 
-    for (const repo of reposList) {
-        const [requestOwner, repoName] = repo.includes('/') ? repo.split('/') : [inputFields.owner, repo];
-        // query all the things
-        const repoData = await getAllWorkForRepository(requestOwner, repoName, username, startDateIso, inputFields.secondary_prs_label);
+    const workData: { [key: string]: QueryGroup }[] = []
+    if (inputFields.focused_orgs.length === 0) {
+        // Query global activity
+        const globalData = await getAllWork(null, username, startDateIso, inputFields.excluded_repos, inputFields.focused_repos);
+        workData.push(globalData);
         await sleep(1000);
-        discussionComments.push(repoData.discussionComments);
-        discussionsCreated.push(repoData.discussionsCreated);
-        issuesCreated.push(repoData.issuesCreated);
-        issueComments.push(repoData.issueComments);
-        prComments.push(repoData.prComments);
-        prCommits.push(repoData.prCommits);
-        prsCreated.push(repoData.prsCreated);
+    } else {
+        // Query activity per each org
+        for (const org of inputFields.focused_orgs) {
+            const orgData = await getAllWork(org, username, startDateIso, inputFields.excluded_repos, inputFields.focused_repos);
+            workData.push(orgData);
+            await sleep(1000);
+        }
     }
+
+    const discussionComments = workData.flatMap((data) => data.discussionComments);
+    const discussionsCreated = workData.flatMap((data) => data.discussionsCreated);
+    const issuesCreated = workData.flatMap((data) => data.issuesCreated);
+    const issueComments = workData.flatMap((data) => data.issueComments);
+    const prComments = workData.flatMap((data) => data.prComments);
+    const prCommits = workData.flatMap((data) => data.prCommits);
+    const prsCreated = workData.flatMap((data) => data.prsCreated);
 
     // group all the things
     const prGroups = handlePRGroups(prsCreated, prComments, prCommits);
     const issueGroups = handleIssueGroups(issuesCreated, issueComments);
+    const discussionsGroups = handleDiscussionGroups(discussionsCreated, discussionComments);
 
     // format the groups into markdown
-    const documentBody = makeGroupsIntoMarkdown([prGroups, issueGroups], username, startDate);
+    const documentBody = makeGroupsIntoMarkdown([prGroups, issueGroups, discussionsGroups], username, startDate);
 
     // create a branch
     const { ref } = await openBranch(inputFields, username);

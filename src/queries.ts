@@ -1,12 +1,79 @@
 import { graphql } from "@octokit/graphql";
-import { filterCreatedThingByAuthorAndCreation, filterCommitsFromOtherUserOnPR, filterCreatedThingByCreation } from './queryFilters';
+import { filterCreatedThingByAuthorAndCreation, filterItemsByRepo } from './queryFilters';
 import { QueryGroup, QueryType } from './shared.types';
 
 const GH_TOKEN = process.env.GH_TOKEN;
 const repositoryQuery = `\
-query getUserWork($username:String!, $owner:String!, $repo:String!, $sinceIso: DateTime!, $prsCreatedQuery:String!, $prContributionsQuery:String!) {
-  repository(owner: $owner, name: $repo) {
-      ...repo
+query getUserWork($username:String!, $issuesCreatedQuery:String!, $issuesInvolvedQuery:String!, $discussionsCreatedQuery:String!, $discussionsInvolvedQuery:String!, $prsCreatedQuery:String!, $prContributionsQuery:String!) {
+  issuesCreated:search(type: ISSUE, query: $issuesCreatedQuery, first: 20) {
+    nodes {
+      ... on Issue {
+        title
+        createdAt
+        url
+        repository {
+          nameWithOwner
+        }
+      }
+    }
+  }
+  issuesComments:search(type: ISSUE, query: $issuesInvolvedQuery, first: 20) {
+    nodes {
+      ... on Issue {
+        title
+        url
+        comments(last:30) {
+          nodes {
+            createdAt
+            author {
+              login
+            }
+            url
+          }
+        }
+        repository {
+          nameWithOwner
+        }
+      }
+    }
+  }
+
+  discussionsCreated:search(type: DISCUSSION, query: $discussionsCreatedQuery, first: 20) {
+    nodes {
+      ... on Discussion {
+        author {
+          login
+        }
+        title
+        createdAt
+        number
+        url
+        repository {
+          nameWithOwner
+        }
+      }
+    }
+  }
+  discussionComments:search(type: DISCUSSION, query: $discussionsInvolvedQuery, first: 20) {
+    nodes {
+      ... on Discussion {
+        title
+        url
+        comments(last:30) {
+          nodes {
+              author {
+              login
+            }
+            bodyText
+            createdAt
+            url
+          }
+        }
+        repository {
+          nameWithOwner
+        }
+      }
+    }
   }
   prsCreated:search(type: ISSUE, query: $prsCreatedQuery, first: 20) {
     edges {
@@ -15,6 +82,9 @@ query getUserWork($username:String!, $owner:String!, $repo:String!, $sinceIso: D
           title
           createdAt
           url
+          repository {
+            nameWithOwner
+          }
         }
       }
     }
@@ -26,14 +96,18 @@ query getUserWork($username:String!, $owner:String!, $repo:String!, $sinceIso: D
           createdAt
           title
           url
+          repository {
+            nameWithOwner
+          }
           author {
             login
           }
-          commits(first:10) {
+          commits(last:10) {
             nodes {
               commit {
                 url
                 pushedDate
+                committedDate
                 author {
                   user {
                     login
@@ -44,7 +118,7 @@ query getUserWork($username:String!, $owner:String!, $repo:String!, $sinceIso: D
           }
           reviews(first: 10, author:$username) {
             nodes {
-              comments(first: 20) {
+              comments(last: 20) {
                 nodes {
                   createdAt
                   url
@@ -57,123 +131,90 @@ query getUserWork($username:String!, $owner:String!, $repo:String!, $sinceIso: D
     }
   }
 }
-
-fragment repo on Repository {
-    discussions(last: 30, orderBy: { field:CREATED_AT, direction: DESC }) {
-      nodes {
-        author {
-          login
-        }
-        createdAt
-        number
-        url
-      }
-    }
-    discussionComments:discussions(last: 50, orderBy: { field:UPDATED_AT, direction: DESC }) {
-      nodes {
-        comments(last:30) {
-          nodes {
-              author {
-              login
-            }
-            bodyText
-            createdAt
-            url
-          }
-        }
-      }
-    }
-    issues(last: 20, filterBy: {createdBy: $username, since: $sinceIso}, orderBy:{ field: CREATED_AT, direction:DESC }) {
-      nodes {
-        createdAt
-        title
-        url
-      }
-    }
-    issueComments:issues(last:50, filterBy:{since:$sinceIso}) {
-      nodes {
-        title
-        url
-        comments(last:30) {
-          nodes {
-            createdAt
-            author {
-              login
-            }
-            url
-          }
-        }
-      }
-    }
-  }
 `;
-export const getAllWorkForRepository = async (requestOwner: string, repoName: string, username: string, sinceIso: string, secondaryPRsLabel: string): Promise<{ [key: string]: QueryGroup }> => {
-    const { repository, prsCreated, prReviewsAndCommits } = await graphql(repositoryQuery, {
-        username,
-        owner: requestOwner,
-        repo: repoName,
-        sinceIso,
-        prsCreatedQuery: `repo:${requestOwner}/${repoName} is:pr created:>=${sinceIso} author:${username}`,
-        prContributionsQuery: `repo:${requestOwner}/${repoName} is:pr created:>=${sinceIso} -author:${username} label:${secondaryPRsLabel}`,
-        headers: {
-            authorization: `token ${GH_TOKEN}`
-        },
-    });
-    console.log('query input', '\nsince iso:', sinceIso, '\nrepo', repoName, '\nowner', requestOwner)
+export const getAllWork = async (org: string | null, username: string, sinceIso: string, excluded_repos: string[], focused_repos: string[]): Promise<{ [key: string]: QueryGroup }> => {
+  // TODO: add pagination
+  // TODO: add issues closed & prs merged
+  // TODO: add pr reviews (without comments)
+  const orgFilter = org ? `org:${org}` : ``;
+  const createdBaseQuery = `${orgFilter} created:>=${sinceIso}`;
+  const involvedBaseQuery = `${orgFilter} updated:>=${sinceIso}`;
+  console.log('query input', 'since iso:', sinceIso, 'username', username, 'org', org)
 
-    const flattenedIssueComments = repository.issueComments.nodes.reduce((arr, { title, url, comments: { nodes }}) => {
+  const { issuesCreated, issuesComments, discussionsCreated, discussionComments, prsCreated, prReviewsAndCommits } = await graphql(repositoryQuery, {
+      username,
+      issuesCreatedQuery: `${createdBaseQuery} is:issue author:${username}`,
+      issuesInvolvedQuery: `${involvedBaseQuery} is:issue involves:${username}`,
+      discussionsCreatedQuery: `${createdBaseQuery} author:${username}`,
+      discussionsInvolvedQuery: `${involvedBaseQuery} involves:${username}`,
+      prsCreatedQuery: `${createdBaseQuery} is:pr author:${username}`,
+      prContributionsQuery: `${involvedBaseQuery} is:pr involves:${username} -author:${username}`,
+      headers: {
+          authorization: `token ${GH_TOKEN}`
+      },
+    });
+
+    // ===
+    // Filter results by excluded_repos & focused_repos
+    issuesCreated.nodes = filterItemsByRepo(issuesCreated.nodes, excluded_repos, focused_repos)
+    issuesComments.nodes = filterItemsByRepo(issuesComments.nodes, excluded_repos, focused_repos)
+    discussionsCreated.nodes = filterItemsByRepo(discussionsCreated.nodes, excluded_repos, focused_repos)
+    discussionComments.nodes = filterItemsByRepo(discussionComments.nodes, excluded_repos, focused_repos)
+    prsCreated.edges = filterItemsByRepo(prsCreated.edges.map(item => item.node), excluded_repos, focused_repos).map(item => ({ node: item }))
+    prReviewsAndCommits.edges = filterItemsByRepo(prReviewsAndCommits.edges.map(item => item.node), excluded_repos, focused_repos).map(item => ({ node: item }))
+    // ===
+
+    const flattenedIssueComments = issuesComments.nodes.reduce((arr, { title, url, repository, comments: { nodes } }) => {
       return [...arr, ...nodes.map(comment => ({ ...comment, issue: { title, url }}))];
     }, []);
-    const flattenedDiscussionComments = repository.discussionComments.nodes.reduce((arr, { comments: { nodes }}) => {
-      return [...arr, ...nodes];
+    const flattenedDiscussionComments = discussionComments.nodes.reduce((arr, { title, url, comments: { nodes }}) => {
+      return [...arr, ...nodes.map(comment => ({ ...comment, discussion: { title, url } }))];
     }, []);
     const flattenedPRCommits = prReviewsAndCommits.edges.reduce((arr, { node }) => {
       const commitNodes = node.commits.nodes;
-      return [...arr, ...commitNodes.map(commitNode => ({ ...commitNode, pullRequest: { author: node.author } }))]
-    }, []);
-    const flattenedPRComments = prReviewsAndCommits.edges.map(edge => edge.node.reviews.nodes.map(node => node.comments.nodes)).flat().flat();
 
-    const commitsToOtherPRs = filterCommitsFromOtherUserOnPR(username, flattenedPRCommits);
+      return [...arr, ...commitNodes.map(commitNode => ({ ...commitNode.commit, pullRequest: { author: node.author, title: node.title, url: node.url } }))]
+    }, []);
+    const flattenedPRComments = prReviewsAndCommits.edges.reduce((arr, { node }) => {
+      const commentsNodes = node.reviews.nodes.map(review => review.comments.nodes).flat();
+
+      return [...arr, ...commentsNodes.map(commentNode => ({ ...commentNode, pullRequest: { author: node.author, title: node.title, url: node.url } }))]
+    }, []);
+
+  const commitsToOtherPRs = filterCreatedThingByAuthorAndCreation(flattenedPRCommits, username, sinceIso);
 
     const createdPRs = prsCreated.edges.map(edge => edge.node);
-    const createdIssues = filterCreatedThingByCreation(repository.issues.nodes, sinceIso);
+    const createdIssues = issuesCreated.nodes;
     const issueComments = filterCreatedThingByAuthorAndCreation(flattenedIssueComments, username, sinceIso);
-    const createdDiscussions = filterCreatedThingByAuthorAndCreation(repository.discussions.nodes, username, sinceIso);
+    const createdDiscussions = discussionsCreated.nodes;
     const commentsOnDiscussions = filterCreatedThingByAuthorAndCreation(flattenedDiscussionComments, username, sinceIso);
 
     return {
         discussionsCreated: {
-            repo: repoName,
             data: createdDiscussions,
             type: QueryType['discussion-created'],
         },
         discussionComments: {
-            repo: repoName,
             data: commentsOnDiscussions,
             type: QueryType['discussion-comment-created']
         },
         issuesCreated: {
-            repo: repoName,
             data: createdIssues,
             type: QueryType['issue-created']
         },
         issueComments: {
-            repo: repoName,
             data: issueComments,
             type: QueryType['issue-comment-created'],
         },
         prsCreated: {
-            repo: repoName,
             data: createdPRs,
             type: QueryType['pr-created'],
         },
         prCommits: {
-            repo: repoName,
             data: commitsToOtherPRs,
             type: QueryType['pr-commit']
         },
         prComments: {
-            repo: repoName,
             data: flattenedPRComments,
             type: QueryType['pr-comment-created']
         },
