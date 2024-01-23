@@ -1,10 +1,10 @@
 import { graphql } from "@octokit/graphql";
-import { filterCreatedThingByAuthorAndCreation, filterCommitsFromOtherUserOnPR, filterCreatedThingByCreation, getEpicsForPRs, getEpicsForIssues, addEpicsToItems } from './queryFilters';
+import { filterCreatedThingByAuthorAndCreation, filterCommitsFromOtherUserOnPR, filterCreatedThingByCreation, getProjectItemsForPRs, getProjectItemsForIssues, addProjectItemsToItems } from './queryFilters';
 import { QueryGroup, QueryType } from './shared.types';
 
 const GH_TOKEN = process.env.GH_TOKEN;
 const repositoryQuery = `\
-query getUserWork($username:String!, $owner:String!, $repo:String!, $sinceIso: DateTime!, $prsCreatedQuery:String!, $prContributionsQuery:String!) {
+query getUserWork($username:String!, $owner:String!, $repo:String!, $sinceIso: DateTime!, $prsCreatedQuery:String!, $prContributionsQuery:String!, $addProjectFields:Boolean = false, $projectField:String = "") {
   repository(owner: $owner, name: $repo) {
       ...repo
   }
@@ -24,7 +24,7 @@ query getUserWork($username:String!, $owner:String!, $repo:String!, $sinceIso: D
                       project {
                         title
                       }
-                      fieldValueByName(name: "Epic") {
+                      fieldValueByName(name: $projectField) @include(if: $addProjectFields) {
                         ... on ProjectV2ItemFieldSingleSelectValue {
                           name
                         }
@@ -58,7 +58,7 @@ query getUserWork($username:String!, $owner:String!, $repo:String!, $sinceIso: D
                       project {
                         title
                       }
-                      fieldValueByName(name: "Epic") {
+                      fieldValueByName(name: $projectField) @include(if: $addProjectFields) {
                         ... on ProjectV2ItemFieldSingleSelectValue {
                           name
                         }
@@ -134,7 +134,7 @@ fragment repo on Repository {
               project {
                 title
               }
-              fieldValueByName(name: "Epic") {
+              fieldValueByName(name: $projectField) @include(if: $addProjectFields) {
                 ... on ProjectV2ItemFieldSingleSelectValue {
                   name
                 }
@@ -161,7 +161,9 @@ fragment repo on Repository {
     }
   }
 `;
-export const getAllWorkForRepository = async (requestOwner: string, repoName: string, username: string, sinceIso: string): Promise<{ [key: string]: QueryGroup }> => {
+export const getAllWorkForRepository = async (requestOwner: string, repoName: string, username: string, sinceIso: string, projectField?: string): Promise<{ [key: string]: QueryGroup }> => {
+    const projectFieldVariables = projectField ? { addProjectFields: true, projectField } : {};
+    console.log("[BR] projectFieldVariables", projectFieldVariables)
     const { repository, prsCreated, prReviewsAndCommits } = await graphql(repositoryQuery, {
         username,
         owner: requestOwner,
@@ -172,6 +174,7 @@ export const getAllWorkForRepository = async (requestOwner: string, repoName: st
         headers: {
             authorization: `token ${GH_TOKEN}`
         },
+        ...projectFieldVariables
     });
     console.log('query input', '\nsince iso:', sinceIso, '\nrepo', repoName, '\nowner', requestOwner)
 
@@ -195,12 +198,12 @@ export const getAllWorkForRepository = async (requestOwner: string, repoName: st
     const createdDiscussions = filterCreatedThingByAuthorAndCreation(repository.discussions.nodes, username, sinceIso);
     const commentsOnDiscussions = filterCreatedThingByAuthorAndCreation(flattenedDiscussionComments, username, sinceIso);
 
-    const epicsForPRs = getEpicsForPRs(createdPRs, prReviewsAndCommits.edges.map(edge => edge.node));
-    const epicsForIssues = getEpicsForIssues(repository.issues.nodes);
+    const projectItemsForPRs = getProjectItemsForPRs(createdPRs, prReviewsAndCommits.edges.map(edge => edge.node));
+    const projectItemsForIssues = getProjectItemsForIssues(repository.issues.nodes);
 
-    const issuesCreatedWithEpics = addEpicsToItems(createdIssues, epicsForIssues);
-    const issueCommentsWithEpics = addEpicsToItems(issueComments, epicsForIssues);
-    const createdPRsWithEpics = addEpicsToItems(createdPRs, epicsForPRs);
+    const issuesCreatedWithProjectItems = addProjectItemsToItems(createdIssues, projectItemsForIssues);
+    const issueCommentsWithProjectItems = addProjectItemsToItems(issueComments, projectItemsForIssues);
+    const createdPRsWithProjectItems = addProjectItemsToItems(createdPRs, projectItemsForPRs);
 
     return {
         discussionsCreated: {
@@ -215,17 +218,17 @@ export const getAllWorkForRepository = async (requestOwner: string, repoName: st
         },
         issuesCreated: {
             repo: repoName,
-            data: issuesCreatedWithEpics,
+            data: issuesCreatedWithProjectItems,
             type: QueryType['issue-created']
         },
         issueComments: {
             repo: repoName,
-            data: issueCommentsWithEpics,
+            data: issueCommentsWithProjectItems,
             type: QueryType['issue-comment-created'],
         },
         prsCreated: {
             repo: repoName,
-            data: createdPRsWithEpics,
+            data: createdPRsWithProjectItems,
             type: QueryType['pr-created'],
         },
         prCommits: {

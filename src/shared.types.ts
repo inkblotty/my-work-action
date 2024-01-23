@@ -1,4 +1,4 @@
-import { EpicForIssueOrPR } from "./queryFilters";
+import { ProjectItemForIssueOrPR } from "./queryFilters";
 
 export enum QueryType {
     'commit',
@@ -23,16 +23,20 @@ export interface QueryGroup {
     type: QueryType;
 }
 
+export interface Artifact {
+    title: string;
+    url: string;
+    projectItems: ProjectItemForIssueOrPR[];   
+}
+
+export interface GroupData {
+    groupTitle: string;
+    itemType: string;
+    artifacts: Artifact[];
+}
+
 export interface OutputGroup {
-    [repoOrEventString: string]: {
-        groupTitle: string;
-        itemType: string;
-        artifacts: {
-            title: string;
-            url: string;
-            epics: EpicForIssueOrPR[];
-        }[];
-    };
+    [repoOrEventString: string]: GroupData;
 }
 export interface OutputGroupGroup {
     primary: OutputGroup;
@@ -46,6 +50,7 @@ export interface InputFields {
     repo: string;
     timespan: number;
     usernames: string;
+    project_field: string;
 }
 
 type WorkItemType = 'pull-request' | 'discussion' | 'issue' | 'review' | 'commit' | 'comment';

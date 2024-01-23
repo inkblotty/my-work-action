@@ -17,6 +17,9 @@ inputs:
   usernames:
     description: "Your user handle, or your list of teammates, comma-separated."
     required: true
+  project_field:
+    description: "A project field to display for issues and pull requests"
+    required: false
 runs:
   using: "node16"
   main: "dist/index.js"

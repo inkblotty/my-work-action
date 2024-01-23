@@ -1,11 +1,12 @@
 import { formatDate } from "./shared";
-import { OutputGroupGroup } from "./shared.types";
+import { Artifact, GroupData, OutputGroupGroup } from "./shared.types";
 
 const noWorkMessage = "No work items";
 const makeGroupsIntoMarkdown = (
   groupGroups: OutputGroupGroup[],
   username: string,
-  startDate: Date
+  startDate: Date,
+  projectItem?: string,
 ): string => {
   const now = new Date();
   const markdownBodyArr = [
@@ -23,51 +24,9 @@ const makeGroupsIntoMarkdown = (
   const unknownArr = ["## Unknown Work\n\n"];
 
   for (const groups of groupGroups) {
-    for (const primaryVal of Object.values(groups.primary)) {
-      primaryArr.push(`### ${primaryVal.groupTitle}\n`);
-      if (primaryVal.itemType === "PR" || primaryVal.itemType === "Issue") {
-        primaryArr.push(`| ${primaryVal.itemType} | Epic (Project) |\n| ------------- | ------------- |\n`)
-      }
-
-      for (const lineItem of primaryVal.artifacts) {
-        const epics = lineItem.epics ? lineItem.epics.map((epic) => `\`${epic.epicName}\` (${epic.projectName})`).join(", ") : "";
-        if (primaryVal.itemType === "PR" || primaryVal.itemType === "Issue") {
-          primaryArr.push(`| [${lineItem.title}](${lineItem.url}) | ${epics} |\n`);
-        } else {
-          primaryArr.push(`- [${lineItem.title}](${lineItem.url})\n`);
-        }
-      }
-    }
-
-    for (const secondaryVal of Object.values(groups.secondary)) {
-      secondaryArr.push(`### ${secondaryVal.groupTitle}\n`);
-      if (secondaryVal.itemType === "PR" || secondaryVal.itemType === "Issue") {
-        secondaryArr.push(`| ${secondaryVal.itemType} | Epic (Project) |\n| ------------- | ------------- |\n`)
-      }
-      for (const lineItem of secondaryVal.artifacts) {
-        const epics = lineItem.epics ? lineItem.epics.map((epic) => `\`${epic.epicName}\` (${epic.projectName})`).join(", ") : "";
-        if (secondaryVal.itemType === "PR" || secondaryVal.itemType === "Issue") {
-          secondaryArr.push(`| [${lineItem.title}](${lineItem.url}) | ${epics} |\n`);
-        } else {
-          secondaryArr.push(`- [${lineItem.title}](${lineItem.url})\n`);
-        }
-      }
-    }
-
-    for (const unknownVal of Object.values(groups.unknown)) {
-      unknownArr.push(`### ${unknownVal.groupTitle}\n`);
-      if (unknownVal.itemType === "PR" || unknownVal.itemType === "Issue") {
-        unknownArr.push(`| ${unknownVal.itemType} | Epic (Project) |\n| ------------- | ------------- |\n`)
-      }
-      for (const lineItem of unknownVal.artifacts) {
-        const epics = lineItem.epics ? lineItem.epics.map((epic) => `\`${epic.epicName}\` (${epic.projectName})`).join(", ") : "";
-        if (unknownVal.itemType === "PR" || unknownVal.itemType === "Issue") {
-          unknownArr.push(`| [${lineItem.title}](${lineItem.url}) | ${epics} |\n`);
-        } else {
-          unknownArr.push(`- [${lineItem.title}](${lineItem.url})\n`);
-        }
-      }
-    }
+    primaryArr.push(...markdownLinesFromGroup(Object.values(groups.primary), projectItem));
+    secondaryArr.push(...markdownLinesFromGroup(Object.values(groups.secondary), projectItem));
+    unknownArr.push(...markdownLinesFromGroup(Object.values(groups.unknown), projectItem));
   }
 
   if (primaryArr.length === 1) {
@@ -95,4 +54,46 @@ const makeGroupsIntoMarkdown = (
 
   return markdownBodyArr.join("");
 };
+
+const markdownLinesFromGroup = (groups: GroupData[], projectItem?: string): string[] => {
+  const lines = []
+
+  for (const item of groups) {
+    lines.push(...markdownSectionHeader(item, projectItem));
+    lines.push(...markdownSectionContent(item.artifacts, item.itemType, projectItem));
+  }
+
+  return lines;
+}
+
+const markdownSectionContent = (artifacts: Artifact[], itemType: string, projectItem?: string): string[] => {
+  const lines = []
+
+  for (const lineItem of artifacts) {
+    if (projectItem) {
+      const projectItems = lineItem.projectItems ? lineItem.projectItems.map((projectItem) => `\`${projectItem.projectItemName}\` (${projectItem.projectName})`).join(", ") : "";
+      if (itemType === "PR" || itemType === "Issue") {
+        lines.push(`| [${lineItem.title}](${lineItem.url}) | ${projectItems} |\n`);
+      } else {
+        lines.push(`- [${lineItem.title}](${lineItem.url})\n`);
+      }
+    } else {
+      lines.push(`- [${lineItem.title}](${lineItem.url})\n`);
+    }
+  }
+
+  return lines;
+}
+
+const markdownSectionHeader = (item: GroupData, projectItem?: string): string[] => {
+  const lines = []
+
+  lines.push(`### ${item.groupTitle}\n`);
+  if (projectItem && (item.itemType === "PR" || item.itemType === "Issue")) {
+    lines.push(`| ${item.itemType} | ${projectItem} (Project) |\n| ------------- | ------------- |\n`)
+  }
+  
+  return lines;
+}
+
 export default makeGroupsIntoMarkdown;

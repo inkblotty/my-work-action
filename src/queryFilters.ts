@@ -16,7 +16,7 @@ interface CreatedThing {
     user?: {
         login: string;
     };
-    epics?: EpicForIssueOrPR[];
+    projectItems?: ProjectItemForIssueOrPR[];
 }
 export const filterCreatedThingByCreation = (list: CreatedThing[], sinceIso: string) => {
     return list.filter(thing => {
@@ -72,80 +72,80 @@ export const filterCommitsFromOtherUserOnPR = (currentUser: String, commits) => 
   return filterCommitsByCurrentUser;
 }
 
-export type EpicForIssueOrPR = {
+export type ProjectItemForIssueOrPR = {
     projectName: string;
-    epicName: string;
+    projectItemName: string;
 }
 
-export type EpicsForIssuesOrPRs = Record<string, EpicForIssueOrPR[]>;
+export type ProjectItemsForIssuesOrPRs = Record<string, ProjectItemForIssueOrPR[]>;
 
-export const getEpicsForPRs = (prs, prReviewsAndCommits) => {
-  const epicsForPRs: EpicsForIssuesOrPRs = getEpicsFromPRs(prs);
-  const epicsForPRCommits: EpicsForIssuesOrPRs = getEpicsFromPRs(prReviewsAndCommits);
+export const getProjectItemsForPRs = (prs, prReviewsAndCommits) => {
+  const projectItemsForPRs: ProjectItemsForIssuesOrPRs = getProjectItemsFromPRs(prs);
+  const projectItemsForPRCommits: ProjectItemsForIssuesOrPRs = getProjectItemsFromPRs(prReviewsAndCommits);
 
-  const allEpicsForPRs = {};
-  for (const prUrl in epicsForPRs) {
-    allEpicsForPRs[prUrl] = epicsForPRs[prUrl];
+  const allProjectItemsForPRs = {};
+  for (const prUrl in projectItemsForPRs) {
+    allProjectItemsForPRs[prUrl] = projectItemsForPRs[prUrl];
   }
-  for (const prUrl in epicsForPRCommits) {
-    if (!allEpicsForPRs.hasOwnProperty(prUrl)) {
-      allEpicsForPRs[prUrl] = epicsForPRCommits[prUrl];
+  for (const prUrl in projectItemsForPRCommits) {
+    if (!allProjectItemsForPRs.hasOwnProperty(prUrl)) {
+      allProjectItemsForPRs[prUrl] = projectItemsForPRCommits[prUrl];
     } else {
-        allEpicsForPRs[prUrl] = allEpicsForPRs[prUrl].concat(epicsForPRCommits[prUrl]);
+        allProjectItemsForPRs[prUrl] = allProjectItemsForPRs[prUrl].concat(projectItemsForPRCommits[prUrl]);
     }
   }
-  return allEpicsForPRs;
+  return allProjectItemsForPRs;
 }
 
-export const getEpicsForIssues = (issues) => {
-    const epicsForIssues: Record<string, EpicForIssueOrPR[]> = {};
+export const getProjectItemsForIssues = (issues) => {
+    const projectItemsForIssues: Record<string, ProjectItemForIssueOrPR[]> = {};
 
     for (const issue of issues) {
         for (const projectItem of issue.projectItems.edges) {
             const projectName = projectItem.node.project.title;
-            const epicName = projectItem.node.fieldValueByName && projectItem.node.fieldValueByName.name;
-            if (projectName && epicName) {
-                if (!epicsForIssues.hasOwnProperty(issue.url)) {
-                    epicsForIssues[issue.url] = [];
+            const projectItemName = projectItem.node.fieldValueByName && projectItem.node.fieldValueByName.name;
+            if (projectName && projectItemName) {
+                if (!projectItemsForIssues.hasOwnProperty(issue.url)) {
+                    projectItemsForIssues[issue.url] = [];
                 }
-                epicsForIssues[issue.url].push({ projectName, epicName });
+                projectItemsForIssues[issue.url].push({ projectName, projectItemName });
             }
         }
     }
 
-    return epicsForIssues;
+    return projectItemsForIssues;
 }
 
-const getEpicsFromPRs = (prs) => {
-    const epicsForPRs: Record<string, EpicForIssueOrPR[]> = {};
+const getProjectItemsFromPRs = (prs) => {
+    const projectItemsForPRs: Record<string, ProjectItemForIssueOrPR[]> = {};
 
     for (const pr of prs) {
       for (const closingReference of pr.closingIssuesReferences.edges) {
           for (const projectItem of closingReference.node.projectItems.edges) {
               const projectName = projectItem.node.project.title;
-              const epicName = projectItem.node.fieldValueByName && projectItem.node.fieldValueByName.name;
-              if (projectName && epicName) {
-                  if (!epicsForPRs.hasOwnProperty(pr.url)) {
-                      epicsForPRs[pr.url] = [];
+              const projectItemName = projectItem.node.fieldValueByName && projectItem.node.fieldValueByName.name;
+              if (projectName && projectItemName) {
+                  if (!projectItemsForPRs.hasOwnProperty(pr.url)) {
+                      projectItemsForPRs[pr.url] = [];
                   }
-                  epicsForPRs[pr.url].push({ projectName, epicName });
+                  projectItemsForPRs[pr.url].push({ projectName, projectItemName });
               }
           }
       }
     }
 
-    return epicsForPRs;
+    return projectItemsForPRs;
 }
 
- export const addEpicsToItems = (items: { url?: string }[], epics: EpicsForIssuesOrPRs) => {
+ export const addProjectItemsToItems = (items: { url?: string }[], projectItems: ProjectItemsForIssuesOrPRs) => {
     return items.map(item => {
-        const epicsForItem = epics[item.url];
-        if (!epicsForItem) {
+        const projectItemsForItem = projectItems[item.url];
+        if (!projectItemsForItem) {
             return item;
         }
         return {
             ...item,
-            epics: epicsForItem
+            projectItems: projectItemsForItem
         }
     })
  }

@@ -26,7 +26,7 @@ const handleIssueGroups = (allIssuesCreated: QueryGroup[], allIssueComments: Que
                 artifacts: data.map(pr => ({
                     title: pr.title,
                     url: pr.url,
-                    epics: pr.epics,
+                    projectItems: pr.projectItems,
                 }))
             }
         }
@@ -57,7 +57,7 @@ const handleIssueGroups = (allIssuesCreated: QueryGroup[], allIssueComments: Que
             finalIssues.secondary[issueUrl].artifacts.push({
                 title: `Comment #${finalIssues.secondary[issueUrl].artifacts.length + 1}`,
                 url: comment.url,
-                epics: [],
+                projectItems: [],
             });
         }
     };

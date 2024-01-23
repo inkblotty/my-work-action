@@ -40,3 +40,6 @@ Number of days to query, with today as the end date. Defaults to 7 days.
 
 - `usernames`
 Your user handle, or your list of teammates, comma-separated.
+
+- `project_field`
+A project field to display for issues and pull requests.

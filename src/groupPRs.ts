@@ -32,7 +32,7 @@ const handlePRGroups = (
         artifacts: data.map((pr) => ({
           title: pr.title,
           url: pr.url,
-          epics: pr.epics,
+          projectItems: pr.projectItems,
         })),
       };
     }
@@ -57,7 +57,7 @@ const handlePRGroups = (
         tempSecondary[prUrl].artifacts.push({
           title: `Commit at ${formatDateTime(new Date(commit.pushedDate))}`,
           url: commit.url,
-          epics: [],
+          projectItems: [],
         });
       }
     }
@@ -99,7 +99,7 @@ const handlePRGroups = (
       finalPRs.secondary[prUrl].artifacts.push({
         title: `#${finalPRs.secondary[prUrl].artifacts.length + 1}`,
         url: comment.url,
-        epics: [],
+        projectItems: [],
       });
     }
   }
