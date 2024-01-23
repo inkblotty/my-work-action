@@ -19,7 +19,7 @@ let mockData: MockData = {};
 describe('groupPRs', () => {
     beforeAll(async () => {
         mockGraphQlFunction.mockResolvedValue(prData);
-        const result = await getAllWorkForRepository('github', 'accessibility', 'inkblotty', '2021-12-01', '');
+        const result = await getAllWorkForRepository('github', 'accessibility', 'inkblotty', '2021-12-01');
         mockData = result;
     });
 
