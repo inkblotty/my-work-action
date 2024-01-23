@@ -21,7 +21,7 @@ const mockData: MockData = {
 describe('groupIssues', () => {
     beforeAll(async () => {
         mockGraphQlFunction.mockResolvedValue(prData);
-        const result = await getAllWorkForRepository('github', 'accessibility', 'inkblotty', '2021-12-01', '');
+        const result = await getAllWorkForRepository('github', 'accessibility', 'inkblotty', '2021-12-01');
         mockData.issueComments = result.issueComments;
         mockData.issuesCreated = result.issuesCreated;
     });

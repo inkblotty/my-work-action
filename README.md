@@ -19,9 +19,7 @@ Use this action as a tool to reflect on where your team member's time is spent. 
 
 ## Limitations
 ### Resource limits
-Currently, due to the architecture of GitHub's API, querying large repos for secondary work may result in timeouts. Using the `secondary_prs_label` helps mitigate this problem.
-
-If the resource limits are still being hit, consider breaking up your workflow into individual users and/or separate grouping of repos.
+If the resource limits are being hit, consider breaking up your workflow into individual users and/or separate grouping of repos.
 
 ## Required Fields
 ### Environment variables
@@ -36,9 +34,6 @@ The repos that should be searched for relevant work, comma-separated.
 
 - `repo`
 The name of the repo where the PR should be created.
-
-- `secondary_prs_label`
-The label to query for PRs that should be counted as secondary work (reviews and commits, but not created).
 
 - `timespan` (optional)
 Number of days to query, with today as the end date. Defaults to 7 days.
