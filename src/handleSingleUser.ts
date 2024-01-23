@@ -42,13 +42,13 @@ async function handleSingleUser(inputFields: InputFields, username: string, star
     // format the groups into markdown
     const documentBody = makeGroupsIntoMarkdown([prGroups, issueGroups], username, startDate, inputFields.project_field);
 
-    // // create a branch
+    // create a branch
     const { ref } = await openBranch(inputFields, username);
 
-    // // commit to branch
+    // commit to branch
     await commitToBranch(inputFields, username, ref.id, ref.target.oid, documentBody);
 
-    // // open a PR
+    // open a PR
     const body = createPRBodyText(startDate, new Date(), username);
 
     return openPR(inputFields, username, ref.name, body);
