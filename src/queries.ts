@@ -4,7 +4,7 @@ import { QueryGroup, QueryType } from './shared.types';
 
 const GH_TOKEN = process.env.GH_TOKEN;
 const repositoryQuery = `\
-query getUserWork($username:String!, $owner:String!, $repo:String!, $sinceIso: DateTime!, $prsCreatedQuery:String!, $prContributionsQuery:String!, $addProjectFields:Boolean = false, $projectField:String = "") {
+query getUserWork($username:String!, $owner:String!, $repo:String!, $sinceIso: DateTime!, $prsCreatedQuery:String!, $prContributionsQuery:String!, $issueCommentsQuery:String!, $discussionCommentsQuery:String!, $addProjectFields:Boolean = false, $projectField:String = "") {
   repository(owner: $owner, name: $repo) {
       ...repo
   }
@@ -96,6 +96,40 @@ query getUserWork($username:String!, $owner:String!, $repo:String!, $sinceIso: D
       }
     }
   }
+  issueComments:search(type: ISSUE, query: $issueCommentsQuery, first: 50) {
+    nodes {
+      ... on Issue {
+        title
+        url
+        comments(last:30) {
+          nodes {
+            createdAt
+            author {
+              login
+            }
+            url
+          }
+        }
+      }
+    }
+  }
+  discussionComments:search(type: DISCUSSION, query: $discussionCommentsQuery, first: 50) {
+    nodes {
+      ... on Discussion {
+        title
+        url
+        comments(last:30) {
+          nodes {
+            createdAt
+            author {
+              login
+            }
+            url
+          }
+        }
+      }
+    }
+  }
 }
 
 fragment repo on Repository {
@@ -107,20 +141,6 @@ fragment repo on Repository {
         createdAt
         number
         url
-      }
-    }
-    discussionComments:discussions(last: 50, orderBy: { field:UPDATED_AT, direction: DESC }) {
-      nodes {
-        comments(last:30) {
-          nodes {
-              author {
-              login
-            }
-            bodyText
-            createdAt
-            url
-          }
-        }
       }
     }
     issues(last: 20, filterBy: {createdBy: $username, since: $sinceIso}, orderBy:{ field: CREATED_AT, direction:DESC }) {
@@ -144,32 +164,19 @@ fragment repo on Repository {
         }
       }
     }
-    issueComments:issues(last:50, filterBy:{since:$sinceIso}) {
-      nodes {
-        title
-        url
-        comments(last:30) {
-          nodes {
-            createdAt
-            author {
-              login
-            }
-            url
-          }
-        }
-      }
-    }
   }
 `;
 export const getAllWorkForRepository = async (requestOwner: string, repoName: string, username: string, sinceIso: string, projectField?: string): Promise<{ [key: string]: QueryGroup }> => {
     const projectFieldVariables = projectField ? { addProjectFields: true, projectField } : {};
-    const { repository, prsCreated, prReviewsAndCommits } = await graphql(repositoryQuery, {
+    const { repository, prsCreated, prReviewsAndCommits, issueComments, discussionComments } = await graphql(repositoryQuery, {
         username,
         owner: requestOwner,
         repo: repoName,
         sinceIso,
         prsCreatedQuery: `repo:${requestOwner}/${repoName} is:pr created:>=${sinceIso} author:${username}`,
         prContributionsQuery: `repo:${requestOwner}/${repoName} is:pr created:>=${sinceIso} -author:${username} involves:${username}`,
+        issueCommentsQuery: `repo:${requestOwner}/${repoName} is:issue commenter:${username} updated:>=${sinceIso} sort:updated-desc`,
+        discussionCommentsQuery: `repo:${requestOwner}/${repoName} is:discussion commenter:${username} updated:>=${sinceIso} sort:updated-desc`,
         headers: {
             authorization: `token ${GH_TOKEN}`
         },
@@ -177,10 +184,10 @@ export const getAllWorkForRepository = async (requestOwner: string, repoName: st
     });
     console.log('query input', '\nsince iso:', sinceIso, '\nrepo', repoName, '\nowner', requestOwner)
 
-    const flattenedIssueComments = repository.issueComments.nodes.reduce((arr, { title, url, comments: { nodes }}) => {
+    const flattenedIssueComments = issueComments.nodes.reduce((arr, { title, url, comments: { nodes }}) => {
       return [...arr, ...nodes.map(comment => ({ ...comment, issue: { title, url }}))];
     }, []);
-    const flattenedDiscussionComments = repository.discussionComments.nodes.reduce((arr, { comments: { nodes }}) => {
+    const flattenedDiscussionComments = discussionComments.nodes.reduce((arr, { comments: { nodes }}) => {
       return [...arr, ...nodes];
     }, []);
     const flattenedPRCommits = prReviewsAndCommits.edges.reduce((arr, { node }) => {
@@ -196,7 +203,7 @@ export const getAllWorkForRepository = async (requestOwner: string, repoName: st
 
     const createdPRs = prsCreated.edges.map(edge => edge.node);
     const createdIssues = filterCreatedThingByCreation(repository.issues.nodes, sinceIso);
-    const issueComments = filterCreatedThingByAuthorAndCreation(flattenedIssueComments, username, sinceIso);
+    const filteredIssueComments = filterCreatedThingByAuthorAndCreation(flattenedIssueComments, username, sinceIso);
     const createdDiscussions = filterCreatedThingByAuthorAndCreation(repository.discussions.nodes, username, sinceIso);
     const commentsOnDiscussions = filterCreatedThingByAuthorAndCreation(flattenedDiscussionComments, username, sinceIso);
 
@@ -204,7 +211,7 @@ export const getAllWorkForRepository = async (requestOwner: string, repoName: st
     const projectItemsForIssues = getProjectItemsForIssues(repository.issues.nodes);
 
     const issuesCreatedWithProjectItems = addProjectItemsToItems(createdIssues, projectItemsForIssues);
-    const issueCommentsWithProjectItems = addProjectItemsToItems(issueComments, projectItemsForIssues);
+    const issueCommentsWithProjectItems = addProjectItemsToItems(filteredIssueComments, projectItemsForIssues);
     const createdPRsWithProjectItems = addProjectItemsToItems(createdPRs, projectItemsForPRs);
 
     return {
