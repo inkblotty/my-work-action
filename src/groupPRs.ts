@@ -28,9 +28,11 @@ const handlePRGroups = (
 
       finalPRs.primary[repoName] = {
         groupTitle: `PRs Created in [${repoName}](${repoUrl})`,
+        itemType: 'PR',
         artifacts: data.map((pr) => ({
           title: pr.title,
           url: pr.url,
+          projectItems: pr.projectItems,
         })),
       };
     }
@@ -47,6 +49,7 @@ const handlePRGroups = (
         if (!tempSecondary[prUrl]) {
           tempSecondary[prUrl] = {
             groupTitle: `Added <data.length> commits to @${prAuthor}'s PR: [${firstPR.title}](${prUrl})`,
+            itemType: 'PRCommit',
             artifacts: [],
           };
         }
@@ -54,6 +57,7 @@ const handlePRGroups = (
         tempSecondary[prUrl].artifacts.push({
           title: `Commit at ${formatDateTime(new Date(commit.pushedDate))}`,
           url: commit.url,
+          projectItems: [],
         });
       }
     }
@@ -88,6 +92,7 @@ const handlePRGroups = (
       if (!finalPRs.secondary[prUrlTrimmed]) {
         finalPRs.secondary[prUrlTrimmed] = {
           groupTitle: `Reviewed and left comments on PR [${prTitle} #${prNumber}](${prUrl}) in ${repoGroup.repo}`,
+          itemType: 'PRReview',
           artifacts: [],
         };
       }
@@ -95,6 +100,7 @@ const handlePRGroups = (
       finalPRs.secondary[prUrlTrimmed].artifacts.push({
         title: `#${finalPRs.secondary[prUrlTrimmed].artifacts.length + 1}`,
         url: comment.url,
+        projectItems: [],
       });
     }
   }

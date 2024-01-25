@@ -22,9 +22,11 @@ const handleIssueGroups = (allIssuesCreated: QueryGroup[], allIssueComments: Que
 
             finalIssues.primary[repoName] = {
                 groupTitle: `Issues Created in [${repoName}](${repoUrl})`,
+                itemType: 'Issue',
                 artifacts: data.map(pr => ({
                     title: pr.title,
                     url: pr.url,
+                    projectItems: pr.projectItems,
                 }))
             }
         }
@@ -47,6 +49,7 @@ const handleIssueGroups = (allIssuesCreated: QueryGroup[], allIssueComments: Que
             if (!finalIssues.secondary[issueUrl]) {
                 finalIssues.secondary[issueUrl] = {
                     groupTitle: `Left comments on issue: [${comment.issue.title}](${issueUrl}) in ${repoGroup.repo}`,
+                    itemType: 'IssueComment',
                     artifacts: [],
                 }
             }
@@ -54,6 +57,7 @@ const handleIssueGroups = (allIssuesCreated: QueryGroup[], allIssueComments: Que
             finalIssues.secondary[issueUrl].artifacts.push({
                 title: `Comment #${finalIssues.secondary[issueUrl].artifacts.length + 1}`,
                 url: comment.url,
+                projectItems: [],
             });
         }
     };

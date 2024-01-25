@@ -1,10 +1,10 @@
 import { graphql } from "@octokit/graphql";
-import { filterCreatedThingByAuthorAndCreation, filterCommitsFromOtherUserOnPR, filterCreatedThingByCreation } from './queryFilters';
+import { filterCreatedThingByAuthorAndCreation, filterCommitsFromOtherUserOnPR, filterCreatedThingByCreation, getProjectItemsForPRs, getProjectItemsForIssues, addProjectItemsToItems } from './queryFilters';
 import { QueryGroup, QueryType } from './shared.types';
 
 const GH_TOKEN = process.env.GH_TOKEN;
 const repositoryQuery = `\
-query getUserWork($username:String!, $owner:String!, $repo:String!, $sinceIso: DateTime!, $prsCreatedQuery:String!, $prContributionsQuery:String!) {
+query getUserWork($username:String!, $owner:String!, $repo:String!, $sinceIso: DateTime!, $prsCreatedQuery:String!, $prContributionsQuery:String!, $addProjectFields:Boolean = false, $projectField:String = "") {
   repository(owner: $owner, name: $repo) {
       ...repo
   }
@@ -15,6 +15,26 @@ query getUserWork($username:String!, $owner:String!, $repo:String!, $sinceIso: D
           title
           createdAt
           url
+          closingIssuesReferences(first: 10) {
+            edges {
+              node {
+                projectItems(first: 10) {
+                  edges {
+                    node {
+                      project {
+                        title
+                      }
+                      fieldValueByName(name: $projectField) @include(if: $addProjectFields) {
+                        ... on ProjectV2ItemFieldSingleSelectValue {
+                          name
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }
@@ -28,6 +48,26 @@ query getUserWork($username:String!, $owner:String!, $repo:String!, $sinceIso: D
           url
           author {
             login
+          }
+          closingIssuesReferences(first: 10) {
+            edges {
+              node {
+                projectItems(first: 10) {
+                  edges {
+                    node {
+                      project {
+                        title
+                      }
+                      fieldValueByName(name: $projectField) @include(if: $addProjectFields) {
+                        ... on ProjectV2ItemFieldSingleSelectValue {
+                          name
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
           commits(first:10) {
             nodes {
@@ -88,6 +128,20 @@ fragment repo on Repository {
         createdAt
         title
         url
+        projectItems(first: 10) {
+          edges {
+            node {
+              project {
+                title
+              }
+              fieldValueByName(name: $projectField) @include(if: $addProjectFields) {
+                ... on ProjectV2ItemFieldSingleSelectValue {
+                  name
+                }
+              }
+            }
+          }
+        }
       }
     }
     issueComments:issues(last:50, filterBy:{since:$sinceIso}) {
@@ -107,7 +161,8 @@ fragment repo on Repository {
     }
   }
 `;
-export const getAllWorkForRepository = async (requestOwner: string, repoName: string, username: string, sinceIso: string): Promise<{ [key: string]: QueryGroup }> => {
+export const getAllWorkForRepository = async (requestOwner: string, repoName: string, username: string, sinceIso: string, projectField?: string): Promise<{ [key: string]: QueryGroup }> => {
+    const projectFieldVariables = projectField ? { addProjectFields: true, projectField } : {};
     const { repository, prsCreated, prReviewsAndCommits } = await graphql(repositoryQuery, {
         username,
         owner: requestOwner,
@@ -118,6 +173,7 @@ export const getAllWorkForRepository = async (requestOwner: string, repoName: st
         headers: {
             authorization: `token ${GH_TOKEN}`
         },
+        ...projectFieldVariables
     });
     console.log('query input', '\nsince iso:', sinceIso, '\nrepo', repoName, '\nowner', requestOwner)
 
@@ -144,6 +200,13 @@ export const getAllWorkForRepository = async (requestOwner: string, repoName: st
     const createdDiscussions = filterCreatedThingByAuthorAndCreation(repository.discussions.nodes, username, sinceIso);
     const commentsOnDiscussions = filterCreatedThingByAuthorAndCreation(flattenedDiscussionComments, username, sinceIso);
 
+    const projectItemsForPRs = getProjectItemsForPRs(createdPRs, prReviewsAndCommits.edges.map(edge => edge.node));
+    const projectItemsForIssues = getProjectItemsForIssues(repository.issues.nodes);
+
+    const issuesCreatedWithProjectItems = addProjectItemsToItems(createdIssues, projectItemsForIssues);
+    const issueCommentsWithProjectItems = addProjectItemsToItems(issueComments, projectItemsForIssues);
+    const createdPRsWithProjectItems = addProjectItemsToItems(createdPRs, projectItemsForPRs);
+
     return {
         discussionsCreated: {
             repo: repoName,
@@ -157,17 +220,17 @@ export const getAllWorkForRepository = async (requestOwner: string, repoName: st
         },
         issuesCreated: {
             repo: repoName,
-            data: createdIssues,
+            data: issuesCreatedWithProjectItems,
             type: QueryType['issue-created']
         },
         issueComments: {
             repo: repoName,
-            data: issueComments,
+            data: issueCommentsWithProjectItems,
             type: QueryType['issue-comment-created'],
         },
         prsCreated: {
             repo: repoName,
-            data: createdPRs,
+            data: createdPRsWithProjectItems,
             type: QueryType['pr-created'],
         },
         prCommits: {

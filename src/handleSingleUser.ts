@@ -24,7 +24,7 @@ async function handleSingleUser(inputFields: InputFields, username: string, star
     for (const repo of reposList) {
         const [requestOwner, repoName] = repo.includes('/') ? repo.split('/') : [inputFields.owner, repo];
         // query all the things
-        const repoData = await getAllWorkForRepository(requestOwner, repoName, username, startDateIso);
+        const repoData = await getAllWorkForRepository(requestOwner, repoName, username, startDateIso, inputFields.project_field);
         await sleep(1000);
         discussionComments.push(repoData.discussionComments);
         discussionsCreated.push(repoData.discussionsCreated);
@@ -40,7 +40,7 @@ async function handleSingleUser(inputFields: InputFields, username: string, star
     const issueGroups = handleIssueGroups(issuesCreated, issueComments);
 
     // format the groups into markdown
-    const documentBody = makeGroupsIntoMarkdown([prGroups, issueGroups], username, startDate);
+    const documentBody = makeGroupsIntoMarkdown([prGroups, issueGroups], username, startDate, inputFields.project_field);
 
     // create a branch
     const { ref } = await openBranch(inputFields, username);
@@ -50,6 +50,7 @@ async function handleSingleUser(inputFields: InputFields, username: string, star
 
     // open a PR
     const body = createPRBodyText(startDate, new Date(), username);
+
     return openPR(inputFields, username, ref.name, body);
 }
 export default handleSingleUser;

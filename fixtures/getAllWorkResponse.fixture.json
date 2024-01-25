@@ -3060,252 +3060,402 @@
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[Story] [Command Palette] Rework Tab completion and Clear button navigation based on #834",
-              "url": "https://github.com/github/accessibility/issues/833"
+              "url": "https://github.com/github/accessibility/issues/833",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[EPIC] [Command Palette] Screen Reader Remediation: Round 1",
-              "url": "https://github.com/github/accessibility/issues/832"
+              "url": "https://github.com/github/accessibility/issues/832",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[Batch] [Dialog] Developer Experience before Upstreaming",
-              "url": "https://github.com/github/accessibility/issues/830"
+              "url": "https://github.com/github/accessibility/issues/830",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[Story] [Dialog] Documentation for Developers on usage",
-              "url": "https://github.com/github/accessibility/issues/829"
+              "url": "https://github.com/github/accessibility/issues/829",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[Story] [Dialog] Linting rules to help guide Developers to use the new Dialog",
-              "url": "https://github.com/github/accessibility/issues/828"
+              "url": "https://github.com/github/accessibility/issues/828",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[Story] Set up Experimental component files in Dotcom for ActionMenu",
-              "url": "https://github.com/github/accessibility/issues/815"
+              "url": "https://github.com/github/accessibility/issues/815",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[SubTask] Autocomplete in Dotcom: update instances in sponsors",
-              "url": "https://github.com/github/accessibility/issues/814"
+              "url": "https://github.com/github/accessibility/issues/814",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[SubTask] Autocomplete in Dotcom: update instances in invitations",
-              "url": "https://github.com/github/accessibility/issues/813"
+              "url": "https://github.com/github/accessibility/issues/813",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[SubTask] Autocomplete in Dotcom: update instances in toggleable_features",
-              "url": "https://github.com/github/accessibility/issues/812"
+              "url": "https://github.com/github/accessibility/issues/812",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[SubTask] Autocomplete in Dotcom: update instances in feature_flags",
-              "url": "https://github.com/github/accessibility/issues/811"
+              "url": "https://github.com/github/accessibility/issues/811",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[SubTask] Autocomplete in Dotcom: update instances in billing_managers",
-              "url": "https://github.com/github/accessibility/issues/810"
+              "url": "https://github.com/github/accessibility/issues/810",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[SubTask] Autocomplete in Dotcom: update instances in stafftools",
-              "url": "https://github.com/github/accessibility/issues/809"
+              "url": "https://github.com/github/accessibility/issues/809",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[Async Meeting] FileTree Audit Refining",
-              "url": "https://github.com/github/accessibility/issues/808"
+              "url": "https://github.com/github/accessibility/issues/808",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[EPIC] Tooltip Maturity",
-              "url": "https://github.com/github/accessibility/issues/807"
+              "url": "https://github.com/github/accessibility/issues/807",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[Story] [Documentation] [Common Pattern] Font Sizes and Supporting Zoom / Resizing (with link in The Hub)",
-              "url": "https://github.com/github/accessibility/issues/804"
+              "url": "https://github.com/github/accessibility/issues/804",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[Deep-dive] Topic: Accessibility Settings: Enabling customization for the right reasons",
-              "url": "https://github.com/github/accessibility/issues/800"
+              "url": "https://github.com/github/accessibility/issues/800",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[Deep-dive] Topic: Making Charts and Graphs Accessible",
-              "url": "https://github.com/github/accessibility/issues/799"
+              "url": "https://github.com/github/accessibility/issues/799",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[Deep-dive] Topic: ATAG: What is it, and how does it overlap with WCAG?",
-              "url": "https://github.com/github/accessibility/issues/798"
+              "url": "https://github.com/github/accessibility/issues/798",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[Story] Create a branch in Dotcom to enable Accessibility team members to update the 5 Autocomplete use cases",
-              "url": "https://github.com/github/accessibility/issues/797"
+              "url": "https://github.com/github/accessibility/issues/797",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[Story] Bump Primer View Components's auto-complete-element version and publish",
-              "url": "https://github.com/github/accessibility/issues/796"
+              "url": "https://github.com/github/accessibility/issues/796",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[Batch] Primer Autocomplete version bump",
-              "url": "https://github.com/github/accessibility/issues/795"
+              "url": "https://github.com/github/accessibility/issues/795",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[Batch] Discussions Validation of our Self-Serve Platform",
-              "url": "https://github.com/github/accessibility/issues/791"
+              "url": "https://github.com/github/accessibility/issues/791",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[Deep-dive] Topic: Page and Navigation transitions, Dynamic Content, and SPAs ",
-              "url": "https://github.com/github/accessibility/issues/790"
+              "url": "https://github.com/github/accessibility/issues/790",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[Story] Add a Last Audit SHA in metadata of Primer components",
-              "url": "https://github.com/github/accessibility/issues/789"
+              "url": "https://github.com/github/accessibility/issues/789",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[Batch] Start the Experimental ActionMenu component in Dotcom",
-              "url": "https://github.com/github/accessibility/issues/783"
+              "url": "https://github.com/github/accessibility/issues/783",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[Deep-dive] Topic: Spreadsheets are not Forms",
-              "url": "https://github.com/github/accessibility/issues/776"
+              "url": "https://github.com/github/accessibility/issues/776",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[Story] [Documentation] [Common Pattern] Managing Focus",
-              "url": "https://github.com/github/accessibility/issues/733"
+              "url": "https://github.com/github/accessibility/issues/733",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[Story] [Documentation] How to Talk about Disability: People-First versus Identity, Impairment, etc.",
-              "url": "https://github.com/github/accessibility/issues/732"
+              "url": "https://github.com/github/accessibility/issues/732",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[Story] [Documentation] Where to find Internal and External (vetted) Accessibility Resources",
-              "url": "https://github.com/github/accessibility/issues/731"
+              "url": "https://github.com/github/accessibility/issues/731",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[EPIC] [Documentation] Primer Accessibility Common Patterns",
-              "url": "https://github.com/github/accessibility/issues/645"
+              "url": "https://github.com/github/accessibility/issues/645",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[EPIC] [Training] Enable all Hubbers to be Accessibility Aware",
-              "url": "https://github.com/github/accessibility/issues/643"
+              "url": "https://github.com/github/accessibility/issues/643",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[Story] Review and Prep Onboarding training from Microsoft resources for new Hubbers (Level 1)",
-              "url": "https://github.com/github/accessibility/issues/642"
+              "url": "https://github.com/github/accessibility/issues/642",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[EPIC] [Documentation] The Basics: Audits, Roles, and How to do Accessibility Work",
-              "url": "https://github.com/github/accessibility/issues/641"
+              "url": "https://github.com/github/accessibility/issues/641",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[EPIC] [Tooling] Axe Scan",
-              "url": "https://github.com/github/accessibility/issues/639"
+              "url": "https://github.com/github/accessibility/issues/639",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[Bug] Focus is lost after Assigning someone to an Issue",
-              "url": "https://github.com/github/accessibility/issues/604"
+              "url": "https://github.com/github/accessibility/issues/604",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[Story] [Documentation] [Common Pattern] Designing a link for everyone",
-              "url": "https://github.com/github/accessibility/issues/587"
+              "url": "https://github.com/github/accessibility/issues/587",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[Chore] Clean up existing documentation and remove extras",
-              "url": "https://github.com/github/accessibility/issues/559"
+              "url": "https://github.com/github/accessibility/issues/559",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[Review Request] Documentation Team: Search Docs functionality",
-              "url": "https://github.com/github/accessibility/issues/524"
+              "url": "https://github.com/github/accessibility/issues/524",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[Story] [Documentation] [Common Pattern] Adding Context to Buttons",
-              "url": "https://github.com/github/accessibility/issues/508"
+              "url": "https://github.com/github/accessibility/issues/508",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[EPIC] [Tracking] Emoji Picker component",
-              "url": "https://github.com/github/accessibility/issues/506"
+              "url": "https://github.com/github/accessibility/issues/506",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[Tracking] Dropdown component",
-              "url": "https://github.com/github/accessibility/issues/505"
+              "url": "https://github.com/github/accessibility/issues/505",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[Tracking] 6 High-Impact Components",
-              "url": "https://github.com/github/accessibility/issues/502"
+              "url": "https://github.com/github/accessibility/issues/502",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[Story] [Documentation] Outline of the 3 Levels of Accessibility Training at GitHub",
-              "url": "https://github.com/github/accessibility/issues/499"
+              "url": "https://github.com/github/accessibility/issues/499",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[Story] [Documentation] Create *How to Set Up your Environment for Accessibility* in The Hub",
-              "url": "https://github.com/github/accessibility/issues/498"
+              "url": "https://github.com/github/accessibility/issues/498",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[Tracking] \"Self-Serve Platform\" grouped by Location",
-              "url": "https://github.com/github/accessibility/issues/496"
+              "url": "https://github.com/github/accessibility/issues/496",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[Story] [Documentation] Create *How to Get Help* documentation in The Hub",
-              "url": "https://github.com/github/accessibility/issues/495"
+              "url": "https://github.com/github/accessibility/issues/495",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[INITIATIVE] 6 High-Impact Components",
-              "url": "https://github.com/github/accessibility/issues/491"
+              "url": "https://github.com/github/accessibility/issues/491",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[Story] Autocomplete component: Update accessibility-related information in component documentation in Primer",
-              "url": "https://github.com/github/accessibility/issues/385"
+              "url": "https://github.com/github/accessibility/issues/385",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[Story] [SearchAutocomplete] Implement new Search/Autocomplete component in Discussions dashboard",
-              "url": "https://github.com/github/accessibility/issues/378"
+              "url": "https://github.com/github/accessibility/issues/378",
+              "projectItems": {
+                "edges": []
+              }
             },
             {
               "createdAt": "2022-04-06T01:53:21Z",
               "title": "[Story] [SearchAutocomplete] Rework Autocomplete in Primer to have a more accessible API",
-              "url": "https://github.com/github/accessibility/issues/373"
+              "url": "https://github.com/github/accessibility/issues/373",
+              "projectItems": {
+                "edges": []
+              }
             }
           ]
         },
@@ -6260,112 +6410,160 @@
             "node": {
               "title": "Create sprint-overview.md",
               "createdAt": "2022-04-20T21:22:40Z",
-              "url": "https://github.com/github/accessibility/pull/1062"
+              "url": "https://github.com/github/accessibility/pull/1062",
+              "closingIssuesReferences": {
+                "edges": []
+              }
             }
           },
           {
             "node": {
               "title": "[Proposal] New FR policy",
               "createdAt": "2022-04-20T15:12:15Z",
-              "url": "https://github.com/github/accessibility/pull/1055"
+              "url": "https://github.com/github/accessibility/pull/1055",
+              "closingIssuesReferences": {
+                "edges": []
+              }
             }
           },
           {
             "node": {
               "title": "Create my-work.yml",
               "createdAt": "2022-04-15T14:58:38Z",
-              "url": "https://github.com/github/accessibility/pull/1029"
+              "url": "https://github.com/github/accessibility/pull/1029",
+              "closingIssuesReferences": {
+                "edges": []
+              }
             }
           },
           {
             "node": {
               "title": "Update how-we-work.md to improve tab stops",
               "createdAt": "2022-04-07T15:03:32Z",
-              "url": "https://github.com/github/accessibility/pull/1001"
+              "url": "https://github.com/github/accessibility/pull/1001",
+              "closingIssuesReferences": {
+                "edges": []
+              }
             }
           },
           {
             "node": {
               "title": "All the updates to our Daily Update workflow",
               "createdAt": "2022-04-05T19:32:54Z",
-              "url": "https://github.com/github/accessibility/pull/990"
+              "url": "https://github.com/github/accessibility/pull/990",
+              "closingIssuesReferences": {
+                "edges": []
+              }
             }
           },
           {
             "node": {
               "title": "Update office-hours-meeting.md to align with deep dive template",
               "createdAt": "2022-04-05T18:31:36Z",
-              "url": "https://github.com/github/accessibility/pull/988"
+              "url": "https://github.com/github/accessibility/pull/988",
+              "closingIssuesReferences": {
+                "edges": []
+              }
             }
           },
           {
             "node": {
               "title": "Create daily-update-comment.yml",
               "createdAt": "2022-04-05T15:52:21Z",
-              "url": "https://github.com/github/accessibility/pull/986"
+              "url": "https://github.com/github/accessibility/pull/986",
+              "closingIssuesReferences": {
+                "edges": []
+              }
             }
           },
           {
             "node": {
               "title": "Automation: Testing daily-update",
               "createdAt": "2022-04-04T19:46:16Z",
-              "url": "https://github.com/github/accessibility/pull/985"
+              "url": "https://github.com/github/accessibility/pull/985",
+              "closingIssuesReferences": {
+                "edges": []
+              }
             }
           },
           {
             "node": {
               "title": "Update Audit Process to cross-link to The Hub",
               "createdAt": "2022-04-01T14:58:58Z",
-              "url": "https://github.com/github/accessibility/pull/977"
+              "url": "https://github.com/github/accessibility/pull/977",
+              "closingIssuesReferences": {
+                "edges": []
+              }
             }
           },
           {
             "node": {
               "title": "[Docs] Process for Primer audit issues & Initial outline of Accessibility ownership between a11y Eng and Primer",
               "createdAt": "2022-03-31T23:58:05Z",
-              "url": "https://github.com/github/accessibility/pull/972"
+              "url": "https://github.com/github/accessibility/pull/972",
+              "closingIssuesReferences": {
+                "edges": []
+              }
             }
           },
           {
             "node": {
               "title": "Update hww.env",
               "createdAt": "2022-03-17T22:32:03Z",
-              "url": "https://github.com/github/accessibility/pull/915"
+              "url": "https://github.com/github/accessibility/pull/915",
+              "closingIssuesReferences": {
+                "edges": []
+              }
             }
           },
           {
             "node": {
               "title": "Update deep-dive.yml",
               "createdAt": "2022-03-17T17:27:59Z",
-              "url": "https://github.com/github/accessibility/pull/911"
+              "url": "https://github.com/github/accessibility/pull/911",
+              "closingIssuesReferences": {
+                "edges": []
+              }
             }
           },
           {
             "node": {
               "title": "Update a11y-audit-request.md",
               "createdAt": "2022-03-11T19:30:54Z",
-              "url": "https://github.com/github/accessibility/pull/886"
+              "url": "https://github.com/github/accessibility/pull/886",
+              "closingIssuesReferences": {
+                "edges": []
+              }
             }
           },
           {
             "node": {
               "title": "Fix labels on Refining template",
               "createdAt": "2022-03-10T18:41:52Z",
-              "url": "https://github.com/github/accessibility/pull/880"
+              "url": "https://github.com/github/accessibility/pull/880",
+              "closingIssuesReferences": {
+                "edges": []
+              }
             }
           },
           {
             "node": {
               "title": "Create Folder for Axe Con notes",
               "createdAt": "2022-03-09T15:49:27Z",
-              "url": "https://github.com/github/accessibility/pull/872"
+              "url": "https://github.com/github/accessibility/pull/872",
+              "closingIssuesReferences": {
+                "edges": []
+              }
             }
           },
           {
             "node": {
               "title": "Update deep-dive.yml to add timezones",
               "createdAt": "2022-03-02T16:05:00Z",
-              "url": "https://github.com/github/accessibility/pull/835"
+              "url": "https://github.com/github/accessibility/pull/835",
+              "closingIssuesReferences": {
+                "edges": []
+              }
             }
           }
         ]
@@ -6377,6 +6575,9 @@
               "createdAt": "2022-06-08T20:12:03Z",
               "title": "Add CODEOWNERS file",
               "url": "https://github.com/github/accessibility-scorecard/pull/13",
+              "closingIssuesReferences": {
+                "edges": []
+              },
               "author": {
                 "login": "khiga8"
               },
@@ -6412,6 +6613,9 @@
               "createdAt": "2022-06-08T19:57:25Z",
               "title": "Adding stale issues requirement for Accessibility Audit objective",
               "url": "https://github.com/github/accessibility-scorecard/pull/12",
+              "closingIssuesReferences": {
+                "edges": []
+              },
               "author": {
                 "login": "kendallgassner"
               },
@@ -6597,6 +6801,9 @@
               "createdAt": "2022-06-08T16:39:19Z",
               "title": "Break down linter requirements to be granular",
               "url": "https://github.com/github/accessibility-scorecard/pull/11",
+              "closingIssuesReferences": {
+                "edges": []
+              },
               "author": {
                 "login": "khiga8"
               },
@@ -6680,6 +6887,9 @@
               "createdAt": "2022-06-08T15:04:15Z",
               "title": "Test removing lib",
               "url": "https://github.com/github/accessibility-scorecard/pull/10",
+              "closingIssuesReferences": {
+                "edges": []
+              },
               "author": {
                 "login": "kendallgassner"
               },
@@ -6730,6 +6940,9 @@
               "createdAt": "2022-06-07T20:55:11Z",
               "title": "Cleaning up getLabels and getService",
               "url": "https://github.com/github/accessibility-scorecard/pull/9",
+              "closingIssuesReferences": {
+                "edges": []
+              },
               "author": {
                 "login": "kendallgassner"
               },
@@ -6791,6 +7004,9 @@
               "createdAt": "2022-06-06T21:03:30Z",
               "title": "Add score: Percentage of Issues closed ",
               "url": "https://github.com/github/accessibility-scorecard/pull/8",
+              "closingIssuesReferences": {
+                "edges": []
+              },
               "author": {
                 "login": "kendallgassner"
               },
@@ -6918,6 +7134,9 @@
               "createdAt": "2022-06-01T18:46:10Z",
               "title": "Update update-scorecard-staging.yml",
               "url": "https://github.com/github/accessibility-scorecard/pull/7",
+              "closingIssuesReferences": {
+                "edges": []
+              },
               "author": {
                 "login": "khiga8"
               },
@@ -6957,6 +7176,9 @@
               "createdAt": "2022-06-01T10:57:53Z",
               "title": "docs: updates overall readme for scorecard work",
               "url": "https://github.com/github/accessibility-scorecard/pull/6",
+              "closingIssuesReferences": {
+                "edges": []
+              },
               "author": {
                 "login": "lindseywild"
               },
