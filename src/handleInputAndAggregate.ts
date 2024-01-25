@@ -18,7 +18,7 @@ export const makeValidatedInput = (GH_TOKEN: string) => {
         queried_repos: '',
         timespan: parseInt(core.getInput('timespan') || '7'),
         usernames: '',
-        project_field: '',
+        project_field: core.getInput("project_field"),
     };
 
     const requiredInputs = ["owner", "repo", "queried_repos", "usernames"];
