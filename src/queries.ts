@@ -163,7 +163,6 @@ fragment repo on Repository {
 `;
 export const getAllWorkForRepository = async (requestOwner: string, repoName: string, username: string, sinceIso: string, projectField?: string): Promise<{ [key: string]: QueryGroup }> => {
     const projectFieldVariables = projectField ? { addProjectFields: true, projectField } : {};
-    console.log("[BR] projectFieldVariables", projectFieldVariables)
     const { repository, prsCreated, prReviewsAndCommits } = await graphql(repositoryQuery, {
         username,
         owner: requestOwner,
