@@ -229,7 +229,7 @@ export const getAllWorkForRepository = async (requestOwner: string, repoName: st
     return {
         discussionsCreated: {
             repo: repoName,
-            data: discussionsCreated,
+            data: discussionsCreated.nodes,
             type: QueryType['discussion-created'],
         },
         discussionComments: {
