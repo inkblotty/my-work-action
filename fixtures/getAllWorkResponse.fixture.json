@@ -411,7 +411,18 @@
           "title": "[Story] [Command Palette] Rework Tab completion and Clear button navigation based on #834",
           "url": "https://github.com/github/accessibility/issues/833",
           "projectItems": {
-            "edges": []
+            "edges": [
+              {
+                "node": {
+                  "project": {
+                    "title": "Accessibility"
+                  },
+                  "fieldValueByName": {
+                    "name": "In Progress"
+                  }
+                }
+              }
+            ]
           }
         },
         {
@@ -427,7 +438,18 @@
           "title": "[Batch] [Dialog] Developer Experience before Upstreaming",
           "url": "https://github.com/github/accessibility/issues/830",
           "projectItems": {
-            "edges": []
+            "edges": [
+              {
+                "node": {
+                  "project": {
+                    "title": "Accessibility"
+                  },
+                  "fieldValueByName": {
+                    "name": null
+                  }
+                }
+              }
+            ]
           }
         },
         {
