@@ -21,6 +21,11 @@ Use this action as a tool to reflect on where your team member's time is spent. 
 ### Resource limits
 If the resource limits are being hit, consider breaking up your workflow into individual users and/or separate grouping of repos.
 
+## Required Scopes
+Using this action requires using a legacy Personal Access Token (PAT) with following scopes:
+- repo: read + write
+- discussions: read
+
 ## Required Fields
 ### Environment variables
 - `GH_TOKEN`
