@@ -34,13 +34,13 @@ const handleDiscussionGroups = (allDiscussionsCreated: QueryGroup[], allDiscussi
 
     for (const repoGroup of allDiscussionComments) {
         for (const comment of repoGroup.data) {
-            const discussionUrl = comment.url.split('#')[0];
+            const discussionUrl = comment.discussion.url;
 
             // make sure that comment belongs to a group
             if (!finalDiscussions.secondary[discussionUrl]) {
                 finalDiscussions.secondary[discussionUrl] = {
                     itemType: 'DiscussionComment',
-                    groupTitle: `Left comments on discussion: [${comment.discussion.title}](${discussionUrl})`,
+                    groupTitle: `Left comments on discussion: [${comment.discussion.title}](${comment.discussion.url})`,
                     artifacts: [],
                 }
             }

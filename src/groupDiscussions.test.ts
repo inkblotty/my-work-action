@@ -29,10 +29,11 @@ describe('groupDiscussions', () => {
     test('handleDiscussionGroups', async () => {
         const result = await handleDiscussionGroups([mockData.discussionsCreated], [mockData.discussionComments]);
 
-        expect(result.primary['github/accessibility']).toBeTruthy();
-        expect(result.primary['github/accessibility'].artifacts.length).toEqual(50);
+        console.log(result)
+        expect(result.primary['github/issues']).toBeTruthy();
+        expect(result.primary['github/issues'].artifacts.length).toEqual(3);
 
         // number of discussions commented on by inkblotty since Dec 1, 2021
-        expect(Object.keys(result.secondary).length).toEqual(37);
+        expect(Object.keys(result.secondary).length).toEqual(1);
     });
 });

@@ -199,9 +199,7 @@ export const getAllWorkForRepository = async (requestOwner: string, repoName: st
       return [...arr, ...nodes.map(comment => ({ ...comment, issue: { title, url }}))];
     }, []);
     const flattenedDiscussionComments = discussionComments.nodes.reduce((arr, { title, url, comments: { nodes }}) => {
-      const discussionTitle = title;
-      const discussionUrl = url;
-      return [...arr, ...nodes.map(comment => ({ discussionTitle, discussionUrl, ...comment }))];
+      return [...arr, ...nodes.map(comment => ({ discussion: { title, url }, ...comment }))];
     }, []);
     const flattenedPRCommits = prReviewsAndCommits.edges.reduce((arr, { node }) => {
       const commitNodes = node.commits.nodes;
