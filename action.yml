@@ -20,6 +20,9 @@ inputs:
   project_field:
     description: "A project field to display for issues and pull requests"
     required: false
+  destination_branch:
+    description: "The branch for a PR to be created against. Defaults to 'main'."
+    required: false
 runs:
   using: "node16"
   main: "dist/index.js"

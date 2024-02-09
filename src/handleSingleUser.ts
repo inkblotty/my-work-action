@@ -11,6 +11,7 @@ import { sleep } from './shared';
 
 async function handleSingleUser(inputFields: InputFields, username: string, startDate: Date) {
     const startDateIso = startDate.toISOString();
+    const destinationBranch = inputFields.destinationBranch;
     
     const reposList = inputFields.queried_repos.split(',');
     const discussionComments: QueryGroup[] = [];
@@ -43,7 +44,7 @@ async function handleSingleUser(inputFields: InputFields, username: string, star
     const documentBody = makeGroupsIntoMarkdown([prGroups, issueGroups], username, startDate, inputFields.project_field);
 
     // create a branch
-    const { ref } = await openBranch(inputFields, username);
+    const { ref } = await openBranch(inputFields, username, destinationBranch);
 
     // commit to branch
     await commitToBranch(inputFields, username, ref.id, ref.target.oid, documentBody);
