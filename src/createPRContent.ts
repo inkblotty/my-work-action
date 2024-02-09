@@ -9,7 +9,7 @@ This PR aggregates everything you've done in asssociated repos within the last w
 
 ### Next Steps for @${username}
 1. Review the PR
-    - If you notice missing information, add it in and ping @inkblotty to update the script
+    - If you notice missing information, add it in and ping \`@inkblotty\` to update the script
 2. Add any Highlights to your Highlights file
 3. Merge the PR
 4. In your next meeting with your manager, if there are any trends you want to discuss, bring up this document
