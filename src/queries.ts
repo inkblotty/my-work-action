@@ -4,7 +4,7 @@ import { QueryGroup, QueryType } from './shared.types';
 
 const GH_TOKEN = process.env.GH_TOKEN;
 const repositoryQuery = `\
-query getUserWork($username:String!, $owner:String!, $repo:String!, $sinceIso: DateTime!, $prsCreatedQuery:String!, $prContributionsQuery:String!, $issueCommentsQuery:String!, $discussionCreatedQuery:String!, $discussionsInvolvedQuery:String!, $addProjectFields:Boolean = false, $projectField:String = "") {
+query getUserWork($username:String!, $owner:String!, $repo:String!, $sinceIso: DateTime!, $prsCreatedQuery:String!, $prContributionsQuery:String!, $issueCommentsQuery:String!, $discussionsCreatedQuery:String!, $discussionsInvolvedQuery:String!, $addProjectFields:Boolean = false, $projectField:String = "") {
   repository(owner: $owner, name: $repo) {
       ...repo
   }
