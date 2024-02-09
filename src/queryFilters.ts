@@ -141,7 +141,10 @@ const getProjectItemsFromPRs = (prs) => {
     return items.map(item => {
         const projectItemsForItem = projectItems[item.url];
         if (!projectItemsForItem) {
-            return item;
+            return {
+                ...item,
+                projectItems: []
+            }
         }
         return {
             ...item,
