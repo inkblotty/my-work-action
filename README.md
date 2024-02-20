@@ -41,5 +41,8 @@ Number of days to query, with today as the end date. Defaults to 7 days.
 - `usernames`
 Your user handle, or your list of teammates, comma-separated.
 
-- `project_field`
-A ([single select](https://docs.github.com/en/issues/planning-and-tracking-with-projects/understanding-fields/about-single-select-fields)) project field to display for issues and pull requests. This is usually a column (on Table views) from a GitHub Project, such as Status or Iteration.  
+- `project_field` (optional)
+A ([single select](https://docs.github.com/en/issues/planning-and-tracking-with-projects/understanding-fields/about-single-select-fields)) project field to display for issues and pull requests. This is usually a column (on Table views) from a GitHub Project, such as Status or Iteration. 
+
+- `destination_branch` (optional)
+Defaults to 'main'. The branch that PRs should be created against.

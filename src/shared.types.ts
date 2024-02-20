@@ -45,6 +45,7 @@ export interface OutputGroupGroup {
 }
 
 export interface InputFields {
+    destinationBranch?: string;
     owner: string;
     queried_repos: string;
     repo: string;

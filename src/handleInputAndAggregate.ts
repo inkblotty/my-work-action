@@ -31,6 +31,11 @@ export const makeValidatedInput = (GH_TOKEN: string) => {
         endObj[inputName] = workflowValue;
     };
 
+    const destinationBranch = core.getInput('destination_branch');
+    if (destinationBranch) {
+        endObj.destinationBranch = destinationBranch;
+    }
+
     return endObj;
 }
 

@@ -17,7 +17,7 @@ mutation myCreateRef($input: CreateRefInput!) {
 `;
 
 interface RefStuff { ref: { id: string, name: string, target: { oid: string } } }
-const openBranch = async ({ owner, repo }: InputFields, username: string): Promise<RefStuff> => {
+const openBranch = async ({ owner, repo }: InputFields, username: string, destinationBranch = 'main'): Promise<RefStuff> => {
     const now = (new Date()).getTime();
     const branchName = `temp/my-work-${username}-${now}`;
     const requestOwner = repo.includes('/') ? repo.split('/')[0] : owner;
@@ -28,7 +28,7 @@ const openBranch = async ({ owner, repo }: InputFields, username: string): Promi
     const { data: { commit: { sha: latestCommitOnMain } } } = await github.getOctokit(process.env.GH_TOKEN).request('GET /repos/{owner}/{repo}/branches/{branch}', {
         owner: requestOwner,
         repo,
-        branch: 'main',
+        branch: destinationBranch,
     });
     const branchData = {
         input: {
