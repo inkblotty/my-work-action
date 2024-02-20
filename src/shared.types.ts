@@ -26,7 +26,7 @@ export interface QueryGroup {
 export interface Artifact {
     title: string;
     url: string;
-    projectItems: ProjectItemForIssueOrPR[];   
+    projectItems?: ProjectItemForIssueOrPR[];   
 }
 
 export interface GroupData {

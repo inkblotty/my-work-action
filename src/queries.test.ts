@@ -12,8 +12,8 @@ describe('getAllWorkForRespository', () => {
         mockGraphQlFunction.mockResolvedValue(prData);
         const result = await getAllWorkForRepository('github', 'accessibility', 'inkblotty', '2021-12-01');
 
-        expect(result.discussionsCreated.data.length).toEqual(2);
-        expect(result.discussionComments.data.length).toEqual(26);
+        expect(result.discussionsCreated.data.length).toEqual(3);
+        expect(result.discussionComments.data.length).toEqual(1); // the fixture has more, but only one is for inkblotty
 
         expect(result.issuesCreated.data.length).toEqual(50);
         // comments from other users and from earlier dates are filtered out
