@@ -54,6 +54,6 @@ async function handleSingleUser(inputFields: InputFields, username: string, star
     // open a PR
     const body = createPRBodyText(startDate, new Date(), username);
 
-    return openPR(inputFields, username, ref.name, body);
+    return openPR(inputFields, username, ref.name, body, destinationBranch);
 }
 export default handleSingleUser;
