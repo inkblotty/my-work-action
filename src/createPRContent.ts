@@ -28,7 +28,7 @@ const createPRObj = ({ owner, repo }: Pick<InputFields, 'owner' | 'repo'>, curre
     const requestOwner = repo.includes('/') ? repo.split('/')[0] : owner;
     return {
         body: createPRBodyText(prData.startDate, prData.endDate, currentUsername),
-        base: prData.destinationBranch,
+        base: prData.destinationBranch || 'main',
         head: prData.tempBranch,
         owner: requestOwner,
         repo,

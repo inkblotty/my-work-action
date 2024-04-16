@@ -28,7 +28,7 @@ const openBranch = async ({ owner, repo }: InputFields, username: string, destin
     const { data: { commit: { sha: latestCommitOnMain } } } = await github.getOctokit(process.env.GH_TOKEN).request('GET /repos/{owner}/{repo}/branches/{branch}', {
         owner: requestOwner,
         repo,
-        branch: destinationBranch,
+        branch: destinationBranch || 'main',
     });
     const branchData = {
         input: {
