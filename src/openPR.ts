@@ -8,7 +8,7 @@ const openPR = async ({ owner, repo }: InputFields, username: string, branchName
     const prData = {
         owner: requestOwner,
         repo,
-        base: destinationBranch,
+        base: destinationBranch || 'main',
         head: `refs/heads/${branchName}`,
         title: `@${username}'s Work: ${now}`,
         draft: true,
