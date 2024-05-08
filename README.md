@@ -97,7 +97,7 @@ To validate changes outside of the automated tests, you can:
 
 1. Add the workflow to a test repo of your choice
 1. Point workflow to inkblotty/my-work-action@your-branch
-1. Trigger workflow run 
+1. Trigger workflow run. See [these docs](https://docs.github.com/en/actions/using-workflows/triggering-a-workflow) for more information about workflow triggers. 
    
    ```yml
    name: "My Work: @monalisa"
