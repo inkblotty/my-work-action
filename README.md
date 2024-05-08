@@ -46,3 +46,47 @@ A ([single select](https://docs.github.com/en/issues/planning-and-tracking-with-
 
 - `destination_branch` (optional)
 Defaults to 'main'. The branch that PRs should be created against.
+
+## Local Development
+
+> [!NOTE]
+>
+> You'll need to have a reasonably modern version of
+> [Node.js](https://nodejs.org). 20.x or later should work!
+
+### Install dependencies
+
+   ```bash
+   npm install
+   ```
+
+### Run tests
+
+   ```bash
+   $ npm test
+
+   PASS  ./index.test.js
+     ✓ throws invalid number (3ms)
+     ✓ wait 500 ms (504ms)
+     ✓ test runs (95ms)
+
+   ...
+   ```
+
+### Build dist
+
+   ```bash
+   npm run build
+   ```
+
+   > [!IMPORTANT]
+   > This step is important! It will run [`ncc`](https://github.com/vercel/ncc)
+   > to build the final JavaScript action code with all dependencies included.
+   > If you do not run this step, the action will not work correctly when it is
+   > used in a workflow.
+
+### Format, test, and build
+
+   ```bash
+   npm run all
+   ```
