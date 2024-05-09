@@ -66,14 +66,7 @@ Defaults to 'main'. The branch that PRs should be created against.
 ### Run tests
 
    ```bash
-   $ npm test
-
-   PASS  ./index.test.js
-     ✓ throws invalid number (3ms)
-     ✓ wait 500 ms (504ms)
-     ✓ test runs (95ms)
-
-   ...
+   npm test
    ```
 
 ### Build dist
@@ -104,17 +97,19 @@ To validate changes outside of the automated tests, you can:
    
    ```yml
    name: "My Work: @monalisa"
+
+   # Set one or more options for triggering workflow runs. Some common examples included below.
    on:
      # Allows you to run this workflow manually from the Actions tab 
      workflow_dispatch:
 
-     # Triggers the workflow on push or pull request events but only for the master branch
+     # Triggers the workflow on push or pull request events, but only for specific branch
      push:
        branches: [ main ]
      pull_request:
        branches: [ main ]
 
-     # Schedule workflow runs
+     # Schedules workflow runs. See https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule for syntax.
      schedule:
        # Every Tuesday at 5 AM UTC (12 AM ET)
        - cron: "0 7 * * 2"
