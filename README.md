@@ -24,6 +24,9 @@ If the resource limits are being hit, consider breaking up your workflow into in
 ## Required Fields
 ### Environment variables
 - `GH_TOKEN`
+This action requires using a [legacy Personal Access Token (PAT)](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#personal-access-tokens-classic) with following scopes:
+  - repo: read + write
+  - discussions: read
 
 ### Input variables
 - `owner`
