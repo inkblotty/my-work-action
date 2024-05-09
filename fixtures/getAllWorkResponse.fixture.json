@@ -3,7 +3,7 @@
     "issues": {
       "nodes": [
         {
-          "createdAt": "2022-04-06T01:53:21Z",
+          "createdAt": "2022-04-06T01:53:22Z",
           "title": "[Story] [Command Palette] Rework Tab completion and Clear button navigation based on #834",
           "url": "https://github.com/github/accessibility/issues/833",
           "projectItems": {
