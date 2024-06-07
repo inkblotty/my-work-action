@@ -186,7 +186,7 @@ export const getAllWorkForRepository = async (requestOwner: string, repoName: st
         prsCreatedQuery: `repo:${requestOwner}/${repoName} is:pr created:>=${sinceIso} author:${username}`,
         prContributionsQuery: `repo:${requestOwner}/${repoName} is:pr created:>=${sinceIso} -author:${username} involves:${username}`,
         issueCommentsQuery: `repo:${requestOwner}/${repoName} is:issue commenter:${username} updated:>=${sinceIso} sort:updated-desc`,
-        discussionsCreatedQuery: `repo:${requestOwner}/${repoName} created:>=${sinceIso}} author:${username}`,
+        discussionsCreatedQuery: `repo:${requestOwner}/${repoName} created:>=${sinceIso} author:${username}`,
         discussionsInvolvedQuery: `repo:${requestOwner}/${repoName} updated:>=${sinceIso} involves:${username}`,
         headers: {
             authorization: `token ${GH_TOKEN}`
