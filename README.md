@@ -1,7 +1,7 @@
 # My Work: An Action for Reflections
 
 ## Context
-Review cycles can be time-consuming. You've got peers to review, your manager to review, yourself to review. You've got to think about each person's within the specified amount of time for the review, but not before that window of time, and you don't want to forget anything important.
+Review cycles can be time-consuming. You've got peers to review, your manager to review, yourself to review. You've got to think about each person's work within the specified amount of time for the review, but not before that window of time, and you don't want to forget anything important.
 
 With promotions, it can be just as difficult to summarize a period of time, focusing on the important highlights, and create a story about your growth and why you're ready for the next step.
 
