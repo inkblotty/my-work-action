@@ -5,7 +5,7 @@ export const createPRBodyText = (startDate: Date, endDate: Date, username: strin
 ## @${username}'s Work for Week of ${formatDate(startDate)} - ${formatDate(endDate)}
 
 ### Description
-This PR aggregates everything you've done in asssociated repos within the last week.
+This PR aggregates everything you've done in associated repos within the last week.
 
 ### Next Steps for @${username}
 1. Review the PR
