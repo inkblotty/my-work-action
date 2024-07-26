@@ -13,6 +13,7 @@ import handleDiscussionGroups from "./groupDiscussions";
 async function handleSingleUser(inputFields: InputFields, username: string, startDate: Date) {
     const startDateIso = startDate.toISOString();
     const destinationBranch = inputFields.destinationBranch;
+    const draftPr = inputFields.draftPr;
     
     const reposList = inputFields.queried_repos.split(',');
     const discussionComments: QueryGroup[] = [];
@@ -54,6 +55,6 @@ async function handleSingleUser(inputFields: InputFields, username: string, star
     // open a PR
     const body = createPRBodyText(startDate, new Date(), username);
 
-    return openPR(inputFields, username, ref.name, body, destinationBranch);
+    return openPR(inputFields, username, ref.name, body, destinationBranch, draftPr);
 }
 export default handleSingleUser;

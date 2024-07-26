@@ -23,6 +23,9 @@ inputs:
   destination_branch:
     description: "The branch for a PR to be created against. Defaults to 'main'."
     required: false
+  draft_pr:
+    description: "Whether to create the PR as a draft. Defaults to true."
+    required: false
 runs:
   using: "node16"
   main: "dist/index.js"

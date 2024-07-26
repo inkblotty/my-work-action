@@ -36,6 +36,13 @@ export const makeValidatedInput = (GH_TOKEN: string) => {
         endObj.destinationBranch = destinationBranch;
     }
 
+    const draftPrSpecified = core.getInput("draft_pr")
+    if (draftPrSpecified) {
+        endObj.draftPr = core.getBooleanInput("draft_pr")
+    } else {
+        endObj.draftPr = true
+    }
+
     return endObj;
 }
 

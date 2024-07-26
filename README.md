@@ -50,6 +50,9 @@ A ([single select](https://docs.github.com/en/issues/planning-and-tracking-with-
 - `destination_branch` (optional)
 Defaults to 'main'. The branch that PRs should be created against.
 
+- `draft_pr` (optional)
+Whether to create the PR as a draft. Defaults to true.
+
 ## Local Development
 
 > [!NOTE]
