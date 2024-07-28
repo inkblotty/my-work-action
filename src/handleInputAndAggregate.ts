@@ -19,6 +19,7 @@ export const makeValidatedInput = (GH_TOKEN: string) => {
         timespan: parseInt(core.getInput('timespan') || '7'),
         usernames: '',
         project_field: core.getInput("project_field"),
+        draft_pr: core.getInput("draft_pr") ? core.getBooleanInput("draft_pr") : true
     };
 
     const requiredInputs = ["owner", "repo", "queried_repos", "usernames"];
@@ -34,13 +35,6 @@ export const makeValidatedInput = (GH_TOKEN: string) => {
     const destinationBranch = core.getInput('destination_branch');
     if (destinationBranch) {
         endObj.destinationBranch = destinationBranch;
-    }
-
-    const draftPrSpecified = core.getInput("draft_pr")
-    if (draftPrSpecified) {
-        endObj.draftPr = core.getBooleanInput("draft_pr")
-    } else {
-        endObj.draftPr = true
     }
 
     return endObj;
