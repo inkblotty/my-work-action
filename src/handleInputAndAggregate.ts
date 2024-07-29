@@ -6,7 +6,7 @@ import handleSingleUser from './handleSingleUser';
 const makeRequiredErrorMessage = (inputName) => `Failed to retrieve input "${inputName}". Does the workflow include "${inputName}"?`;
 
 export const makeValidatedInput = (GH_TOKEN: string) => {
-    if (!GH_TOKEN) {
+    if (!GH_TOKEN && process.env.NODE_ENV !== 'test') {
         throw new Error(
             "Failed to retrieve a GitHub token. Does this repository have a secret named 'GH_TOKEN'? https://docs.github.com/en/actions/reference/encrypted-secrets#creating-encrypted-secrets-for-a-repository"
           );
@@ -19,6 +19,7 @@ export const makeValidatedInput = (GH_TOKEN: string) => {
         timespan: parseInt(core.getInput('timespan') || '7'),
         usernames: '',
         project_field: core.getInput("project_field"),
+        draft_pr: core.getInput("draft_pr") ? core.getBooleanInput("draft_pr") : true
     };
 
     const requiredInputs = ["owner", "repo", "queried_repos", "usernames"];
@@ -47,7 +48,9 @@ const handleInputAndAggregate = async () => {
 
     // perform each user with delay so we don't get rate limited
     for (let i = 0; i < usernames.length; i++) {
-        await sleep(5000);
+        if (process.env.NODE_ENV !== "test") {
+            await sleep(5000);
+        }
         await handleSingleUser(inputFields, usernames[i], startDate);
     }
 }
