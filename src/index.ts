@@ -1,10 +1,3 @@
-import * as core from '@actions/core';
-import handleInputAndAggregate from "./handleInputAndAggregate";
+import run from "./main"
 
-(async () => {
-    try {
-        handleInputAndAggregate();
-    } catch (err) {
-        core.setFailed(err.message);
-    }
-})();
+run()
