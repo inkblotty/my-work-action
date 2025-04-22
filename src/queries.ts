@@ -84,6 +84,8 @@ query getUserWork($username:String!, $owner:String!, $repo:String!, $sinceIso: D
           }
           reviews(first: 10, author:$username) {
             nodes {
+              createdAt
+              url
               comments(first: 20) {
                 nodes {
                   createdAt
@@ -205,9 +207,15 @@ export const getAllWorkForRepository = async (requestOwner: string, repoName: st
       const commitNodes = node.commits.nodes;
       return [...arr, ...commitNodes.map(commitNode => ({ ...commitNode, pullRequest: { author: node.author } }))]
     }, []);
+    // TODO update test to confirm changes are working as expected
     const flattenedPRComments = prReviewsAndCommits.edges.map(edge => {
       const prTitle = edge.node.title;
-      return edge.node.reviews.nodes.map(node => node.comments.nodes.map(comment => ({ ...comment, prTitle })));
+      return edge.node.reviews.nodes.map(node => {
+        if (node.comments.nodes.length === 0) {
+          return { ...node, prTitle };
+        }
+        return node.comments.nodes.map(comment => ({ ...comment, prTitle }));
+      });
     }).flat().flat();
 
     const commitsToOtherPRs = filterCommitsFromOtherUserOnPR(username, flattenedPRCommits);
