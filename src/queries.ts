@@ -213,11 +213,11 @@ export const getAllWorkForRepository = async (requestOwner: string, repoName: st
       const prTitle = edge.node.title;
       edge.node.reviews.nodes.forEach(review => {
         // If the review is empty and has no comments, return the review only
-        if (!review.body && review.comments.nodes.length === 0) {
+        if (review.body.length === 0 && review.comments.nodes.length === 0) {
           arr.push({ ...review, prTitle });
         } else {
           // If the review isn't empty, treat it like a comment and include it in the returned array
-          if (review.body) {
+          if (review.body.length > 0) {
             arr.push({ ...review, prTitle });
           }
           review.comments.nodes.forEach(comment => {
