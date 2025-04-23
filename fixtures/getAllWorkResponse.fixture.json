@@ -624,6 +624,7 @@
               {
                 "createdAt": "2022-06-08T22:48:06Z",
                 "url": "https://github.com/github/accessibility-scorecard/pull/13#review_r1",
+                "body": "This is a review body for PR 13.",
                 "comments": {
                   "nodes": []
                 }
@@ -762,6 +763,7 @@
               {
                 "createdAt": "2022-06-09T01:33:50Z",
                 "url": "https://github.com/github/accessibility-scorecard/pull/12#review_r1",
+                "body": "This is a review body for PR 12.",
                 "comments": {
                   "nodes": [
                     {

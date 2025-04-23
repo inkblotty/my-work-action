@@ -33,9 +33,9 @@ describe('groupPRs', () => {
 
         // Hardcode expected counts based on fixture data
         const expectedCommentCountsByPR = {
-            "/github/accessibility-scorecard/pull/6": 1, // 1 review + 0 comments
-            "/github/accessibility-scorecard/pull/12": 9, // 3 reviews + 9 comments
-            "/github/accessibility-scorecard/pull/13": 1, // 1 review + 0 comments
+            "/github/accessibility-scorecard/pull/6": 1, // 1 empty review + 0 comments
+            "/github/accessibility-scorecard/pull/12": 10, // 1 non-empty review + 9 comments
+            "/github/accessibility-scorecard/pull/13": 1, // 1 empty review + 0 comments
         };
 
         // Check that secondary group artifacts (aka comments) have the expected properties

@@ -21,12 +21,12 @@ describe('getAllWorkForRespository', () => {
 
         expect(result.prsCreated.data.length).toEqual(16);
         expect(result.prCommits.data.length).toEqual(0);
-        expect(result.prComments.data.length).toEqual(11);
+        expect(result.prComments.data.length).toEqual(12);
 
         // Check that prComments includes reviews without comments
-        const reviewsWithoutComments = result.prComments.data.filter(comment => comment.url.includes('#review_'));
+        const reviews = result.prComments.data.filter(comment => comment.url.includes('#review_'));
         const reviewComments = result.prComments.data.filter(comment => comment.url.includes('#discussion_'));
-        expect(reviewsWithoutComments.length).toBe(2);
+        expect(reviews.length).toBe(3);
         expect(reviewComments.length).toBe(9);
     });
 });

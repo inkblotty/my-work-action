@@ -84,6 +84,7 @@ query getUserWork($username:String!, $owner:String!, $repo:String!, $sinceIso: D
           }
           reviews(first: 10, author:$username) {
             nodes {
+              body
               createdAt
               url
               comments(first: 20) {
@@ -207,13 +208,18 @@ export const getAllWorkForRepository = async (requestOwner: string, repoName: st
       const commitNodes = node.commits.nodes;
       return [...arr, ...commitNodes.map(commitNode => ({ ...commitNode, pullRequest: { author: node.author } }))]
     }, []);
-    // TODO update test to confirm changes are working as expected
+    // Note: flattenedPRComments includes both reviews and comments
     const flattenedPRComments = prReviewsAndCommits.edges.reduce((arr, edge) => {
       const prTitle = edge.node.title;
       edge.node.reviews.nodes.forEach(review => {
-        if (review.comments.nodes.length === 0) {
+        // If the review is empty and has no comments, return the review only
+        if (!review.body && review.comments.nodes.length === 0) {
           arr.push({ ...review, prTitle });
         } else {
+          // If the review isn't empty, treat it like a comment and include it in the returned array
+          if (review.body) {
+            arr.push({ ...review, prTitle });
+          }
           review.comments.nodes.forEach(comment => {
             arr.push({ ...comment, prTitle });
           });
