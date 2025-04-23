@@ -24,8 +24,8 @@ describe('getAllWorkForRespository', () => {
         expect(result.prComments.data.length).toEqual(11);
 
         // Check that prComments includes reviews without comments
-        const reviewsWithoutComments = result.prComments.data.filter(comment => comment.url.includes('review_'));
-        const reviewComments = result.prComments.data.filter(comment => comment.url.includes('discussion_'));
+        const reviewsWithoutComments = result.prComments.data.filter(comment => comment.url.includes('#review_'));
+        const reviewComments = result.prComments.data.filter(comment => comment.url.includes('#discussion_'));
         expect(reviewsWithoutComments.length).toBe(2);
         expect(reviewComments.length).toBe(9);
     });
