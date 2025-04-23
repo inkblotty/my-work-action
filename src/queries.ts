@@ -208,15 +208,19 @@ export const getAllWorkForRepository = async (requestOwner: string, repoName: st
       return [...arr, ...commitNodes.map(commitNode => ({ ...commitNode, pullRequest: { author: node.author } }))]
     }, []);
     // TODO update test to confirm changes are working as expected
-    const flattenedPRComments = prReviewsAndCommits.edges.map(edge => {
+    const flattenedPRComments = prReviewsAndCommits.edges.reduce((arr, edge) => {
       const prTitle = edge.node.title;
-      return edge.node.reviews.nodes.map(node => {
-        if (node.comments.nodes.length === 0) {
-          return { ...node, prTitle };
+      edge.node.reviews.nodes.forEach(review => {
+        if (review.comments.nodes.length === 0) {
+          arr.push({ ...review, prTitle });
+        } else {
+          review.comments.nodes.forEach(comment => {
+            arr.push({ ...comment, prTitle });
+          });
         }
-        return node.comments.nodes.map(comment => ({ ...comment, prTitle }));
       });
-    }).flat().flat();
+      return arr;
+    }, []);
 
     const commitsToOtherPRs = filterCommitsFromOtherUserOnPR(username, flattenedPRCommits);
 
