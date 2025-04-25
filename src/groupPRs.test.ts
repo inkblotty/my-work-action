@@ -28,7 +28,27 @@ describe('groupPRs', () => {
         expect(result.primary['github/accessibility']).toBeTruthy();
         expect(result.primary['github/accessibility'].artifacts.length).toEqual(16);
 
-        // interacted with 1 PR secondarily
-        expect(Object.keys(result.secondary).length).toEqual(1);
+        // interacted with 3 PRs secondarily
+        expect(Object.keys(result.secondary).length).toEqual(3);
+
+        // Hardcode expected counts based on fixture data
+        const expectedCommentCountsByPR = {
+            "/github/accessibility-scorecard/pull/6": 1, // 1 empty review + 0 comments
+            "/github/accessibility-scorecard/pull/12": 10, // 1 non-empty review + 9 comments
+            "/github/accessibility-scorecard/pull/13": 1, // 1 empty review + 0 comments
+        };
+
+        // Check that secondary group artifacts (aka comments) have the expected properties
+        Object.entries(result.secondary).forEach(([prURL, group]) => {
+            const expectedCommentCount = expectedCommentCountsByPR[prURL];
+            expect(group.artifacts.length).toEqual(expectedCommentCount);
+
+            group.artifacts.forEach((artifact) => {
+                expect(artifact).toHaveProperty('title');
+                expect(artifact).toHaveProperty('url');
+                expect(artifact.title).toMatch(/^#/);
+                expect(artifact.url).toMatch(new RegExp(`${prURL}#(review_|discussion_)`));
+            });
+        });
     });
 });

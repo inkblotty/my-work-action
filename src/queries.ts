@@ -84,6 +84,9 @@ query getUserWork($username:String!, $owner:String!, $repo:String!, $sinceIso: D
           }
           reviews(first: 10, author:$username) {
             nodes {
+              body
+              createdAt
+              url
               comments(first: 20) {
                 nodes {
                   createdAt
@@ -205,10 +208,25 @@ export const getAllWorkForRepository = async (requestOwner: string, repoName: st
       const commitNodes = node.commits.nodes;
       return [...arr, ...commitNodes.map(commitNode => ({ ...commitNode, pullRequest: { author: node.author } }))]
     }, []);
-    const flattenedPRComments = prReviewsAndCommits.edges.map(edge => {
+    // Note: flattenedPRComments includes both reviews and comments
+    const flattenedPRComments = prReviewsAndCommits.edges.reduce((arr, edge) => {
       const prTitle = edge.node.title;
-      return edge.node.reviews.nodes.map(node => node.comments.nodes.map(comment => ({ ...comment, prTitle })));
-    }).flat().flat();
+      edge.node.reviews.nodes.forEach(review => {
+        // If the review is empty and has no comments, return the review only
+        if (review.body.length === 0 && review.comments.nodes.length === 0) {
+          arr.push({ ...review, prTitle });
+        } else {
+          // If the review isn't empty, treat it like a comment and include it in the returned array
+          if (review.body.length > 0) {
+            arr.push({ ...review, prTitle });
+          }
+          review.comments.nodes.forEach(comment => {
+            arr.push({ ...comment, prTitle });
+          });
+        }
+      });
+      return arr;
+    }, []);
 
     const commitsToOtherPRs = filterCommitsFromOtherUserOnPR(username, flattenedPRCommits);
 
