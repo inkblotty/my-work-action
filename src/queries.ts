@@ -1,5 +1,5 @@
 import { graphql } from "@octokit/graphql";
-import { filterCreatedThingByAuthorAndCreation, filterCommitsFromOtherUserOnPR, filterCreatedThingByCreation, getProjectItemsForPRs, getProjectItemsForIssues, addProjectItemsToItems } from './queryFilters';
+import { filterCreatedThingByAuthorAndCreation, filterCommitsFromOtherUserOnPR, filterCreatedThingByCreation, getIsWithinRange, getProjectItemsForPRs, getProjectItemsForIssues, addProjectItemsToItems } from './queryFilters';
 import { QueryGroup, QueryType } from './shared.types';
 
 const GH_TOKEN = process.env.GH_TOKEN;
@@ -86,6 +86,7 @@ query getUserWork($username:String!, $owner:String!, $repo:String!, $sinceIso: D
             nodes {
               body
               createdAt
+              submittedAt
               url
               comments(first: 20) {
                 nodes {
@@ -187,7 +188,7 @@ export const getAllWorkForRepository = async (requestOwner: string, repoName: st
         repo: repoName,
         sinceIso,
         prsCreatedQuery: `repo:${requestOwner}/${repoName} is:pr created:>=${sinceIso} author:${username}`,
-        prContributionsQuery: `repo:${requestOwner}/${repoName} is:pr created:>=${sinceIso} -author:${username} involves:${username}`,
+        prContributionsQuery: `repo:${requestOwner}/${repoName} is:pr updated:>=${sinceIso} -author:${username} involves:${username}`,
         issueCommentsQuery: `repo:${requestOwner}/${repoName} is:issue commenter:${username} updated:>=${sinceIso} sort:updated-desc`,
         discussionsCreatedQuery: `repo:${requestOwner}/${repoName} created:>=${sinceIso} author:${username}`,
         discussionsInvolvedQuery: `repo:${requestOwner}/${repoName} updated:>=${sinceIso} involves:${username}`,
@@ -212,15 +213,21 @@ export const getAllWorkForRepository = async (requestOwner: string, repoName: st
     const flattenedPRComments = prReviewsAndCommits.edges.reduce((arr, edge) => {
       const prTitle = edge.node.title;
       edge.node.reviews.nodes.forEach(review => {
+        if (!review.submittedAt) {
+          return;
+        }
+        const isRecentReview = getIsWithinRange(review.submittedAt, sinceIso);
         // If the review is empty and has no comments, return the review only
         if (review.body.length === 0 && review.comments.nodes.length === 0) {
-          arr.push({ ...review, prTitle });
-        } else {
-          // If the review isn't empty, treat it like a comment and include it in the returned array
-          if (review.body.length > 0) {
+          if (isRecentReview) {
             arr.push({ ...review, prTitle });
           }
-          review.comments.nodes.forEach(comment => {
+        } else {
+          // If the review isn't empty, treat it like a comment and include it in the returned array
+          if (review.body.length > 0 && isRecentReview) {
+            arr.push({ ...review, prTitle });
+          }
+          filterCreatedThingByCreation(review.comments.nodes, sinceIso).forEach(comment => {
             arr.push({ ...comment, prTitle });
           });
         }

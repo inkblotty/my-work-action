@@ -624,6 +624,7 @@
               {
                 "body": "This is a review body for PR 13.",
                 "createdAt": "2022-06-08T22:48:06Z",
+                "submittedAt": "2022-06-08T22:48:06Z",
                 "url": "https://github.com/github/accessibility-scorecard/pull/13#review_r1",
                 "comments": {
                   "nodes": []
@@ -763,6 +764,7 @@
               {
                 "body": "This is a review body for PR 12.",
                 "createdAt": "2022-06-09T01:33:50Z",
+                "submittedAt": "2022-06-09T01:33:50Z",
                 "url": "https://github.com/github/accessibility-scorecard/pull/12#review_r1",
                 "comments": {
                   "nodes": [
@@ -776,6 +778,7 @@
               {
                 "body": "",
                 "createdAt": "2022-06-09T01:35:17Z",
+                "submittedAt": "2022-06-09T01:35:17Z",
                 "url": "https://github.com/github/accessibility-scorecard/pull/12#review_r2",
                 "comments": {
                   "nodes": [
@@ -789,6 +792,7 @@
               {
                 "body": "",
                 "createdAt": "2022-06-09T01:35:57Z",
+                "submittedAt": "2022-06-09T01:35:57Z",
                 "url": "https://github.com/github/accessibility-scorecard/pull/12#review_r3",
                 "comments": {
                   "nodes": [
@@ -1233,6 +1237,7 @@
               {
                 "body": "",
                 "createdAt": "2022-06-01T14:08:32Z",
+                "submittedAt": "2022-06-01T14:08:32Z",
                 "url": "https://github.com/github/accessibility-scorecard/pull/6#review_r1",
                 "comments": {
                   "nodes": []
